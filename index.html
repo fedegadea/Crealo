@@ -1323,17 +1323,23 @@ IMPORTANTE CRÍTICO: Tu respuesta debe ser ÚNICAMENTE el objeto JSON. Sin expli
   try{
     const data = await callAPI(1);
     if(!data.content?.length) throw new Error('Respuesta vacía. Intentá de nuevo.');
-    const raw = data.content.map(i=>i.text||'').join('').replace(/```json[\s\S]*?```|```/g,'').trim();
+    const raw = data.content.map(i=>i.text||'').join('').trim();
     let parsed;
-    try{ parsed = JSON.parse(raw); }
-    catch(je){
-      // Try to extract JSON from response if model added extra text
-      const match = raw.match(/\{[\s\S]*\}/);
-      if(match){ try{ parsed = JSON.parse(match[0]); }catch(e2){ throw new Error('Formato de respuesta inválido. Intentá de nuevo.'); } }
-      else throw new Error('La IA no devolvió JSON. Intentá de nuevo.');
+    try{
+      // Try 1: direct parse
+      const clean = raw.replace(/^```json\s*/,'').replace(/\s*```$/,'').trim();
+      parsed = JSON.parse(clean);
+    } catch(je){
+      try{
+        // Try 2: find first { to last }
+        const start = raw.indexOf('{');
+        const end = raw.lastIndexOf('}');
+        if(start === -1 || end === -1) throw new Error('no json');
+        parsed = JSON.parse(raw.slice(start, end + 1));
+      } catch(e2){
+        throw new Error('La IA no devolvió JSON. Intentá de nuevo.');
+      }
     }
-    const variants = parsed.variants;
-    if(!variants?.length) throw new Error('No se generaron variantes. Intentá de nuevo.');
 
     const area = document.getElementById('resArea');
     const fmtActive = curTool==='ads' ? (document.querySelector('#fmtCtrl .seg-btn.active')?.textContent.trim()||'') : '';
