@@ -1340,7 +1340,8 @@ IMPORTANTE CRÍTICO: Tu respuesta debe ser ÚNICAMENTE el objeto JSON. Sin expli
         throw new Error('La IA no devolvió JSON. Intentá de nuevo.');
       }
     }
-
+    const variants = parsed.variants || parsed.Variants || (Array.isArray(parsed) ? parsed : null);
+    if(!variants?.length) throw new Error('No se generaron variantes. Intentá de nuevo.');
     const area = document.getElementById('resArea');
     const fmtActive = curTool==='ads' ? (document.querySelector('#fmtCtrl .seg-btn.active')?.textContent.trim()||'') : '';
     area.innerHTML = `<div class="res-header">${variants.length} variantes generadas · ${angle}${fmtActive?' · '+fmtActive:''}</div>`;
