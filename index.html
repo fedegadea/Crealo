@@ -1290,7 +1290,9 @@ REGLAS OBLIGATORIAS:
 - Que suene a humano, no a robot ni a agencia
 - Adaptá el largo y estilo exactamente al formato especificado
 
-Respondé ÚNICAMENTE con JSON válido, sin markdown, sin texto antes ni después:
+IMPORTANTE CRÍTICO: Tu respuesta debe ser ÚNICAMENTE el objeto JSON. Sin explicaciones, sin texto, sin markdown, sin \`\`\`json, sin nada antes ni después. Empezar con { y terminar con }. Si agregás cualquier texto extra la respuesta falla completamente.
+
+{"variants":[{"type":"Variante 1","headline":"...","body":"...","cta":"...","clips":null},{"type":"Variante 2","headline":"...","body":"...","cta":"...","clips":null},{"type":"Variante 3","headline":"...","body":"...","cta":"...","clips":null}]}
 {"variants":[{"type":"Variante 1","headline":"...","body":"...","cta":"...","clips":null},{"type":"Variante 2","headline":"...","body":"...","cta":"...","clips":null},{"type":"Variante 3","headline":"...","body":"...","cta":"...","clips":null}]}`;
 
   // API call with auto-retry on overload
