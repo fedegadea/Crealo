@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crealo — Contenido que vende, sin agencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07070a;
+  --green:#00ff87;
+  --green-d:#00c96a;
+  --orange:#ff6b2b;
+  --blue:#4d9fff;
+  --white:#f5f3ef;
+  --gray:#0e0e14;
+  --gray2:#161620;
+  --gray3:#1f1f2e;
+  --gray4:#2a2a3a;
+  --muted:#5a5a72;
+  --text:#e8e4de;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Instrument Sans',sans-serif;background:var(--black);color:var(--text);overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--gray4);border-radius:4px}
+
+/* ══════════════════════════════
+   LANDING
+══════════════════════════════ */
+#landing{display:block}
+#appView{display:none}
+
+/* NAV */
+.l-nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(24px);
+  background:rgba(7,7,10,0.75);
+  border-bottom:1px solid var(--border2);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--white)}
+.logo-pulse{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.6);opacity:.5}}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:13px;color:var(--muted);cursor:pointer;transition:color .2s;background:none;border:none;font-family:inherit}
+.nav-link:hover{color:var(--text)}
+.nav-cta-btn{padding:10px 24px;background:var(--green);color:var(--black);border:none;border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s}
+.nav-cta-btn:hover{background:var(--green-d);transform:scale(1.04)}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 48px 80px;
+  position:relative;overflow:hidden;
+}
+.hero-mesh{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%,rgba(0,255,135,.09) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 40% at 5% 85%,rgba(255,107,43,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 50% at 95% 60%,rgba(77,159,255,.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,255,135,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,.025) 1px,transparent 1px);
+  background-size:64px 64px;
+  animation:gridDrift 25s linear infinite;
+}
+@keyframes gridDrift{0%{transform:translateY(0)}100%{transform:translateY(64px)}}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,255,135,.07);border:1px solid rgba(0,255,135,.2);
+  border-radius:50px;padding:8px 20px;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--green);
+  margin-bottom:36px;position:relative;z-index:1;
+  animation:fadeUp .7s ease both;
+}
+.hero-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(52px,8.5vw,108px);
+  line-height:.92;letter-spacing:-4px;color:var(--white);
+  position:relative;z-index:1;max-width:1000px;
+  animation:fadeUp .7s .1s ease both;
+}
+.hero-title .g{color:var(--green)}
+.hero-title .dim{color:rgba(255,255,255,.22)}
+.hero-sub{
+  font-size:18px;font-weight:300;color:rgba(232,228,222,.5);
+  max-width:540px;line-height:1.7;margin:28px auto 52px;
+  position:relative;z-index:1;
+  animation:fadeUp .7s .2s ease both;
+}
+.hero-sub strong{color:var(--text);font-weight:500}
+.hero-form{
+  display:flex;gap:10px;max-width:460px;width:100%;
+  position:relative;z-index:1;
+  animation:fadeUp .7s .3s ease both;
+}
+.hero-input{
+  flex:1;padding:16px 22px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:50px;font-family:'Instrument Sans',sans-serif;font-size:15px;color:var(--text);
+  outline:none;transition:border-color .2s;
+}
+.hero-input::placeholder{color:var(--muted)}
+.hero-input:focus{border-color:rgba(0,255,135,.35)}
+.hero-btn{
+  padding:16px 28px;background:var(--green);color:var(--black);border:none;
+  border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
+  cursor:pointer;white-space:nowrap;transition:all .2s;
+  box-shadow:0 0 40px rgba(0,255,135,.2);
+}
+.hero-btn:hover{background:var(--green-d);transform:scale(1.04);box-shadow:0 0 60px rgba(0,255,135,.4)}
+.hero-note{font-size:12px;color:var(--muted);margin-top:14px;position:relative;z-index:1;animation:fadeUp .7s .4s ease both}
+.hero-scroll-line{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  width:1px;height:56px;
+  background:linear-gradient(to bottom,var(--green),transparent);
+  animation:breathe 1.8s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* MARQUEE */
+.marquee-wrap{
+  border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);
+  padding:18px 0;overflow:hidden;background:rgba(0,255,135,.015);
+}
+.marquee-track{display:flex;white-space:nowrap;animation:marquee 22s linear infinite}
+.marquee-item{display:inline-flex;align-items:center;gap:14px;padding:0 36px;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.marquee-dot{color:var(--green);font-size:18px}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.l-section{padding:120px 48px;max-width:1200px;margin:0 auto}
+.l-full{padding:100px 48px;position:relative}
+.s-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.s-tag::before{content:'';width:28px;height:1px;background:var(--green)}
+.s-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(34px,4.5vw,58px);line-height:1.05;letter-spacing:-2px;color:var(--white);margin-bottom:20px}
+.s-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:560px}
+
+/* PROBLEM */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;background:var(--border2);border-radius:20px;overflow:hidden}
+.pain-card{background:var(--gray);padding:40px 32px;transition:background .25s}
+.pain-card:hover{background:var(--gray2)}
+.pain-em{font-size:28px;margin-bottom:18px;display:block}
+.pain-t{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--white);margin-bottom:10px}
+.pain-d{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* HOW */
+.how-bg{background:var(--gray);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;background:var(--border2);border-radius:20px;overflow:hidden}
+.step-card{background:var(--gray);padding:44px 36px}
+.step-num{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:rgba(0,255,135,.07);line-height:1;margin-bottom:20px;letter-spacing:-4px}
+.step-icon{width:44px;height:44px;background:rgba(0,255,135,.08);border:1px solid rgba(0,255,135,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
+.step-t{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--white);margin-bottom:10px}
+.step-d{font-size:13px;color:var(--muted);line-height:1.7}
+.step-time{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:11px;color:var(--green);background:rgba(0,255,135,.07);padding:5px 12px;border-radius:50px}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.feat-card{
+  background:var(--gray2);border:1px solid var(--border);border-radius:18px;padding:32px;
+  cursor:pointer;transition:all .25s;position:relative;overflow:hidden;
+}
+.feat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transition:transform .3s}
+.feat-card:hover{transform:translateY(-4px);border-color:rgba(0,255,135,.15)}
+.feat-card:hover::after{transform:scaleX(1)}
+.feat-card.orange::after{background:var(--orange)}
+.feat-card.orange:hover{border-color:rgba(255,107,43,.15)}
+.feat-icon{font-size:30px;margin-bottom:16px;display:block}
+.feat-badge{position:absolute;top:16px;right:16px;font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:50px}
+.badge-ai{background:rgba(0,255,135,.1);color:var(--green)}
+.badge-wapp{background:rgba(255,107,43,.1);color:var(--orange)}
+.feat-t{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--white);margin-bottom:8px}
+.feat-d{font-size:13px;color:var(--muted);line-height:1.65}
+.feat-enter{font-size:11px;color:var(--green);margin-top:14px;display:inline-flex;align-items:center;gap:6px}
+.feat-card.orange .feat-enter{color:var(--orange)}
+
+/* STATS */
+.stats-bg{background:var(--gray);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border2);border-radius:20px;overflow:hidden;max-width:1100px;margin:0 auto}
+.stat-box{background:var(--gray);padding:44px 32px;text-align:center}
+.stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:52px;letter-spacing:-3px;background:linear-gradient(135deg,var(--green),#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:10px}
+.stat-l{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* CTA */
+.cta-wrap{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.cta-bg-mesh{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(0,255,135,.06) 0%,transparent 70%);pointer-events:none}
+.cta-form{display:flex;gap:10px;max-width:440px;margin:0 auto;justify-content:center}
+
+/* SUCCESS */
+.success-row{display:none;align-items:center;justify-content:center;gap:10px;color:var(--green);font-size:14px;padding:16px 24px;background:rgba(0,255,135,.07);border:1px solid rgba(0,255,135,.2);border-radius:50px}
+.success-row.show{display:flex}
+
+/* FOOTER */
+footer{padding:28px 48px;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--white);display:flex;align-items:center;gap:8px}
+.footer-copy{font-size:12px;color:var(--muted)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ══════════════════════════════
+   APP
+══════════════════════════════ */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{
+  width:248px;flex-shrink:0;
+  background:var(--gray);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.sb-logo{padding:24px 22px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-logo-inner{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--white)}
+.sb-back{font-size:11px;color:var(--muted);cursor:pointer;transition:color .2s;background:none;border:none;font-family:inherit}
+.sb-back:hover{color:var(--text)}
+.sb-brand{padding:14px 22px;border-bottom:1px solid var(--border)}
+.sb-brand-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.sb-brand-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-brand-edit{font-size:11px;color:var(--green);cursor:pointer;margin-top:3px;display:inline-block}
+.sb-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+.sb-section{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 12px 6px}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  transition:all .18s;font-size:13px;color:var(--muted);
+  border:1px solid transparent;
+}
+.sb-item:hover{background:var(--gray2);color:var(--text)}
+.sb-item.active{background:rgba(0,255,135,.07);border-color:rgba(0,255,135,.12);color:var(--green)}
+.sb-item .si{font-size:15px;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--orange);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:50px}
+
+/* MAIN */
+.app-main{flex:1;overflow-y:auto;display:flex;flex-direction:column;background:var(--black)}
+.topbar{
+  padding:18px 32px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--gray);position:sticky;top:0;z-index:10;flex-shrink:0;
+}
+.topbar-t{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--white)}
+.topbar-s{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* SCREENS */
+.screen{display:none;flex:1;padding:32px;animation:fadeUp .35s ease both}
+.screen.active{display:block}
+
+/* ─ ONBOARDING ─ */
+.ob-wrap{max-width:580px;margin:0 auto}
+.ob-prog{display:flex;gap:5px;margin-bottom:44px}
+.ob-prog-d{height:3px;border-radius:2px;flex:1;background:var(--gray3);transition:background .3s}
+.ob-prog-d.done{background:var(--green)}
+.ob-step{display:none;animation:fadeUp .35s ease both}
+.ob-step.active{display:block}
+.ob-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:14px}
+.ob-title{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;line-height:1.1;letter-spacing:-1px;color:var(--white);margin-bottom:6px}
+.ob-sub{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.65}
+
+/* FIELDS */
+.field{margin-bottom:18px}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.field input,.field textarea,.field select{
+  width:100%;padding:13px 16px;
+  background:var(--gray2);border:1px solid var(--border);border-radius:11px;
+  font-family:'Instrument Sans',sans-serif;font-size:14px;color:var(--text);
+  outline:none;transition:border-color .2s;resize:none;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(0,255,135,.3)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field select option{background:var(--gray2)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* CHIPS */
+.chip-group{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 15px;background:var(--gray2);border:1px solid var(--border);border-radius:50px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .18s;user-select:none}
+.chip:hover{border-color:rgba(0,255,135,.25);color:var(--text)}
+.chip.on{background:rgba(0,255,135,.09);border-color:var(--green);color:var(--green)}
+
+/* BUTTONS */
+.btn-p{padding:14px 28px;background:var(--green);color:var(--black);border:none;border-radius:11px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px}
+.btn-p:hover{background:var(--green-d);transform:translateY(-1px)}
+.btn-s{padding:14px 22px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:11px;font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-s:hover{border-color:rgba(255,255,255,.15);color:var(--text)}
+
+/* ─ HOME ─ */
+.home-g{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-1px;color:var(--white);margin-bottom:4px}
+.home-s{font-size:14px;color:var(--muted);margin-bottom:32px}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.tc{background:var(--gray2);border:1px solid var(--border);border-radius:16px;padding:26px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.tc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transition:transform .3s}
+.tc:hover{transform:translateY(-3px);border-color:rgba(0,255,135,.18);background:var(--gray3)}
+.tc:hover::before{transform:scaleX(1)}
+.tc.or::before{background:var(--orange)}
+.tc.or:hover{border-color:rgba(255,107,43,.18)}
+.tc-icon{font-size:28px;margin-bottom:14px;display:block}
+.tc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--white);margin-bottom:5px}
+.tc-desc{font-size:12px;color:var(--muted);line-height:1.65}
+.tc-badge{position:absolute;top:14px;right:14px;font-size:9px;font-weight:700;padding:3px 9px;border-radius:50px}
+
+/* ─ AD TOOL (PRO) ─ */
+.tool-wrap{max-width:780px}
+.back-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:24px;transition:color .2s;background:none;border:none;font-family:inherit}
+.back-btn:hover{color:var(--text)}
+.tool-t{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;letter-spacing:-1px;color:var(--white);margin-bottom:4px}
+.tool-s{font-size:13px;color:var(--muted);margin-bottom:28px}
+
+/* Pro Ad Tool */
+.pro-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.seg-ctrl{display:flex;background:var(--gray2);border:1px solid var(--border);border-radius:11px;padding:4px;gap:3px}
+.seg-btn{flex:1;padding:9px;background:transparent;border:none;border-radius:8px;font-family:'Instrument Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:6px}
+.seg-btn.active{background:var(--gray3);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+.angle-grid-pro{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:0}
+.angle-card{background:var(--gray2);border:1px solid var(--border);border-radius:11px;padding:14px;cursor:pointer;transition:all .18s;text-align:left}
+.angle-card:hover{border-color:rgba(0,255,135,.2)}
+.angle-card.on{background:rgba(0,255,135,.07);border-color:var(--green)}
+.angle-card .ac-em{font-size:18px;margin-bottom:6px;display:block}
+.angle-card .ac-t{font-size:12px;font-weight:600;color:var(--white)}
+.angle-card .ac-d{font-size:10px;color:var(--muted);margin-top:2px}
+
+.gen-btn{
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,var(--green),#00d475);
+  color:var(--black);border:none;border-radius:12px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:16px;
+  cursor:pointer;transition:all .25s;margin-top:16px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 8px 32px rgba(0,255,135,.18);
+}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 12px 44px rgba(0,255,135,.32)}
+.gen-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Results */
+.results{margin-top:28px}
+.res-header{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.res-card{background:var(--gray2);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:12px;transition:border-color .2s}
+.res-card:hover{border-color:rgba(0,255,135,.15)}
+.res-type{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.res-h{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--white);margin-bottom:7px;line-height:1.3}
+.res-b{font-size:13px;color:rgba(232,228,222,.6);line-height:1.7;margin-bottom:8px}
+.res-cta{font-size:11px;color:var(--orange);font-weight:500;letter-spacing:.5px}
+.res-actions{display:flex;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.res-btn{padding:6px 14px;border-radius:8px;font-size:11px;cursor:pointer;transition:all .18s;font-family:'Instrument Sans',sans-serif;font-weight:500;border:1px solid rgba(0,255,135,.2);background:rgba(0,255,135,.07);color:var(--green)}
+.res-btn:hover{background:rgba(0,255,135,.15)}
+.res-btn.done{background:rgba(0,255,135,.2);border-color:var(--green)}
+
+/* UGC */
+.ugc-wrap{max-width:680px}
+.ugc-sec{background:var(--gray2);border:1px solid var(--border);border-radius:16px;padding:26px;margin-bottom:16px}
+.ugc-sec-t{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--white);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.ugc-num{width:24px;height:24px;background:rgba(255,107,43,.12);border:1px solid rgba(255,107,43,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--orange);flex-shrink:0}
+.qty-row{display:flex;align-items:center;gap:12px}
+.qty-btn{width:34px;height:34px;background:var(--gray3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.qty-btn:hover{border-color:var(--orange);color:var(--orange)}
+.qty-inp{width:80px;padding:10px;background:var(--gray3);border:1px solid var(--border);border-radius:9px;font-size:22px;font-family:'Syne',sans-serif;font-weight:800;color:var(--white);text-align:center;outline:none}
+.wapp-btn{
+  width:100%;padding:17px;background:#25D366;color:#fff;border:none;
+  border-radius:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;
+  cursor:pointer;transition:all .22s;display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 8px 32px rgba(37,211,102,.25);
+}
+.wapp-btn:hover{background:#1ebe5a;transform:translateY(-2px);box-shadow:0 12px 44px rgba(37,211,102,.38)}
+
+/* Video Script Clips */
+.script-hook-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:10px;font-weight:600}
+.clips-wrap{display:flex;flex-direction:column;gap:8px;margin:10px 0 14px}
+.clip{background:var(--gray3);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.clip-header{display:flex;align-items:center;gap:10px;padding:9px 14px;background:rgba(0,255,135,.04);border-bottom:1px solid var(--border)}
+.clip-tc{font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:var(--green);white-space:nowrap}
+.clip-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.clip-body{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.clip-dialog{font-size:13px;color:var(--white);line-height:1.5}
+.clip-visual{font-size:11px;color:var(--muted);font-style:italic;padding-top:4px;border-top:1px solid rgba(255,255,255,.04);margin-top:4px}
+.clip-visual span{color:rgba(77,159,255,.7);font-style:normal;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-right:6px}
+
+/* MISC */
+.spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err-box{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.25);border-radius:10px;padding:13px 16px;font-size:13px;color:#ff8888;margin-top:14px}
+.divider{height:1px;background:var(--border);margin:20px 0}
+.info-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);background:var(--gray3);border:1px solid var(--border);padding:5px 12px;border-radius:50px;margin-top:10px}
+
+@media(max-width:768px){
+  .l-nav{padding:14px 20px}
+  .hero,.l-section,.l-full{padding-left:20px;padding-right:20px}
+  .pain-grid,.steps-row,.features-grid,.stats-row{grid-template-columns:1fr}
+  .hero-form,.cta-form{flex-direction:column}
+  footer{flex-direction:column;gap:12px;text-align:center}
+  .pro-grid,.two-col{grid-template-columns:1fr}
+  .angle-grid-pro{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LANDING
+══════════════════════════════════════ -->
+<div id="landing">
+
+<nav class="l-nav">
+  <div class="nav-logo"><div class="logo-pulse"></div>Crealo</div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="scrollToSection('#como')">Cómo funciona</button>
+    <button class="nav-link" onclick="scrollToSection('#herramientas')">Herramientas</button>
+    <button class="nav-link" onclick="scrollToSection('#ctafinal')">Precios</button>
+    <button class="nav-cta-btn" onclick="openApp()">Probar gratis →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-badge">✦ Acceso anticipado · Gratis</div>
+  <h1 class="hero-title">
+    Contenido<br>
+    que <span class="g">vende.</span><br>
+    <span class="dim">Sin agencia.</span>
+  </h1>
+  <p class="hero-sub">
+    Generá copy para ads con IA, conseguí <strong>creators reales</strong> que muestren tu producto y recibí videos editados listos para publicar. <strong>Todo en un lugar.</strong>
+  </p>
+  <div class="hero-form" id="hForm">
+    <input class="hero-input" type="email" placeholder="Tu email de trabajo" id="hEmail">
+    <button class="hero-btn" onclick="heroSubmit()">Empezar gratis →</button>
+  </div>
+  <div class="success-row" id="hSuccess">✓ Anotado. Te escribimos pronto.</div>
+  <p class="hero-note">Sin tarjeta. Sin compromiso.</p>
+  <div class="hero-scroll-line"></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Copy para Ads IA</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>UGC con Creators reales</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Videos editados y listos</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Emails que convierten</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Posts para redes</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Full Service disponible</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Copy para Ads IA</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>UGC con Creators reales</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Videos editados y listos</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Emails que convierten</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Posts para redes</span>
+    <span class="marquee-item"><span class="marquee-dot">✦</span>Full Service disponible</span>
+  </div>
+</div>
+
+<!-- PROBLEMA -->
+<div class="l-section reveal" id="problema">
+  <div class="s-tag">El problema</div>
+  <h2 class="s-title">¿Te suena alguna<br>de estas?</h2>
+  <div class="pain-grid">
+    <div class="pain-card reveal">
+      <span class="pain-em">😩</span>
+      <div class="pain-t">"No tengo tiempo para crear contenido"</div>
+      <div class="pain-d">Manejás todo solo. El contenido queda siempre para después. Y después nunca llega.</div>
+    </div>
+    <div class="pain-card reveal">
+      <span class="pain-em">💸</span>
+      <div class="pain-t">"Las agencias cobran una fortuna"</div>
+      <div class="pain-d">Pedís presupuesto y el número no cierra. O contratás y los resultados no justifican el costo.</div>
+    </div>
+    <div class="pain-card reveal">
+      <span class="pain-em">📵</span>
+      <div class="pain-t">"No encuentro creators reales"</div>
+      <div class="pain-d">Los grandes no te dan bola. Los chicos son un caos. El UGC real es difícil de conseguir y coordinar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<div class="l-full how-bg" id="como">
+  <div class="l-section" style="padding-top:0;padding-bottom:0">
+    <div class="s-tag reveal">Cómo funciona</div>
+    <h2 class="s-title reveal">Tres pasos.<br>Un solo lugar.</h2>
+    <p class="s-sub reveal">Desde el copy hasta el video final. Sin agencia, sin reuniones interminables, sin presupuestos imposibles.</p>
+    <div class="steps-row">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon">⚡</div>
+        <div class="step-t">Configurás tu marca</div>
+        <div class="step-d">En 3 minutos cargás tu marca, audiencia y tono. La IA aprende cómo hablar por vos. Una sola vez.</div>
+        <div class="step-time">⚡ 3 minutos</div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">02</div>
+        <div class="step-icon">🎯</div>
+        <div class="step-t">Elegís qué necesitás</div>
+        <div class="step-d">Copy para ads, posts, emails, UGC o full service. Un click y la plataforma genera o conecta lo que necesitás.</div>
+        <div class="step-time">🎯 Al instante</div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">03</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-t">Publicás y vendés</div>
+        <div class="step-d">Copiás el copy o recibís el video editado. Listo para subir. Nosotros nos encargamos del resto.</div>
+        <div class="step-time">📦 48-72 horas</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERRAMIENTAS -->
+<div class="l-section" id="herramientas">
+  <div class="s-tag reveal">Herramientas</div>
+  <h2 class="s-title reveal">Todo lo que necesitás<br>para vender más.</h2>
+  <p class="s-sub reveal">Cinco herramientas construidas específicamente para ecommerce. Sin curva de aprendizaje.</p>
+  <div class="features-grid">
+    <div class="feat-card reveal" onclick="openApp()">
+      <span class="feat-badge badge-ai">IA</span>
+      <span class="feat-icon">🎯</span>
+      <div class="feat-t">Copy para Ads Pro</div>
+      <div class="feat-d">Generá ads para Meta con ángulo, formato (imagen/video), duración y objetivo. 3 variantes listas para testear.</div>
+      <div class="feat-enter">Probar gratis →</div>
+    </div>
+    <div class="feat-card reveal" onclick="openApp()">
+      <span class="feat-badge badge-ai">IA</span>
+      <span class="feat-icon">📱</span>
+      <div class="feat-t">Posts para Redes</div>
+      <div class="feat-d">Captions para Instagram y TikTok con hooks que paran el scroll. Adaptado al tono de tu marca.</div>
+      <div class="feat-enter">Probar gratis →</div>
+    </div>
+    <div class="feat-card reveal" onclick="openApp()">
+      <span class="feat-badge badge-ai">IA</span>
+      <span class="feat-icon">📧</span>
+      <div class="feat-t">Emails que convierten</div>
+      <div class="feat-d">Recupero de carrito, lanzamientos, campañas y newsletters. Escritos para que se abran y generen ventas.</div>
+      <div class="feat-enter">Probar gratis →</div>
+    </div>
+    <div class="feat-card orange reveal" onclick="openApp()">
+      <span class="feat-badge badge-wapp">WhatsApp</span>
+      <span class="feat-icon">🎥</span>
+      <div class="feat-t">UGC Creators</div>
+      <div class="feat-d">Describís el perfil del creator ideal, elegís cuántos videos y te conectamos con quien mejor encaje para tu marca.</div>
+      <div class="feat-enter">Pedir UGC →</div>
+    </div>
+    <div class="feat-card orange reveal" onclick="openApp()">
+      <span class="feat-badge badge-wapp">WhatsApp</span>
+      <span class="feat-icon">🚀</span>
+      <div class="feat-t">Full Service</div>
+      <div class="feat-d">Estrategia, creators, edición y publicación. Nos encargamos de todo. Vos solo revisás y aprobás.</div>
+      <div class="feat-enter">Consultar →</div>
+    </div>
+    <div class="feat-card reveal" style="background:transparent;border:1px dashed rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:default">
+      <span style="font-size:28px;margin-bottom:12px">✦</span>
+      <div class="feat-t" style="font-size:14px">Más herramientas<br>próximamente</div>
+      <div class="feat-d" style="margin-top:8px">Descripciones de producto, scripts para videos, calendarios de contenido y más.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="l-full stats-bg" style="padding:80px 48px">
+  <div class="stats-row">
+    <div class="stat-box reveal"><div class="stat-n">3x</div><div class="stat-l">más engagement con UGC vs contenido de marca</div></div>
+    <div class="stat-box reveal"><div class="stat-n">10'</div><div class="stat-l">para tener copy listo para tu próximo ad</div></div>
+    <div class="stat-box reveal"><div class="stat-n">80%</div><div class="stat-l">menos costo que una agencia tradicional</div></div>
+    <div class="stat-box reveal"><div class="stat-n">48hs</div><div class="stat-l">desde que pedís UGC hasta tenerlo filmado</div></div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
+<section class="l-full" id="ctafinal" style="padding:130px 48px;text-align:center;position:relative;overflow:hidden">
+  <div class="cta-bg-mesh"></div>
+  <div class="cta-wrap">
+    <div class="s-tag reveal" style="justify-content:center">✦ Empezá hoy</div>
+    <h2 class="s-title reveal" style="max-width:none">Tu competencia ya está<br>creando contenido. <span style="color:var(--green)">Vos?</span></h2>
+    <p style="font-size:16px;color:var(--muted);margin-bottom:40px" class="reveal">Acceso anticipado gratis. Sin tarjeta, sin compromiso.</p>
+    <div class="cta-form reveal" id="ctaF">
+      <input class="hero-input" type="email" placeholder="Tu email" id="ctaEmail">
+      <button class="hero-btn" onclick="ctaSubmit()">Quiero acceso →</button>
+    </div>
+    <div class="success-row" id="ctaSuccess">✓ Anotado. Te escribimos pronto.</div>
+    <div style="margin-top:24px" class="reveal">
+      <button class="nav-cta-btn" style="font-size:15px;padding:14px 32px" onclick="openApp()">O probá la app ahora →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo"><div class="logo-pulse"></div>Crealo</div>
+  <div class="footer-copy">© 2025 Crealo · Contenido que vende, sin agencia</div>
+</footer>
+
+</div><!-- /landing -->
+
+<!-- ══════════════════════════════════════
+     APP
+══════════════════════════════════════ -->
+<div id="appView">
+<div class="app">
+
+  <div class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-inner"><div class="logo-pulse"></div>Crealo</div>
+      <button class="sb-back" onclick="goLanding()">← Salir</button>
+    </div>
+    <div class="sb-brand" id="sbBrand" style="display:none">
+      <div class="sb-brand-label">Tu marca</div>
+      <div class="sb-brand-name" id="sbBrandName">—</div>
+      <span class="sb-brand-edit" onclick="goOb()">Editar perfil</span>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">IA · Generación</div>
+      <div class="sb-item active" id="nav-home" onclick="goScreen('home')"><span class="si">⚡</span>Inicio</div>
+      <div class="sb-item" id="nav-ads" onclick="goTool('ads')"><span class="si">🎯</span>Copy para Ads</div>
+      <div class="sb-item" id="nav-posts" onclick="goTool('posts')"><span class="si">📱</span>Posts Redes</div>
+      <div class="sb-item" id="nav-email" onclick="goTool('email')"><span class="si">📧</span>Emails</div>
+      <div class="sb-section">Personas reales</div>
+      <div class="sb-item" id="nav-ugc" onclick="goScreen('ugc')"><span class="si">🎥</span>UGC Creators<span class="sb-badge">NEW</span></div>
+      <div class="sb-item" id="nav-full" onclick="goScreen('full')"><span class="si">🚀</span>Full Service</div>
+    </div>
+  </div>
+
+  <div class="app-main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-t" id="tbTitle">Crealo</div>
+        <div class="topbar-s" id="tbSub">Tu estudio de contenido</div>
+      </div>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div class="screen active" id="screen-onboarding">
+      <div class="ob-wrap">
+        <div class="ob-prog">
+          <div class="ob-prog-d done" id="pd0"></div>
+          <div class="ob-prog-d" id="pd1"></div>
+          <div class="ob-prog-d" id="pd2"></div>
+          <div class="ob-prog-d" id="pd3"></div>
+        </div>
+
+        <!-- Step 0 -->
+        <div class="ob-step active" id="obs0">
+          <div class="ob-tag">✦ Paso 1 de 4 · Tu marca</div>
+          <h2 class="ob-title">Contanos sobre<br>tu negocio.</h2>
+          <p class="ob-sub">La IA aprende cómo hablar por vos. Solo lo configurás una vez.</p>
+          <div class="field"><label>Nombre de la marca</label><input id="f-name" placeholder="Ej: Clarté, Ukelele, La Bótica..."></div>
+          <div class="two-col">
+            <div class="field"><label>Rubro / Categoría</label><input id="f-cat" placeholder="Ej: Skincare, Moda, Suplementos..."></div>
+            <div class="field"><label>¿Qué vendés?</label><input id="f-prod" placeholder="Ej: Ice Roller facial..."></div>
+          </div>
+          <div class="field"><label>Link de tu tienda (opcional)</label><input id="f-url" placeholder="www.tutienda.com.ar"></div>
+          <button class="btn-p" onclick="obNext(0)">Siguiente →</button>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="ob-step" id="obs1">
+          <div class="ob-tag">✦ Paso 2 de 4 · Tu cliente</div>
+          <h2 class="ob-title">¿A quién<br>le vendés?</h2>
+          <p class="ob-sub">Cuanto más claro, mejor el contenido que va a generar la IA.</p>
+          <div class="field"><label>Descripción de tu cliente ideal</label><textarea id="f-aud" rows="2" placeholder="Ej: Mujeres 25-40, conscientes del skincare, buscan resultados reales sin gastar una fortuna..."></textarea></div>
+          <div class="field"><label>Principal dolor que resolvés</label><textarea id="f-pain" rows="2" placeholder="Ej: Cara hinchada, poros abiertos, falta de rutina..."></textarea></div>
+          <div class="field"><label>Principal beneficio / diferencial</label><textarea id="f-diff" rows="2" placeholder="Ej: Resultados visibles en 5 minutos, hecho en Argentina, precio accesible..."></textarea></div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-s" onclick="obBack(1)">← Volver</button>
+            <button class="btn-p" onclick="obNext(1)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="ob-step" id="obs2">
+          <div class="ob-tag">✦ Paso 3 de 4 · Tu voz</div>
+          <h2 class="ob-title">¿Cómo habla<br>tu marca?</h2>
+          <p class="ob-sub">El tono define cómo la IA va a escribir por vos.</p>
+          <div class="field">
+            <label>Tono de comunicación</label>
+            <div class="chip-group" id="toneC">
+              <div class="chip" onclick="tog(this,'tone')">Cercano y humano</div>
+              <div class="chip" onclick="tog(this,'tone')">Aspiracional</div>
+              <div class="chip" onclick="tog(this,'tone')">Directo y sin vueltas</div>
+              <div class="chip" onclick="tog(this,'tone')">Sofisticado</div>
+              <div class="chip" onclick="tog(this,'tone')">Divertido</div>
+              <div class="chip" onclick="tog(this,'tone')">Educativo</div>
+            </div>
+          </div>
+          <div class="field"><label>Mensaje principal de la marca (en una frase)</label><input id="f-msg" placeholder='Ej: "El skincare que sí funciona, al precio que sí cierra"'></div>
+          <div class="field"><label>Palabras o frases que NUNCA usarías</label><input id="f-avoid" placeholder="Ej: revolucionario, innovador, de alta gama..."></div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-s" onclick="obBack(2)">← Volver</button>
+            <button class="btn-p" onclick="obNext(2)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="ob-step" id="obs3">
+          <div class="ob-tag">✦ Paso 4 de 4 · Dónde publicás</div>
+          <h2 class="ob-title">¿Dónde está<br>tu audiencia?</h2>
+          <p class="ob-sub">Para adaptar formato, extensión y estilo de cada pieza.</p>
+          <div class="field">
+            <label>Plataformas principales</label>
+            <div class="chip-group" id="platC">
+              <div class="chip" onclick="tog(this,'plat')">Instagram</div>
+              <div class="chip" onclick="tog(this,'plat')">TikTok</div>
+              <div class="chip" onclick="tog(this,'plat')">Facebook</div>
+              <div class="chip" onclick="tog(this,'plat')">WhatsApp</div>
+              <div class="chip" onclick="tog(this,'plat')">Email</div>
+              <div class="chip" onclick="tog(this,'plat')">Tienda online</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Objetivo principal ahora mismo</label>
+            <div class="chip-group" id="goalC">
+              <div class="chip" onclick="tog(this,'goal')">Generar ventas directas</div>
+              <div class="chip" onclick="tog(this,'goal')">Crecer en redes</div>
+              <div class="chip" onclick="tog(this,'goal')">Lanzar un producto</div>
+              <div class="chip" onclick="tog(this,'goal')">Fidelizar clientes</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-s" onclick="obBack(3)">← Volver</button>
+            <button class="btn-p" onclick="finishOb()">Empezar a crear ✦</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="screen" id="screen-home">
+      <div class="home-g" id="homeG">Hola 👋</div>
+      <div class="home-s">¿Qué creamos hoy?</div>
+      <div class="tools-grid">
+        <div class="tc" onclick="goTool('ads')"><span class="tc-badge badge-ai">IA PRO</span><span class="tc-icon">🎯</span><div class="tc-name">Copy para Ads</div><div class="tc-desc">Ads para Meta con ángulo, formato, duración y objetivo. 3 variantes listas para testear.</div></div>
+        <div class="tc" onclick="goTool('posts')"><span class="tc-badge badge-ai">IA</span><span class="tc-icon">📱</span><div class="tc-name">Posts para Redes</div><div class="tc-desc">Captions para Instagram y TikTok con hooks que paran el scroll.</div></div>
+        <div class="tc" onclick="goTool('email')"><span class="tc-badge badge-ai">IA</span><span class="tc-icon">📧</span><div class="tc-name">Emails</div><div class="tc-desc">Recupero de carrito, lanzamientos, campañas y newsletters que convierten.</div></div>
+        <div class="tc or" onclick="goScreen('ugc')"><span class="tc-badge badge-wapp">WhatsApp</span><span class="tc-icon">🎥</span><div class="tc-name">UGC Creators</div><div class="tc-desc">Armá tu pack y te conectamos con el/la creator ideal para tu marca.</div></div>
+        <div class="tc or" onclick="goScreen('full')"><span class="tc-badge badge-wapp">WhatsApp</span><span class="tc-icon">🚀</span><div class="tc-name">Full Service</div><div class="tc-desc">Nos encargamos de todo. Estrategia, creators, edición y publicación.</div></div>
+      </div>
+    </div>
+
+    <!-- AD TOOL PRO -->
+    <div class="screen" id="screen-tool">
+      <div class="tool-wrap">
+        <button class="back-btn" onclick="goScreen('home')">← Volver</button>
+        <div class="tool-t" id="toolT">Copy para Ads Pro</div>
+        <div class="tool-s" id="toolS">El generador de ads más completo para Meta</div>
+
+        <!-- PRODUCTO -->
+        <div class="field"><label>Producto / Servicio a comunicar</label><input id="tProd" placeholder="Ej: Ice Roller facial edición verano, Hoodie premium negro..."></div>
+
+        <!-- ADS EXTRA OPTIONS (solo para ads) -->
+        <div id="adsExtras">
+          <div class="pro-grid">
+            <div class="field">
+              <label>Formato del anuncio</label>
+              <div class="seg-ctrl" id="fmtCtrl">
+                <button class="seg-btn active" data-v="imagen" onclick="selSeg(this,'fmtCtrl')">🖼 Imagen</button>
+                <button class="seg-btn" data-v="video_corto" onclick="selSeg(this,'fmtCtrl')">🎬 Video corto</button>
+                <button class="seg-btn" data-v="video_largo" onclick="selSeg(this,'fmtCtrl')">📹 Video largo</button>
+              </div>
+            </div>
+            <div class="field" id="durField" style="display:none">
+              <label>Duración aproximada del video</label>
+              <div class="seg-ctrl" id="durCtrl">
+                <button class="seg-btn active" data-v="15s" onclick="selSeg(this,'durCtrl')">15s</button>
+                <button class="seg-btn" data-v="30s" onclick="selSeg(this,'durCtrl')">30s</button>
+                <button class="seg-btn" data-v="60s" onclick="selSeg(this,'durCtrl')">60s</button>
+                <button class="seg-btn" data-v="90s+" onclick="selSeg(this,'durCtrl')">90s+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pro-grid">
+            <div class="field">
+              <label>Objetivo del anuncio</label>
+              <div class="seg-ctrl" id="objCtrl">
+                <button class="seg-btn active" data-v="venta_directa" onclick="selSeg(this,'objCtrl')">💰 Venta</button>
+                <button class="seg-btn" data-v="trafico_web" onclick="selSeg(this,'objCtrl')">🌐 Tráfico</button>
+                <button class="seg-btn" data-v="awareness" onclick="selSeg(this,'objCtrl')">📢 Awareness</button>
+                <button class="seg-btn" data-v="remarketing" onclick="selSeg(this,'objCtrl')">🔄 Remarketing</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Temperatura de la audiencia</label>
+              <div class="seg-ctrl" id="tempCtrl">
+                <button class="seg-btn active" data-v="fria" onclick="selSeg(this,'tempCtrl')">❄️ Fría</button>
+                <button class="seg-btn" data-v="tibia" onclick="selSeg(this,'tempCtrl')">🌤 Tibia</button>
+                <button class="seg-btn" data-v="caliente" onclick="selSeg(this,'tempCtrl')">🔥 Caliente</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>¿Hay una oferta o dato concreto?</label>
+            <input id="tOffer" placeholder="Ej: 20% off, envío gratis, precio especial $18.500, lanzamiento...">
+          </div>
+        </div>
+
+        <!-- POSTS EXTRA -->
+        <div id="postsExtras" style="display:none">
+          <div class="field">
+            <label>Plataforma objetivo</label>
+            <div class="seg-ctrl" id="postPlatCtrl">
+              <button class="seg-btn active" data-v="instagram" onclick="selSeg(this,'postPlatCtrl')">📸 Instagram</button>
+              <button class="seg-btn" data-v="tiktok" onclick="selSeg(this,'postPlatCtrl')">🎵 TikTok</button>
+              <button class="seg-btn" data-v="ambas" onclick="selSeg(this,'postPlatCtrl')">✦ Ambas</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMAIL EXTRA -->
+        <div id="emailExtras" style="display:none">
+          <div class="field">
+            <label>Tipo de email</label>
+            <div class="seg-ctrl" id="emailTypeCtrl">
+              <button class="seg-btn active" data-v="carrito_abandonado" onclick="selSeg(this,'emailTypeCtrl')">🛒 Carrito</button>
+              <button class="seg-btn" data-v="lanzamiento" onclick="selSeg(this,'emailTypeCtrl')">🚀 Lanzamiento</button>
+              <button class="seg-btn" data-v="campana" onclick="selSeg(this,'emailTypeCtrl')">🔥 Campaña</button>
+              <button class="seg-btn" data-v="reactivacion" onclick="selSeg(this,'emailTypeCtrl')">💌 Reactivación</button>
+            </div>
+          </div>
+          <div class="field"><label>Oferta o detalle puntual (opcional)</label><input id="tEmailDetail" placeholder="Ej: 20% off, envío gratis, últimas unidades..."></div>
+        </div>
+
+        <!-- ÁNGULOS -->
+        <div class="field">
+          <label>Ángulo principal del mensaje</label>
+          <div class="angle-grid-pro" id="angleGrid"></div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="generate()">✦ Generar contenido</button>
+        <div id="errBox"></div>
+        <div class="results" id="resArea"></div>
+      </div>
+    </div>
+
+    <!-- UGC -->
+    <div class="screen" id="screen-ugc">
+      <div class="ugc-wrap">
+        <button class="back-btn" onclick="goScreen('home')">← Volver</button>
+        <div class="tool-t">UGC Creators 🎥</div>
+        <div class="tool-s">Armá tu pack y te conectamos con el/la creator ideal</div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">1</span>Tu producto</div>
+          <div class="field"><label>¿Qué producto querés que filmen?</label><input id="uProd" placeholder="Ej: Ice Roller facial edición verano"></div>
+          <div class="field"><label>¿Qué mensaje querés que transmita el video?</label><textarea id="uMsg" rows="2" placeholder="Ej: Mostrar el ritual matutino, sensación de frescura, resultado en piel..."></textarea></div>
+        </div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">2</span>¿Cuántos videos?</div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="chgQty(-1)">−</button>
+            <input class="qty-inp" type="number" id="uQty" value="3" min="1" max="50">
+            <button class="qty-btn" onclick="chgQty(1)">+</button>
+            <span style="font-size:13px;color:var(--muted)">videos</span>
+          </div>
+          <div class="info-chip">💡 Recomendamos empezar con 3 para testear distintos estilos</div>
+        </div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">3</span>Perfil del creator ideal</div>
+          <div class="two-col">
+            <div class="field"><label>Género</label>
+              <select id="uGen"><option value="">Sin preferencia</option><option>Femenino</option><option>Masculino</option><option>No binario</option></select>
+            </div>
+            <div class="field"><label>Rango de edad</label>
+              <select id="uAge"><option value="">Sin preferencia</option><option>18-24 años</option><option>25-34 años</option><option>35-44 años</option><option>45+ años</option></select>
+            </div>
+          </div>
+          <div class="field"><label>Categoría / Rubro</label>
+            <div class="chip-group" id="uCatC">
+              <div class="chip" onclick="tog(this,'uCat')">Beauty & Skincare</div>
+              <div class="chip" onclick="tog(this,'uCat')">Lifestyle</div>
+              <div class="chip" onclick="tog(this,'uCat')">Fitness</div>
+              <div class="chip" onclick="tog(this,'uCat')">Moda</div>
+              <div class="chip" onclick="tog(this,'uCat')">Mamás</div>
+              <div class="chip" onclick="tog(this,'uCat')">Foodie</div>
+              <div class="chip" onclick="tog(this,'uCat')">Tech</div>
+              <div class="chip" onclick="tog(this,'uCat')">Viajes</div>
+            </div>
+          </div>
+          <div class="field"><label>Estilo de contenido</label>
+            <div class="chip-group" id="uStyleC">
+              <div class="chip" onclick="tog(this,'uStyle')">Reseña honesta</div>
+              <div class="chip" onclick="tog(this,'uStyle')">Unboxing</div>
+              <div class="chip" onclick="tog(this,'uStyle')">Tutorial / How-to</div>
+              <div class="chip" onclick="tog(this,'uStyle')">Lifestyle / Rutina</div>
+              <div class="chip" onclick="tog(this,'uStyle')">Antes y después</div>
+              <div class="chip" onclick="tog(this,'uStyle')">Testimonio espontáneo</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field"><label>Seguidores mínimos</label>
+              <select id="uFoll"><option value="">Sin preferencia</option><option>1K-5K (Nano)</option><option>5K-20K (Micro)</option><option>20K-100K (Mid)</option><option>100K+ (Macro)</option></select>
+            </div>
+            <div class="field"><label>Zona geográfica</label>
+              <select id="uZone"><option>Argentina (todo el país)</option><option>CABA y GBA</option><option>Interior Argentina</option><option>Latinoamérica</option><option>España</option><option>Sin preferencia</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">4</span>Notas adicionales</div>
+          <div class="field"><label>¿Algo más que quieras aclarar?</label><textarea id="uNotes" rows="2" placeholder="Ej: Video vertical, sin filtros, que mencione el precio, que muestre el packaging..."></textarea></div>
+        </div>
+
+        <button class="wapp-btn" onclick="sendUGC()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Enviar propuesta por WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- FULL SERVICE -->
+    <div class="screen" id="screen-full">
+      <div class="ugc-wrap">
+        <button class="back-btn" onclick="goScreen('home')">← Volver</button>
+        <div class="tool-t">Full Service 🚀</div>
+        <div class="tool-s">Nos encargamos de todo. Contanos qué necesitás.</div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">1</span>Objetivo</div>
+          <div class="field"><label>¿Qué necesitás lograr?</label>
+            <div class="chip-group" id="fsGoalC">
+              <div class="chip" onclick="tog(this,'fsGoal')">Lanzar un producto</div>
+              <div class="chip" onclick="tog(this,'fsGoal')">Contenido mensual</div>
+              <div class="chip" onclick="tog(this,'fsGoal')">Campaña puntual</div>
+              <div class="chip" onclick="tog(this,'fsGoal')">Reactivar mi marca</div>
+              <div class="chip" onclick="tog(this,'fsGoal')">Escalar mis ads</div>
+            </div>
+          </div>
+          <div class="field"><label>Contanos más en detalle</label><textarea id="fsDetail" rows="3" placeholder="Ej: Tenemos lanzamiento en agosto, necesitamos 8 videos UGC + copy para ads + edición..."></textarea></div>
+        </div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">2</span>Presupuesto aproximado</div>
+          <div class="chip-group" id="fsBudC">
+            <div class="chip" onclick="tog(this,'fsBud')">Menos de $200k</div>
+            <div class="chip" onclick="tog(this,'fsBud')">$200k - $500k</div>
+            <div class="chip" onclick="tog(this,'fsBud')">$500k - $1M</div>
+            <div class="chip" onclick="tog(this,'fsBud')">+$1M</div>
+            <div class="chip" onclick="tog(this,'fsBud')">No sé todavía</div>
+          </div>
+        </div>
+
+        <div class="ugc-sec">
+          <div class="ugc-sec-t"><span class="ugc-num">3</span>Tus datos</div>
+          <div class="two-col">
+            <div class="field"><label>Tu nombre</label><input id="fsName" placeholder="Nombre"></div>
+            <div class="field"><label>Tu WhatsApp</label><input id="fsPhone" placeholder="Ej: 1122334455"></div>
+          </div>
+        </div>
+
+        <button class="wapp-btn" onclick="sendFull()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Pedir propuesta por WhatsApp
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /app-main -->
+</div><!-- /app -->
+</div><!-- /appView -->
+
+<script>
+const WAPP = '5491100000000'; // ← REEMPLAZAR con tu número
+
+// ── STATE ──
+const B = {}; // brand data
+
+// ── LANDING ──
+function scrollToSection(id){ document.querySelector(id)?.scrollIntoView({behavior:'smooth'}) }
+function heroSubmit(){
+  const v=document.getElementById('hEmail').value;
+  if(!v||!v.includes('@')){document.getElementById('hEmail').style.borderColor='rgba(255,100,100,.5)';return}
+  document.getElementById('hForm').style.display='none';
+  document.getElementById('hSuccess').classList.add('show');
+}
+function ctaSubmit(){
+  const v=document.getElementById('ctaEmail').value;
+  if(!v||!v.includes('@')){document.getElementById('ctaEmail').style.borderColor='rgba(255,100,100,.5)';return}
+  document.getElementById('ctaF').style.display='none';
+  document.getElementById('ctaSuccess').classList.add('show');
+}
+function openApp(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('appView').style.display='block';
+  // If brand already configured, go home directly
+  if(B.name){
+    goScreen('home');
+  }
+}
+function goLanding(){
+  document.getElementById('appView').style.display='none';
+  document.getElementById('landing').style.display='block';
+}
+
+// Reveal observer
+const ro=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*70)})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── ONBOARDING ──
+let obS=0;
+function obNext(s){
+  if(s===0){
+    if(!document.getElementById('f-name').value.trim()){alert('Poné el nombre de tu marca.');return}
+    B.name=document.getElementById('f-name').value.trim();
+    B.cat=document.getElementById('f-cat').value.trim();
+    B.prod=document.getElementById('f-prod').value.trim();
+    B.url=document.getElementById('f-url').value.trim();
+  }
+  if(s===1){
+    B.audience=document.getElementById('f-aud').value.trim();
+    B.pain=document.getElementById('f-pain').value.trim();
+    B.diff=document.getElementById('f-diff').value.trim();
+  }
+  if(s===2){
+    B.tone=[...document.querySelectorAll('#toneC .chip.on')].map(c=>c.textContent).join(', ');
+    B.msg=document.getElementById('f-msg').value.trim();
+    B.avoid=document.getElementById('f-avoid').value.trim();
+  }
+  document.getElementById(`obs${s}`).classList.remove('active');
+  obS=s+1;
+  document.getElementById(`obs${obS}`).classList.add('active');
+  document.getElementById(`pd${obS}`).classList.add('done');
+}
+function obBack(s){
+  if(s===0) return;
+  document.getElementById(`obs${s}`).classList.remove('active');
+  obS=s-1;
+  document.getElementById(`obs${obS}`).classList.add('active');
+}
+function finishOb(){
+  B.platforms=[...document.querySelectorAll('#platC .chip.on')].map(c=>c.textContent).join(', ');
+  B.goals=[...document.querySelectorAll('#goalC .chip.on')].map(c=>c.textContent).join(', ');
+  document.getElementById('pd3').classList.add('done');
+  document.getElementById('sbBrand').style.display='block';
+  document.getElementById('sbBrandName').textContent=B.name;
+  document.getElementById('homeG').textContent=`Hola, ${B.name} 👋`;
+  goScreen('home');
+}
+function goOb(){
+  obS=0;
+  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('obs0').classList.add('active');
+  goScreen('onboarding');
+}
+
+// ── NAV ──
+const toolConfigs={
+  ads:{t:'Copy para Ads Pro',s:'El generador de ads más completo para Meta',angles:[
+    {em:'🔥',t:'Pain point',d:'Duele antes de vender'},
+    {em:'✨',t:'Aspiracional',d:'La vida que pueden tener'},
+    {em:'🔄',t:'Transformación',d:'Antes vs después'},
+    {em:'⏰',t:'FOMO / Urgencia',d:'Escasez y tiempo limitado'},
+    {em:'🤔',t:'Curiosidad',d:'La pregunta que para el scroll'},
+    {em:'💡',t:'Beneficio directo',d:'Qué gana en concreto'},
+    {em:'👥',t:'Social proof',d:'Otros lo usaron y funcionó'},
+    {em:'🎯',t:'Objeción directa',d:'Resuelve la duda principal'},
+    {em:'🆚',t:'Comparativa',d:'Por qué elegirte a vos'},
+  ],extras:'ads'},
+  posts:{t:'Posts para Redes',s:'Captions con hooks que paran el scroll',angles:[
+    {em:'📚',t:'Educativo',d:'Enseñá algo útil'},
+    {em:'😂',t:'Relatable',d:'Te pasa a vos también'},
+    {em:'🎭',t:'Behind the scenes',d:'Mostrá el detrás'},
+    {em:'💬',t:'Testimonio',d:'Resultados reales'},
+    {em:'💡',t:'Tip rápido',d:'Valor en pocas líneas'},
+    {em:'🔥',t:'Controversial',d:'Una opinión que genere debate'},
+  ],extras:'posts'},
+  email:{t:'Emails',s:'Emails que se abren y convierten',angles:[
+    {em:'🛒',t:'Urgencia',d:'Quedan pocas unidades'},
+    {em:'❤️',t:'Emocional',d:'Conectar antes de vender'},
+    {em:'🎁',t:'Beneficio claro',d:'Lo que ganás si abrís'},
+    {em:'🤔',t:'Curiosidad',d:'El asunto que no podés no abrir'},
+    {em:'🔄',t:'Recordatorio suave',d:'Sin presión, solo un empujón'},
+    {em:'⭐',t:'Social proof',d:'Otros ya lo probaron'},
+  ],extras:'email'},
+};
+
+let curTool='ads';
+
+function goTool(t){
+  curTool=t;
+  const cfg=toolConfigs[t];
+  document.getElementById('toolT').textContent=cfg.t;
+  document.getElementById('toolS').textContent=cfg.s;
+  document.getElementById('tProd').value='';
+  document.getElementById('resArea').innerHTML='';
+  document.getElementById('errBox').innerHTML='';
+  document.getElementById('genBtn').innerHTML='✦ Generar contenido';
+
+  // Show/hide extras
+  document.getElementById('adsExtras').style.display=t==='ads'?'block':'none';
+  document.getElementById('postsExtras').style.display=t==='posts'?'block':'none';
+  document.getElementById('emailExtras').style.display=t==='email'?'block':'none';
+  // Reset format selector to imagen and hide durField when switching to ads
+  if(t==='ads'){
+    document.querySelectorAll('#fmtCtrl .seg-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('#fmtCtrl .seg-btn[data-v="imagen"]').classList.add('active');
+    document.getElementById('durField').style.display='none';
+    document.querySelectorAll('#objCtrl .seg-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('#objCtrl .seg-btn[data-v="venta_directa"]').classList.add('active');
+    document.querySelectorAll('#tempCtrl .seg-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('#tempCtrl .seg-btn[data-v="fria"]').classList.add('active');
+    document.getElementById('tOffer').value='';
+  }
+
+  // Angles
+  const ag=document.getElementById('angleGrid');
+  ag.innerHTML=cfg.angles.map((a,i)=>`
+    <div class="angle-card${i===0?' on':''}" onclick="selAngle(this)">
+      <span class="ac-em">${a.em}</span>
+      <div class="ac-t">${a.t}</div>
+      <div class="ac-d">${a.d}</div>
+    </div>`).join('');
+
+  goScreen('tool');
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`nav-${t}`)?.classList.add('active');
+  // setTopbar AFTER goScreen so it overwrites the generic 'tool' title
+  setTopbar(cfg.t, cfg.s);
+}
+
+function selAngle(el){
+  document.querySelectorAll('.angle-card').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function selSeg(btn,ctrl){
+  document.querySelectorAll(`#${ctrl} .seg-btn`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  // Show/hide duration for image format
+  if(ctrl==='fmtCtrl'){
+    const dur=document.getElementById('durField');
+    dur.style.display=btn.dataset.v==='imagen'?'none':'block';
+  }
+}
+
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`screen-${name}`).classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`nav-${name}`)?.classList.add('active');
+  const titles={home:['Crealo','Tu estudio de contenido'],ugc:['UGC Creators','Conectamos tu marca con creators reales'],full:['Full Service','Nos encargamos de todo'],onboarding:['Crealo','Configurá tu marca'],tool:['Herramienta','']};
+  if(titles[name]) setTopbar(titles[name][0],titles[name][1]);
+}
+
+function setTopbar(t,s){
+  document.getElementById('tbTitle').textContent=t;
+  document.getElementById('tbSub').textContent=s;
+}
+
+// ── GENERATE ──
+async function generate(){
+  const prod=document.getElementById('tProd').value.trim();
+  if(!prod){showErr('Escribí el producto a comunicar.');return}
+
+  const angle=document.querySelector('.angle-card.on .ac-t')?.textContent||'';
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generando...';
+  document.getElementById('resArea').innerHTML='';
+  document.getElementById('errBox').innerHTML='';
+
+  // Get tool-specific params and build task instruction
+  let taskInstruction = '';
+  let extraParams = '';
+
+  if(curTool==='ads'){
+    const fmt = document.querySelector('#fmtCtrl .seg-btn.active')?.dataset.v || 'imagen';
+    const dur = document.querySelector('#durCtrl .seg-btn.active')?.dataset.v || '15s';
+    const obj = document.querySelector('#objCtrl .seg-btn.active')?.dataset.v || 'venta_directa';
+    const temp = document.querySelector('#tempCtrl .seg-btn.active')?.dataset.v || 'fria';
+    const offer = document.getElementById('tOffer').value.trim();
+
+    const fmtLabels = { imagen: 'Imagen estática', video_corto: 'Video corto', video_largo: 'Video largo' };
+    const objLabels = { venta_directa: 'Venta directa / conversión', trafico_web: 'Tráfico al sitio web', awareness: 'Reconocimiento de marca (awareness)', remarketing: 'Remarketing (ya conocen la marca)' };
+    const tempLabels = { fria: 'Fría (no conocen la marca)', tibia: 'Tibia (la vieron pero no compraron)', caliente: 'Caliente (ya compraron o están muy cerca)' };
+
+    extraParams = `FORMATO DEL ANUNCIO: ${fmtLabels[fmt]}${fmt !== 'imagen' ? `\nDURACIÓN DEL VIDEO: ${dur}` : ''}
+OBJETIVO: ${objLabels[obj]}
+TEMPERATURA DE AUDIENCIA: ${tempLabels[temp]}${offer ? `\nOFERTA / DATO CONCRETO: ${offer}` : ''}`;
+
+
+    if(fmt === 'imagen'){
+      taskInstruction = `Generá 3 variantes de copy para un ANUNCIO DE IMAGEN ESTÁTICA en Meta (Instagram/Facebook).
+Cada variante debe tener:
+- "headline": primera línea del texto — el gancho que frena el scroll (máx 8 palabras, impactante, sin punto al final)
+- "body": 2-3 líneas debajo del headline (máx 60 palabras, rioplatense natural, que genere deseo o resuelva una objeción)
+- "cta": texto del botón de acción en Meta (máx 4 palabras, ej: "Comprá ahora", "Ver más", "Lo quiero")
+- "clips": null`;
+
+    } else if(fmt === 'video_corto'){
+      const durSecs = { '15s':15, '30s':30, '60s':60, '90s+':90 };
+      const T = durSecs[dur] || 30;
+      const segs = [
+        {from:0,        to:3,                    label:'HOOK'},
+        {from:3,        to:Math.round(T*0.30),   label:'PROBLEMA / DESEO'},
+        {from:Math.round(T*0.30), to:Math.round(T*0.65), label:'SOLUCIÓN / PRODUCTO'},
+        {from:Math.round(T*0.65), to:Math.round(T*0.85), label:'PRUEBA / BENEFICIO'},
+        {from:Math.round(T*0.85), to:T,           label:'CIERRE + CTA'},
+      ];
+      const clipsSchema = segs.map(s=>`{"from":${s.from},"to":${s.to},"label":"${s.label}","dialog":"[lo que se dice en cámara o voz en off]","visual":"[descripción de lo que se ve]"}`).join(',');
+
+      taskInstruction = `Generá 3 variantes de SCRIPT PROFESIONAL para un VIDEO CORTO de ${dur} en Meta Reels/Stories.
+Cada variante debe tener:
+- "headline": el HOOK exacto de los primeros 3 segundos (máx 8 palabras, que genere curiosidad o impacto inmediato, rioplatense)
+- "body": null  
+- "cta": el texto verbal + en pantalla del cierre (máx 5 palabras)
+- "clips": array con exactamente ${segs.length} objetos, UNO POR CADA SEGMENTO, en este orden y con estos tiempos exactos:
+[${clipsSchema}]
+Completá "dialog" con el texto EXACTO que se dice/escucha, y "visual" con qué se ve en pantalla en ese momento.`;
+
+    } else {
+      const durSecs = { '15s':15, '30s':30, '60s':60, '90s+':90 };
+      const T = durSecs[dur] || 90;
+      const segs = [
+        {from:0,                   to:5,                    label:'HOOK DE APERTURA'},
+        {from:5,                   to:Math.round(T*0.20),   label:'CONTEXTO / PROBLEMA'},
+        {from:Math.round(T*0.20),  to:Math.round(T*0.40),  label:'PRESENTACIÓN DEL PRODUCTO'},
+        {from:Math.round(T*0.40),  to:Math.round(T*0.60),  label:'BENEFICIOS EN DETALLE'},
+        {from:Math.round(T*0.60),  to:Math.round(T*0.78),  label:'PRUEBA SOCIAL / TESTIMONIO'},
+        {from:Math.round(T*0.78),  to:Math.round(T*0.90),  label:'OFERTA / URGENCIA'},
+        {from:Math.round(T*0.90),  to:T,                   label:'CTA FINAL'},
+      ];
+      const clipsSchema = segs.map(s=>`{"from":${s.from},"to":${s.to},"label":"${s.label}","dialog":"[texto exacto]","visual":"[qué se ve]"}`).join(',');
+
+      taskInstruction = `Generá 3 variantes de SCRIPT PROFESIONAL para un VIDEO LARGO de ${dur} en Meta Facebook/Instagram.
+Cada variante debe tener:
+- "headline": el HOOK de apertura — qué se dice en los primeros 5 segundos para que no lo skipeen (máx 10 palabras, rioplatense)
+- "body": null
+- "cta": texto del cierre verbal y en pantalla (máx 5 palabras)
+- "clips": array con exactamente ${segs.length} objetos, UNO POR SEGMENTO, con estos tiempos exactos:
+[${clipsSchema}]
+Completá "dialog" con el texto EXACTO que se dice en ese segmento, y "visual" con descripción de qué se ve en pantalla.`;
+    }
+  }
+
+  if(curTool==='posts'){
+    const plat = document.querySelector('#postPlatCtrl .seg-btn.active')?.dataset.v || 'instagram';
+    const platLabel = { instagram: 'Instagram Feed/Reels', tiktok: 'TikTok', ambas: 'Instagram y TikTok' };
+    extraParams = `PLATAFORMA: ${platLabel[plat]}`;
+    taskInstruction = `Generá 3 captions para ${platLabel[plat]}. Cada uno con:
+- "headline": primera línea del caption, el hook que para el scroll (máx 10 palabras, con gancho fuerte — pregunta, dato, provocación o afirmación bold)
+- "body": resto del caption (3-5 líneas, voz natural de la marca, emojis moderados y en contexto, rioplatense) + salto de línea + 4-6 hashtags relevantes
+- "cta": llamada a la acción al final antes de los hashtags (máx 5 palabras, ej: "Guardalo para después 👆", "Contanos en los comentarios", "Link en bio")`;
+  }
+
+  if(curTool==='email'){
+    const etype = document.querySelector('#emailTypeCtrl .seg-btn.active')?.dataset.v || 'carrito_abandonado';
+    const detail = document.getElementById('tEmailDetail').value.trim();
+    const etypeLabels = { carrito_abandonado: 'Recupero de carrito abandonado', lanzamiento: 'Lanzamiento de producto', campana: 'Campaña / promoción especial', reactivacion: 'Reactivación de base de clientes inactivos' };
+    extraParams = `TIPO DE EMAIL: ${etypeLabels[etype]}${detail ? `\nOFERTA / DETALLE: ${detail}` : ''}`;
+    taskInstruction = `Generá 3 variantes de email de marketing del tipo "${etypeLabels[etype]}". Cada una con:
+- "headline": asunto del email (máx 9 palabras, que genere curiosidad o urgencia para que lo abran — no genérico, no "¡Mirá lo que tenemos para vos!")
+- "body": preheader (1 línea resumen) + cuerpo del email (4-6 líneas, voz de marca, rioplatense, con estructura clara que lleve al clic)
+- "cta": texto del botón principal del email (máx 5 palabras)`;
+  }
+
+  const prompt = `Sos un experto en copywriting y marketing digital para ecommerce en Argentina.
+
+DATOS DE LA MARCA:
+- Nombre: ${B.name || 'la marca'}
+- Rubro: ${B.cat || 'ecommerce'}
+- Producto: ${B.prod || prod}
+- Diferencial: ${B.diff || 'no especificado'}
+- Tono de comunicación: ${B.tone || 'cercano y directo'}
+- Mensaje principal de la marca: ${B.msg || 'no especificado'}
+- Palabras y frases a EVITAR: ${B.avoid || 'ninguna'}
+- Audiencia objetivo: ${B.audience || 'consumidores argentinos'}
+- Dolor principal que resuelve: ${B.pain || 'no especificado'}
+
+TAREA:
+${taskInstruction}
+
+PRODUCTO A COMUNICAR: ${prod}
+ÁNGULO DEL MENSAJE: ${angle}
+${extraParams}
+
+REGLAS OBLIGATORIAS:
+- Español rioplatense natural: usá "vos", "tu", "dale", "mirá", etc.
+- NUNCA uses: "revolucionario", "innovador", "exclusivo", "de alta gama", "premium", "único en su tipo"
+- Cada variante tiene que ser NOTABLEMENTE distinta de las otras (distinto hook, distinto enfoque, distinta estructura)
+- Que suene a humano, no a robot ni a agencia
+- Adaptá el largo y estilo exactamente al formato especificado
+
+Respondé ÚNICAMENTE con JSON válido, sin markdown, sin texto antes ni después:
+{"variants":[{"type":"Variante 1","headline":"...","body":"...","cta":"...","clips":null},{"type":"Variante 2","headline":"...","body":"...","cta":"...","clips":null},{"type":"Variante 3","headline":"...","body":"...","cta":"...","clips":null}]}`;
+
+  // API call with auto-retry on overload
+  const isVideo = curTool==='ads' && document.querySelector('#fmtCtrl .seg-btn.active')?.dataset.v !== 'imagen';
+  const maxTokens = isVideo ? 2800 : 1600;
+
+  async function callAPI(attempt){
+    const res = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens: maxTokens, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    if(!res.ok){
+      const msg = data?.error?.message || '';
+      const type = data?.error?.type || '';
+      if((type==='overloaded_error' || res.status===529 || res.status===503) && attempt < 3){
+        const wait = attempt * 8000;
+        btn.innerHTML = `<span class="spinner"></span> Reintentando en ${wait/1000}s... (intento ${attempt+1}/3)`;
+        await new Promise(r=>setTimeout(r, wait));
+        return callAPI(attempt+1);
+      }
+      throw new Error(msg || `Error HTTP ${res.status}`);
+    }
+    return data;
+  }
+
+  try{
+    const data = await callAPI(1);
+    if(!data.content?.length) throw new Error('Respuesta vacía. Intentá de nuevo.');
+    const raw = data.content.map(i=>i.text||'').join('').replace(/```json[\s\S]*?```|```/g,'').trim();
+    let parsed;
+    try{ parsed = JSON.parse(raw); }
+    catch(je){
+      // Try to extract JSON from response if model added extra text
+      const match = raw.match(/\{[\s\S]*\}/);
+      if(match){ try{ parsed = JSON.parse(match[0]); }catch(e2){ throw new Error('Formato de respuesta inválido. Intentá de nuevo.'); } }
+      else throw new Error('La IA no devolvió JSON. Intentá de nuevo.');
+    }
+    const variants = parsed.variants;
+    if(!variants?.length) throw new Error('No se generaron variantes. Intentá de nuevo.');
+
+    const area = document.getElementById('resArea');
+    const fmtActive = curTool==='ads' ? (document.querySelector('#fmtCtrl .seg-btn.active')?.textContent.trim()||'') : '';
+    area.innerHTML = `<div class="res-header">${variants.length} variantes generadas · ${angle}${fmtActive?' · '+fmtActive:''}</div>`;
+
+    variants.forEach((v,i)=>{
+      const d = document.createElement('div');
+      d.className = 'res-card';
+      const isVideoVariant = Array.isArray(v.clips) && v.clips.length > 0;
+
+      // Build body HTML
+      let bodyHTML = '';
+      if(isVideoVariant){
+        // Render clip cards
+        const clipsHTML = v.clips.map(c => `
+          <div class="clip">
+            <div class="clip-header">
+              <div class="clip-tc">${c.from}s — ${c.to}s</div>
+              <div class="clip-label">${c.label||''}</div>
+            </div>
+            <div class="clip-body">
+              <div class="clip-dialog"></div>
+              <div class="clip-visual"><span>Visual</span><span class="clip-visual-text"></span></div>
+            </div>
+          </div>`).join('');
+        bodyHTML = `<div class="script-hook-label">Script completo · ${v.clips.length} segmentos</div><div class="clips-wrap">${clipsHTML}</div>`;
+      } else {
+        bodyHTML = `<div class="res-b"></div>`;
+      }
+
+      d.innerHTML = `
+        <div class="res-type">Variante ${i+1}</div>
+        <div class="res-h"></div>
+        ${bodyHTML}
+        <div class="res-cta"></div>
+        <div class="res-actions">
+          <button class="res-btn cp-h">${isVideoVariant ? 'Copiar hook' : 'Copiar headline'}</button>
+          ${isVideoVariant ? '' : '<button class="res-btn cp-b">Copiar copy</button>'}
+          <button class="res-btn cp-a">✦ Copiar todo</button>
+        </div>`;
+
+      d.querySelector('.res-h').textContent = v.headline || '';
+      d.querySelector('.res-cta').textContent = v.cta ? '→ ' + v.cta : '';
+
+      if(isVideoVariant){
+        // Fill clip text content safely (no innerHTML injection)
+        const clipEls = d.querySelectorAll('.clip');
+        v.clips.forEach((c, ci) => {
+          if(clipEls[ci]){
+            clipEls[ci].querySelector('.clip-dialog').textContent = c.dialog || '';
+            clipEls[ci].querySelector('.clip-visual-text').textContent = c.visual || '';
+          }
+        });
+        // Build plain text for copy
+        const scriptText = v.clips.map(c=>`[${c.from}s-${c.to}s] ${c.label}\n🎙 ${c.dialog}\n👁 ${c.visual}`).join('\n\n');
+        const fullText = `HOOK: ${v.headline}\n\n${scriptText}\n\nCTA: ${v.cta}`;
+        d.querySelector('.cp-h').addEventListener('click', function(){ cp(v.headline||'', this) });
+        d.querySelector('.cp-a').addEventListener('click', function(){ cp(fullText, this) });
+      } else {
+        const bodyEl = d.querySelector('.res-b');
+        if(bodyEl) bodyEl.innerHTML = (v.body||'').replace(/\n/g,'<br>');
+        d.querySelector('.cp-h').addEventListener('click', function(){ cp(v.headline||'', this) });
+        const cpB = d.querySelector('.cp-b');
+        if(cpB) cpB.addEventListener('click', function(){ cp(v.body||'', this) });
+        d.querySelector('.cp-a').addEventListener('click', function(){ cp((v.headline||'')+'\n\n'+(v.body||'')+'\n\nCTA: '+(v.cta||''), this) });
+      }
+
+      area.appendChild(d);
+    });
+
+  }catch(e){
+    showErr('⚠ ' + (e.message||'Error desconocido. Revisá tu conexión e intentá de nuevo.'));
+  }
+
+  btn.disabled=false;
+  btn.innerHTML='✦ Generar de nuevo';
+}
+
+function cp(text, btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    const o=btn.textContent;btn.textContent='✓ Copiado';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('done')},2000);
+  }).catch(()=>{
+    // fallback
+    const ta=document.createElement('textarea');
+    ta.value=text;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    const o=btn.textContent;btn.textContent='✓ Copiado';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('done')},2000);
+  });
+}
+function showErr(m){document.getElementById('errBox').innerHTML=`<div class="err-box">${m}</div>`}
+
+// ── CHIPS ──
+function tog(el,g){el.classList.toggle('on')}
+
+// ── QTY ──
+function chgQty(d){const i=document.getElementById('uQty');i.value=Math.max(1,Math.min(50,parseInt(i.value||1)+d))}
+
+// ── WHATSAPP ──
+function sendUGC(){
+  const prod=document.getElementById('uProd').value.trim();
+  if(!prod){alert('Completá el producto a filmar.');return}
+  const cats=[...document.querySelectorAll('#uCatC .chip.on')].map(c=>c.textContent).join(', ');
+  const styles=[...document.querySelectorAll('#uStyleC .chip.on')].map(c=>c.textContent).join(', ');
+  const txt=`🎥 *PROPUESTA UGC — CREALO*
+
+🏷️ *Marca:* ${B.name||'—'}
+📦 *Producto:* ${prod}
+💬 *Mensaje del video:* ${document.getElementById('uMsg').value||'—'}
+🎬 *Cantidad de videos:* ${document.getElementById('uQty').value}
+
+👤 *Creator ideal:*
+• Género: ${document.getElementById('uGen').value||'Sin preferencia'}
+• Edad: ${document.getElementById('uAge').value||'Sin preferencia'}
+• Categoría: ${cats||'Sin preferencia'}
+• Estilo: ${styles||'Sin preferencia'}
+• Seguidores: ${document.getElementById('uFoll').value||'Sin preferencia'}
+• Zona: ${document.getElementById('uZone').value}
+
+📝 *Notas:* ${document.getElementById('uNotes').value||'—'}`;
+  window.open(`https://wa.me/${WAPP}?text=${encodeURIComponent(txt)}`,'_blank');
+}
+
+function sendFull(){
+  const goals=[...document.querySelectorAll('#fsGoalC .chip.on')].map(c=>c.textContent).join(', ');
+  const bud=[...document.querySelectorAll('#fsBudC .chip.on')].map(c=>c.textContent).join(', ');
+  const txt=`🚀 *CONSULTA FULL SERVICE — CREALO*
+
+📛 *Nombre:* ${document.getElementById('fsName').value||'—'}
+📱 *WhatsApp:* ${document.getElementById('fsPhone').value||'—'}
+🏷️ *Marca:* ${B.name||'—'}
+🎯 *Objetivo:* ${goals||'—'}
+📋 *Detalle:* ${document.getElementById('fsDetail').value||'—'}
+💰 *Presupuesto:* ${bud||'—'}`;
+  window.open(`https://wa.me/${WAPP}?text=${encodeURIComponent(txt)}`,'_blank');
+}
+</script>
+</body>
+</html>
