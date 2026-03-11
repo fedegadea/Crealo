@@ -1301,7 +1301,7 @@ Respondé ÚNICAMENTE con JSON válido, sin markdown, sin texto antes ni despué
     const res = await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ model:'claude-sonnet-4-5-20251022', max_tokens: maxTokens, messages:[{role:'user',content:prompt}] })
+      body:JSON.stringify({ model:'claude-sonnet-4-5-20250929', max_tokens: maxTokens, messages:[{role:'user',content:prompt}] })
     });
     const data = await res.json();
     if(!res.ok){
