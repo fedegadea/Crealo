@@ -78,7 +78,7 @@ function checkShowAnalyze() {
 
 // ══ ANALYZE REFS WITH AI ══
 async function analyzeRefs() {
-  const refs = getRefLinks('refLinksUGC');
+  const refs = typeof getRefLinksUGCAll === 'function' ? getRefLinksUGCAll() : getRefLinks('refLinksUGC');
   if (!refs) return;
   const btn = document.getElementById('refAnalyzeBtn');
   const result = document.getElementById('refAnalysisResult');
@@ -144,6 +144,165 @@ function loadPaletteUI() {
   });
   if (colors.length >= 5 && addBtn) addBtn.style.display = 'none';
 }
+
+
+// ══════════════════════════════════════
+// BANCO DE REFERENCIAS
+// ══════════════════════════════════════
+
+const REF_BANK = [
+  // ── BEAUTY & SKINCARE ──
+  { id:'b1', cat:'beauty', platform:'TikTok', name:'@glowrecipe', style:'Skincare satisfying — texturas, capas, resultado final. Muy aspiracional y colorido.', tags:['ASMR','Skincare','Aspiracional'], url:'https://www.tiktok.com/@glowrecipe' },
+  { id:'b2', cat:'beauty', platform:'Instagram', name:'@cerave', style:'Educativo y científico. Explica el ingrediente, muestra el resultado. Tono clínico pero accesible.', tags:['Educativo','Ingredientes','Reel'], url:'https://www.instagram.com/cerave' },
+  { id:'b3', cat:'beauty', platform:'TikTok', name:'@skincarebyhyram', style:'Talking head directo. Reseña honesta, mucho primeros planos. Engancha en el primer segundo con una pregunta.', tags:['Review','Talking head','Hook fuerte'], url:'https://www.tiktok.com/@skincarebyhyram' },
+  { id:'b4', cat:'beauty', platform:'TikTok', name:'@paulaschoice', style:'Antes/después muy marcado. Copy superpuesto. Música trending. Cortes rápidos.', tags:['Antes/después','B-roll','Trending'], url:'https://www.tiktok.com/@paulaschoice' },
+  { id:'b5', cat:'beauty', platform:'Instagram', name:'@tatcha', style:'Cinematográfico, lento, premium. Paleta beige/dorada. Sin texto en pantalla. Solo imagen y música.', tags:['Premium','Cinematográfico','Sin texto'], url:'https://www.instagram.com/tatcha' },
+  { id:'b6', cat:'beauty', platform:'TikTok', name:'@elfcosmetics', style:'Humor y relatable. Mucho UGC real. Gente común mostrando resultados en casa. Muy auténtico.', tags:['UGC real','Humor','Auténtico'], url:'https://www.tiktok.com/@elfcosmetics' },
+
+  // ── MODA ──
+  { id:'m1', cat:'moda', platform:'TikTok', name:'@zara', style:'Get Ready With Me (GRWM). Outfits completos. Música chill. Colores neutros. Sin voz, solo música.', tags:['GRWM','Outfits','Minimalista'], url:'https://www.tiktok.com/@zara' },
+  { id:'m2', cat:'moda', platform:'Instagram', name:'@aritzia', style:'Editorial de alta calidad. Modelos en locaciones urbanas. Paleta desaturada. Muy aspiracional.', tags:['Editorial','Aspiracional','Urbano'], url:'https://www.instagram.com/aritzia' },
+  { id:'m3', cat:'moda', platform:'TikTok', name:'@shein', style:'Haul masivo. Mucho producto, precio en pantalla. Texto rápido. Muy directo a la venta.', tags:['Haul','Precio','Directo'], url:'https://www.tiktok.com/@shein' },
+  { id:'m4', cat:'moda', platform:'TikTok', name:'@princesspolly', style:'Outfit inspo con transiciones. Música pop. Mucho color. Target joven. Texto onscreen con precios.', tags:['Transiciones','Colorido','Joven'], url:'https://www.tiktok.com/@princesspolly' },
+  { id:'m5', cat:'moda', platform:'Instagram', name:'@loavies', style:'Feed muy curado, paleta pastel. Reels cortos con outfits. Copy mínimo. Estética coherente.', tags:['Feed curado','Pastel','Estética'], url:'https://www.instagram.com/loavies' },
+
+  // ── FOOD & BEBIDAS ──
+  { id:'f1', cat:'food', platform:'TikTok', name:'@chipotle', style:'Trends de TikTok adaptados a fast food. Humor joven. Muy viral. Poco producto, mucho entretenimiento.', tags:['Trending','Humor','Viral'], url:'https://www.tiktok.com/@chipotle' },
+  { id:'f2', cat:'food', platform:'TikTok', name:'@dunkin', style:'Behind the scenes de preparación. ASMR de bebidas. Colores vibrantes. Satisfying.', tags:['BTS','ASMR','Satisfying'], url:'https://www.tiktok.com/@dunkin' },
+  { id:'f3', cat:'food', platform:'Instagram', name:'@magnolia_bakery', style:'Close-ups de productos, iluminación cálida, paleta rosa/beige. Muy apetitoso. Sin voiceover.', tags:['Close-up','Cálido','Apetitoso'], url:'https://www.instagram.com/magnolia_bakery' },
+  { id:'f4', cat:'food', platform:'TikTok', name:'@tasty', style:'Receta rápida en 60s. Vista desde arriba. Texto con ingredientes. Ritmo muy rápido.', tags:['Receta','Top-down','Rápido'], url:'https://www.tiktok.com/@buzzfeedtasty' },
+  { id:'f5', cat:'food', platform:'TikTok', name:'@stanley1913', style:'Lifestyle, no el producto. Mujer en la mañana con su vaso. Minimalista. Aspiracional de vida ordenada.', tags:['Lifestyle','Minimalista','Mañana'], url:'https://www.tiktok.com/@stanley1913' },
+
+  // ── FITNESS ──
+  { id:'ft1', cat:'fitness', platform:'TikTok', name:'@gymshark', style:'Atletas reales en el gym. Música energética. Cuts al ritmo. Antes/después de entrenamientos.', tags:['Atletas','Energético','Gym'], url:'https://www.tiktok.com/@gymshark' },
+  { id:'ft2', cat:'fitness', platform:'Instagram', name:'@lululemon', style:'Yoga y running en locaciones naturales. Paleta neutra. Slow motion. Muy aspiracional de bienestar.', tags:['Bienestar','Slow-mo','Natural'], url:'https://www.instagram.com/lululemon' },
+  { id:'ft3', cat:'fitness', platform:'TikTok', name:'@whoop', style:'Data y resultados. Gráficos del dispositivo. Testimonios de atletas. Muy orientado a resultados.', tags:['Data','Resultados','Testimonios'], url:'https://www.tiktok.com/@whoop' },
+  { id:'ft4', cat:'fitness', platform:'TikTok', name:'@myprotein', style:'Shake preparation, gym sessions, unboxing. Mucho UGC. Mix de aspiracional y accesible.', tags:['UGC','Unboxing','Mix'], url:'https://www.tiktok.com/@myprotein' },
+
+  // ── TECH & GADGETS ──
+  { id:'t1', cat:'tech', platform:'TikTok', name:'@apple', style:'Cinematográfico. Un producto, una función. Música minimalista. Sin voiceover. Solo imagen.', tags:['Minimalista','Cinematográfico','Producto'], url:'https://www.tiktok.com/@apple' },
+  { id:'t2', cat:'tech', platform:'YouTube', name:'@mkbhd', style:'Unboxing premium. Mucho close-up. Voz calmada. Comparativas visuales. Muy detallado.', tags:['Unboxing','Comparativa','Detallado'], url:'https://www.youtube.com/@mkbhd' },
+  { id:'t3', cat:'tech', platform:'TikTok', name:'@dbrand', style:'Humor sarcástico. Copy muy ingenioso. Sin tomar nada en serio. Muy viral entre tech enthusiasts.', tags:['Humor','Sarcástico','Viral'], url:'https://www.tiktok.com/@dbrand' },
+  { id:'t4', cat:'tech', platform:'TikTok', name:'@anker', style:'Demostración rápida de funcionalidad. Hook: "¿sabías que...". Texto grande en pantalla. Directo.', tags:['Demo','Hook','Educativo'], url:'https://www.tiktok.com/@anker' },
+
+  // ── HOGAR & DECO ──
+  { id:'h1', cat:'home', platform:'TikTok', name:'@ikeausa', style:'Transformaciones de espacios. Antes/después. Música lofi. Texto con productos y precios.', tags:['Transformación','Antes/después','Lofi'], url:'https://www.tiktok.com/@ikeausa' },
+  { id:'h2', cat:'home', platform:'Instagram', name:'@anthropologie', style:'Editorial de interiores. Paleta cálida terrosa. Styled shots. Sin personas. Muy curado.', tags:['Editorial','Curado','Interiorismo'], url:'https://www.instagram.com/anthropologie' },
+  { id:'h3', cat:'home', platform:'TikTok', name:'@cleanwithme', style:'Limpieza satisfying. ASMR. Proceso completo. Muy enganchante por el resultado visual.', tags:['ASMR','Satisfying','Proceso'], url:'https://www.tiktok.com/@cleanwithme_' },
+  { id:'h4', cat:'home', platform:'TikTok', name:'@ruggable', style:'Decoración rápida. Swap de alfombras. Transformación de habitación en 30s. Muy satisfying.', tags:['Transformación','Decoración','Rápido'], url:'https://www.tiktok.com/@ruggable' },
+
+  // ── MASCOTAS ──
+  { id:'p1', cat:'pet', platform:'TikTok', name:'@chewy', style:'Pets reaccionando a productos. Mucho humor. Clips cortos del perro/gato. Muy shareable.', tags:['Humor','Mascotas','Shareable'], url:'https://www.tiktok.com/@chewy' },
+  { id:'p2', cat:'pet', platform:'Instagram', name:'@royalcanin', style:'Fotografía premium de mascotas. Educativo sobre nutrición. Tono experto pero accesible.', tags:['Premium','Educativo','Nutrición'], url:'https://www.instagram.com/royalcanin' },
+  { id:'p3', cat:'pet', platform:'TikTok', name:'@bark', style:'Dogs being dogs. Humor absurdo. Música viral. Muy auténtico y sin producción.', tags:['Auténtico','Humor','Sin producción'], url:'https://www.tiktok.com/@bark' },
+];
+
+let _refSelected = new Set();
+let _refActiveCat = 'all';
+let _refActiveTab = 'banco';
+
+function initRefBank() {
+  renderRefBank(REF_BANK);
+}
+
+function renderRefBank(items) {
+  const grid = document.getElementById('refBankGrid');
+  if (!grid) return;
+  if (!items.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:13px">No hay referencias para esa búsqueda.</div>';
+    return;
+  }
+  grid.innerHTML = items.map(ref => `
+    <div class="ref-card${_refSelected.has(ref.id) ? ' selected' : ''}" onclick="toggleRefCard('${ref.id}')" data-cat="${ref.cat}" data-id="${ref.id}">
+      <div class="rc-platform">${ref.platform} · ${ref.cat}</div>
+      <div class="rc-name">${ref.name}</div>
+      <div class="rc-style">${ref.style}</div>
+      <div class="rc-tags">${ref.tags.map(t => `<span class="rc-tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function toggleRefCard(id) {
+  if (_refSelected.has(id)) {
+    _refSelected.delete(id);
+  } else {
+    if (_refSelected.size >= 5) { return; } // max 5
+    _refSelected.add(id);
+  }
+  // update UI
+  document.querySelectorAll('.ref-card').forEach(card => {
+    if (card.dataset.id === id) card.classList.toggle('selected', _refSelected.has(id));
+  });
+  updateRefSelectedBar();
+}
+
+function updateRefSelectedBar() {
+  const bar = document.getElementById('refSelectedBar');
+  const count = document.getElementById('refSelectedCount');
+  if (!bar) return;
+  if (_refSelected.size > 0) {
+    bar.style.display = 'flex';
+    count.textContent = `${_refSelected.size} referencia${_refSelected.size > 1 ? 's' : ''} seleccionada${_refSelected.size > 1 ? 's' : ''}`;
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function clearRefSel() {
+  _refSelected.clear();
+  document.querySelectorAll('.ref-card.selected').forEach(c => c.classList.remove('selected'));
+  updateRefSelectedBar();
+}
+
+function filterRefCat(btn, cat) {
+  _refActiveCat = cat;
+  document.querySelectorAll('.rbc').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const search = document.getElementById('refBankSearch')?.value.toLowerCase() || '';
+  applyRefFilters(cat, search);
+}
+
+function filterRefBank(search) {
+  applyRefFilters(_refActiveCat, search.toLowerCase());
+}
+
+function applyRefFilters(cat, search) {
+  let items = REF_BANK;
+  if (cat !== 'all') items = items.filter(r => r.cat === cat);
+  if (search) items = items.filter(r =>
+    r.name.toLowerCase().includes(search) ||
+    r.style.toLowerCase().includes(search) ||
+    r.tags.some(t => t.toLowerCase().includes(search)) ||
+    r.platform.toLowerCase().includes(search)
+  );
+  renderRefBank(items);
+}
+
+function switchRefTab(tab) {
+  _refActiveTab = tab;
+  document.querySelectorAll('.ref-tab').forEach((b,i) => {
+    b.classList.toggle('active', (i===0 && tab==='banco') || (i===1 && tab==='custom'));
+  });
+  document.getElementById('refBancoPanel').style.display = tab === 'banco' ? 'block' : 'none';
+  document.getElementById('refCustomPanel').style.display = tab === 'custom' ? 'block' : 'none';
+}
+
+// Override getRefLinks for UGC to also include selected bank refs
+const _origGetRefLinks = getRefLinks;
+function getRefLinksUGCAll() {
+  // Bank selected
+  const bankRefs = [..._refSelected].map(id => {
+    const ref = REF_BANK.find(r => r.id === id);
+    return ref ? `${ref.name} (${ref.platform}) — ${ref.style}` : '';
+  }).filter(Boolean);
+  // Custom links
+  const customLinks = _refActiveTab === 'custom' ? getRefLinks('refLinksUGC') : '';
+  const all = [...bankRefs, ...(customLinks ? [customLinks] : [])];
+  return all.join(' | ');
+}
+
+// Init bank when UGC screen opens
+const _origGoTool = window.goTool;
 
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
@@ -1165,6 +1324,84 @@ footer{padding:28px 48px;border-top:1px solid var(--border2);display:flex;align-
 }
 .ref-analysis-result strong { color: var(--green); }
 
+
+/* ══ BANCO DE REFERENCIAS ══ */
+.ref-tabs { display:flex; gap:6px; margin-bottom:14px; }
+.ref-tab {
+  padding:8px 18px; border-radius:50px; font-size:12px; font-weight:700;
+  background:rgba(255,255,255,.05); border:1px solid var(--border);
+  color:var(--muted); cursor:pointer; font-family:inherit; transition:all .2s;
+}
+.ref-tab.active { background:rgba(0,255,135,.1); border-color:rgba(0,255,135,.3); color:var(--green); }
+.ref-bank-search { margin-bottom:10px; }
+.ref-bank-input {
+  width:100%; padding:10px 14px; border-radius:12px;
+  background:var(--gray2); border:1px solid var(--border);
+  color:var(--text); font-size:13px; font-family:inherit;
+}
+.ref-bank-input:focus { outline:none; border-color:rgba(0,255,135,.3); }
+.ref-bank-cats { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.rbc {
+  padding:5px 14px; border-radius:50px; font-size:11px; font-weight:700;
+  background:rgba(255,255,255,.05); border:1px solid var(--border);
+  color:var(--muted); cursor:pointer; font-family:inherit; transition:all .15s;
+}
+.rbc.active { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.2); color:var(--white); }
+.ref-bank-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  max-height:320px; overflow-y:auto;
+  padding-right:4px;
+}
+.ref-bank-grid::-webkit-scrollbar { width:4px; }
+.ref-bank-grid::-webkit-scrollbar-track { background:transparent; }
+.ref-bank-grid::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:4px; }
+.ref-card {
+  background:var(--gray2); border:1px solid var(--border);
+  border-radius:12px; padding:12px 14px;
+  cursor:pointer; transition:all .15s; position:relative;
+  display:flex; flex-direction:column; gap:5px;
+}
+.ref-card:hover { border-color:rgba(0,255,135,.2); transform:translateY(-1px); }
+.ref-card.selected { border-color:rgba(0,255,135,.5); background:rgba(0,255,135,.05); }
+.ref-card.selected::after {
+  content:'✓'; position:absolute; top:8px; right:10px;
+  width:18px; height:18px; border-radius:50%;
+  background:var(--green); color:var(--black);
+  font-size:10px; font-weight:900;
+  display:flex; align-items:center; justify-content:center;
+}
+.rc-platform {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); font-weight:700;
+}
+.rc-name { font-size:13px; font-weight:700; color:var(--white); line-height:1.2; }
+.rc-style { font-size:11px; color:var(--muted); line-height:1.4; }
+.rc-tags { display:flex; gap:4px; flex-wrap:wrap; margin-top:2px; }
+.rc-tag {
+  font-size:9px; padding:2px 7px; border-radius:50px;
+  background:rgba(255,255,255,.07); color:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.07);
+}
+.ref-selected-bar {
+  margin-top:10px; padding:10px 14px;
+  background:rgba(0,255,135,.07); border:1px solid rgba(0,255,135,.2);
+  border-radius:12px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.ref-sel-count { font-size:12px; color:var(--green); font-weight:700; flex:1; }
+.ref-sel-analyze {
+  padding:7px 16px; background:var(--green); color:var(--black);
+  border:none; border-radius:50px; font-size:12px; font-weight:800;
+  cursor:pointer; font-family:inherit;
+}
+.ref-sel-clear {
+  padding:7px 12px; background:rgba(255,255,255,.07); color:var(--muted);
+  border:1px solid var(--border); border-radius:50px; font-size:12px;
+  cursor:pointer; font-family:inherit;
+}
+@media(max-width:480px) {
+  .ref-bank-grid { grid-template-columns:1fr; max-height:260px; }
+}
+
 </style>
 </head>
 <body>
@@ -1633,21 +1870,58 @@ footer{padding:28px 48px;border-top:1px solid var(--border2);display:flex;align-
         <!-- REFERENCIAS VISUALES -->
         <div class="ugc-sec" id="ugcRefSec">
           <div class="ugc-sec-t"><span class="ugc-num">🎬</span>Referencias visuales</div>
-          <div class="field">
-            <label>Videos que te gustan como referencia (TikTok, Reels, YouTube...)</label>
+
+          <!-- TABS: banco / mis links -->
+          <div class="ref-tabs">
+            <button class="ref-tab active" onclick="switchRefTab('banco')">🏦 Banco de referencias</button>
+            <button class="ref-tab" onclick="switchRefTab('custom')">🔗 Mis links</button>
+          </div>
+
+          <!-- BANCO DE REFERENCIAS -->
+          <div id="refBancoPanel">
+            <div class="ref-bank-search">
+              <input class="ref-bank-input" id="refBankSearch" placeholder="🔍 Buscar por rubro, estilo, plataforma..." oninput="filterRefBank(this.value)">
+            </div>
+            <div class="ref-bank-cats" id="refBankCats">
+              <button class="rbc active" onclick="filterRefCat(this,'all')">Todos</button>
+              <button class="rbc" onclick="filterRefCat(this,'beauty')">💄 Beauty</button>
+              <button class="rbc" onclick="filterRefCat(this,'moda')">👗 Moda</button>
+              <button class="rbc" onclick="filterRefCat(this,'food')">🍕 Food</button>
+              <button class="rbc" onclick="filterRefCat(this,'fitness')">💪 Fitness</button>
+              <button class="rbc" onclick="filterRefCat(this,'tech')">📱 Tech</button>
+              <button class="rbc" onclick="filterRefCat(this,'home')">🏠 Hogar</button>
+              <button class="rbc" onclick="filterRefCat(this,'pet')">🐾 Mascotas</button>
+            </div>
+            <div class="ref-bank-grid" id="refBankGrid">
+              <!-- rendered by JS -->
+            </div>
+            <div class="ref-selected-bar" id="refSelectedBar" style="display:none">
+              <span id="refSelectedCount">0 referencias seleccionadas</span>
+              <button class="ref-sel-analyze" onclick="analyzeRefs()">✨ Analizar estilo con IA</button>
+              <button class="ref-sel-clear" onclick="clearRefSel()">× Limpiar</button>
+            </div>
+          </div>
+
+          <!-- MIS LINKS CUSTOM -->
+          <div id="refCustomPanel" style="display:none">
             <div class="ref-links-wrap" id="refLinksUGC">
               <div class="ref-link-row">
-                <input class="ref-input" placeholder="Ej: https://www.tiktok.com/@marca/video/..." oninput="previewRefLink(this)">
+                <input class="ref-input" placeholder="Ej: https://www.tiktok.com/@marca/video/...">
                 <button class="ref-del" onclick="delRefRow(this)" style="display:none">×</button>
               </div>
             </div>
             <button class="ref-add-btn" onclick="addRefRow('refLinksUGC')">+ Agregar referencia</button>
+            <div class="ref-analyze-wrap" id="refAnalyzeWrapCustom" style="margin-top:12px">
+              <button class="ref-analyze-btn" onclick="analyzeRefs()" id="refAnalyzeBtnCustom">
+                ✨ Analizar estilo con IA
+              </button>
+            </div>
           </div>
-          <div class="ref-analyze-wrap" id="refAnalyzeWrap" style="display:none">
-            <button class="ref-analyze-btn" onclick="analyzeRefs()" id="refAnalyzeBtn">
-              ✨ Analizar estilo con IA
-            </button>
-            <div class="ref-analysis-result" id="refAnalysisResult" style="display:none"></div>
+
+          <!-- ANALYSIS RESULT (shared) -->
+          <div class="ref-analysis-result" id="refAnalysisResult" style="display:none;margin-top:12px"></div>
+          <div id="refAnalyzeWrap" style="display:none">
+            <button class="ref-analyze-btn" onclick="analyzeRefs()" id="refAnalyzeBtn">✨ Analizar estilo con IA</button>
           </div>
         </div>
 
@@ -2799,6 +3073,7 @@ function goScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(`screen-${name}`).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('active'));
+  if (name === 'ugc') { setTimeout(initRefBank, 50); }
   document.getElementById(`nav-${name}`)?.classList.add('active');
   const titles = {
     home: ['Crealo', 'Tu estudio de contenido'],
