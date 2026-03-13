@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/landing", "destination": "/landing.html" },
+    { "source": "/",        "destination": "/app.html" },
+    { "source": "/login",   "destination": "/app.html" },
+    { "source": "/app",     "destination": "/app.html" }
+  ],
+  "headers": [
+    { "source": "/app.html",     "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/landing.html", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+  ]
+}
