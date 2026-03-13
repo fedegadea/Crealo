@@ -1846,7 +1846,7 @@ function buildPdfSections(briefs) {
   return briefs.map(b=>{
     const variantsHTML=b.variants.map((v,vi)=>{
       const hasClips=Array.isArray(v.clips)&&v.clips.length;
-      let bodyHTML=hasClips?`<div style="margin-bottom:8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00c96a;font-weight:700">Script · ${v.clips.length} segmentos</div>${v.clips.map(c=>`<div class="clip-block"><div><span class="clip-tc">${c.from}s — ${c.to}s</span><span class="clip-lbl">${escHTMLpdf(c.label||'')}</span></div><div class="clip-dialog">🎙 ${escHTMLpdf(c.dialog||'')}</div><div class="clip-visual">👁 ${escHTMLpdf(c.visual||'')}</div></div>`).join('')`:
+      let bodyHTML=hasClips?`<div style="margin-bottom:8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00c96a;font-weight:700">Script · ${v.clips.length} segmentos</div>${v.clips.map(c=>`<div class="clip-block"><div><span class="clip-tc">${c.from}s — ${c.to}s</span><span class="clip-lbl">${escHTMLpdf(c.label||'')}</span></div><div class="clip-dialog">🎙 ${escHTMLpdf(c.dialog||'')}</div><div class="clip-visual">👁 ${escHTMLpdf(c.visual||'')}</div></div>`).join('')}`:
         `<div class="v-body">${escHTMLpdf(v.body||'').replace(/\n/g,'<br>')}</div>`;
       return `<div class="v-card"><div class="v-num">Variante ${vi+1}</div><div class="v-headline">${escHTMLpdf(v.headline||'')}</div>${bodyHTML}${v.cta?`<div class="v-cta">→ ${escHTMLpdf(v.cta)}</div>`:''}</div>`;
     }).join('');
