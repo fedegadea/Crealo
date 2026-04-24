@@ -198,14 +198,14 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
     <div class="err-msg" id="err1">Completá todos los campos antes de continuar.</div>
   </div>
 
-  <!-- STEP 2: Estilo -->
+  <!-- STEP 2: Detalles técnicos -->
   <div class="step" id="step2">
     <div class="step-eyebrow">Paso 2 de 3</div>
-    <h1 class="step-title">Estilo y plataforma</h1>
-    <p class="step-sub">Así personalizamos el brief para que la creator te entienda al toque.</p>
+    <h1 class="step-title">Detalles del contenido</h1>
+    <p class="step-sub">Con esto la creator va a entender tu marca al 100% antes de grabar.</p>
 
-    <div class="field" style="margin-bottom:24px">
-      <label>¿Dónde vas a publicar el contenido?</label>
+    <div class="field" style="margin-bottom:22px">
+      <label>¿Dónde vas a publicar?</label>
       <div class="platform-group" style="margin-top:8px">
         <div class="platform-pill sel" onclick="selPlatform(this)" data-val="instagram">📸 Instagram</div>
         <div class="platform-pill" onclick="selPlatform(this)" data-val="tiktok">🎵 TikTok</div>
@@ -214,13 +214,37 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
       </div>
     </div>
 
-    <div class="field">
-      <label>¿Quién es tu cliente ideal?</label>
-      <input type="text" id="audience" placeholder="Ej: Mujeres de 25-35 años, interesadas en skincare natural y vida saludable" />
+    <div class="field" style="margin-bottom:22px">
+      <label>Duración del video</label>
+      <div class="platform-group" style="margin-top:8px">
+        <div class="platform-pill" onclick="selDur(this)" data-val="15s">⚡ 15 seg</div>
+        <div class="platform-pill sel" onclick="selDur(this)" data-val="30s">🎬 30 seg</div>
+        <div class="platform-pill" onclick="selDur(this)" data-val="60s">📱 60 seg</div>
+        <div class="platform-pill" onclick="selDur(this)" data-val="+1min">🎥 +1 min</div>
+      </div>
     </div>
 
-    <div class="field" style="margin-bottom:24px">
-      <label>Estilo visual del contenido</label>
+    <div class="field" style="margin-bottom:22px">
+      <label>Formato</label>
+      <div class="platform-group" style="margin-top:8px">
+        <div class="platform-pill sel" onclick="selFormat(this)" data-val="9:16">📱 9:16 Vertical</div>
+        <div class="platform-pill" onclick="selFormat(this)" data-val="1:1">⬛ 1:1 Cuadrado</div>
+        <div class="platform-pill" onclick="selFormat(this)" data-val="16:9">🖥️ 16:9 Horizontal</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>¿Quién es tu cliente ideal?</label>
+      <input type="text" id="audience" placeholder="Ej: Mujeres de 25-35 años interesadas en skincare natural y vida saludable" />
+    </div>
+
+    <div class="field">
+      <label>Colores de tu marca <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(opcional)</span></label>
+      <input type="text" id="colors" placeholder="Ej: Azul marino, blanco y dorado — o #0A1628, #FFFFFF, #D4AF37" />
+    </div>
+
+    <div class="field" style="margin-bottom:22px">
+      <label>Estilo visual</label>
       <div class="option-group" style="margin-top:8px">
         <div class="opt-card" onclick="selStyle(this)" data-val="lifestyle"><div class="opt-icon">🌿</div><div class="opt-name">Lifestyle</div><div class="opt-desc">Cotidiano y natural</div></div>
         <div class="opt-card" onclick="selStyle(this)" data-val="minimal"><div class="opt-icon">⬜</div><div class="opt-name">Minimalista</div><div class="opt-desc">Limpio y elegante</div></div>
@@ -229,9 +253,14 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
       </div>
     </div>
 
+    <div class="field">
+      <label>Referencia o inspiración <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(opcional)</span></label>
+      <input type="text" id="reference" placeholder="Ej: @cuenta o link a video que te gusta como referencia de estilo" />
+    </div>
+
     <button class="btn-next" onclick="goStep3()">Ver mi brief →</button>
     <button class="btn-back" onclick="goStep(1)">← Atrás</button>
-    <div class="err-msg" id="err2">Completá todos los campos antes de continuar.</div>
+    <div class="err-msg" id="err2">Completá los campos obligatorios antes de continuar.</div>
   </div>
 
   <!-- STEP 3: Preview + Pago -->
@@ -286,9 +315,10 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
 
     <!-- Price summary -->
     <div class="price-summary">
-      <div class="ps-row"><span>Brief generado por IA</span><span id="psBrief">$9.999</span></div>
+      <div class="ps-row"><span>Brief generado por IA</span><span>$9.999</span></div>
       <div class="ps-row"><span>Marca</span><span id="psBrand">—</span></div>
-      <div class="ps-row"><span>Plataforma</span><span id="psPlatform">—</span></div>
+      <div class="ps-row"><span>Plataforma · Formato · Duración</span><span id="psPlatform">—</span></div>
+      <div class="ps-row" id="psColorsRow"><span>Colores de marca</span><span id="psColors">—</span></div>
       <div class="ps-total"><span>Total</span><span>$9.999</span></div>
     </div>
 
@@ -339,12 +369,14 @@ const SUPABASE_URL = 'https://dtopwxldxlwgdvpjcegg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_W54QQPJ_WFtvI67N5SPniQ_jZ1kpCES';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let state = { brand:'', product:'', goal:'', platform:'instagram', audience:'', style:'' };
+let state = { brand:'', product:'', goal:'', platform:'instagram', duration:'30s', format:'9:16', audience:'', colors:'', style:'', reference:'' };
 
 // ── SELECTORS ──
-let selGoalVal='', selPlatformVal='instagram', selStyleVal='';
+let selGoalVal='', selPlatformVal='instagram', selDurVal='30s', selFormatVal='9:16', selStyleVal='';
 function selGoal(el){ document.querySelectorAll('[onclick^="selGoal"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selGoalVal=el.dataset.val; }
 function selPlatform(el){ document.querySelectorAll('[onclick^="selPlatform"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selPlatformVal=el.dataset.val; }
+function selDur(el){ document.querySelectorAll('[onclick^="selDur"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selDurVal=el.dataset.val; }
+function selFormat(el){ document.querySelectorAll('[onclick^="selFormat"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selFormatVal=el.dataset.val; }
 function selStyle(el){ document.querySelectorAll('[onclick^="selStyle"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selStyleVal=el.dataset.val; }
 
 // ── NAV ──
@@ -378,12 +410,21 @@ function goStep3(){
   const err=document.getElementById('err2');
   if(!audience||!selStyleVal){ err.style.display='block'; return; }
   err.style.display='none';
-  state.audience=audience; state.platform=selPlatformVal; state.style=selStyleVal;
+  state.audience=audience;
+  state.platform=selPlatformVal;
+  state.duration=selDurVal;
+  state.format=selFormatVal;
+  state.style=selStyleVal;
+  state.colors=document.getElementById('colors').value.trim();
+  state.reference=document.getElementById('reference').value.trim();
 
   // Populate preview
   document.getElementById('prevBrand').textContent=state.brand;
   document.getElementById('psBrand').textContent=state.brand;
-  document.getElementById('psPlatform').textContent=({instagram:'Instagram',tiktok:'TikTok',ambas:'Instagram + TikTok','youtube':'YouTube Shorts'})[state.platform]||state.platform;
+  const platMap={instagram:'Instagram',tiktok:'TikTok',ambas:'Instagram + TikTok',youtube:'YouTube Shorts'};
+  document.getElementById('psPlatform').textContent=`${platMap[state.platform]||state.platform} · ${state.format} · ${state.duration}`;
+  if(state.colors) document.getElementById('psColors').textContent=state.colors;
+  else document.getElementById('psColorsRow').style.display='none';
 
   const goalText={
     ventas:'Generar ventas directas y conversiones medibles. El contenido debe tener un CTA claro que lleve a la compra.',
@@ -406,18 +447,61 @@ function goStep3(){
 
 // ── PAY ──
 async function handlePay(){
-  const { data:{session} } = await sb.auth.getSession();
-  if(!session){ openModal(); return; }
-  startPayment(session.user.email);
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  try {
+    const { data, error } = await sb.auth.getSession();
+    if(error || !data.session){
+      openModal();
+      btn.disabled = false;
+      btn.textContent = '🔓 Comprar mi brief — $9.999';
+      return;
+    }
+    startPayment(data.session.user.email);
+  } catch(e){
+    openModal();
+    btn.disabled = false;
+    btn.textContent = '🔓 Comprar mi brief — $9.999';
+  }
 }
 async function startPayment(email){
   showLoading('Creando tu orden...','Te redirigimos a Mercado Pago');
   try {
-    const res=await fetch('/api/crear-pago',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titulo:`Crealo — Brief IA para ${state.brand}`,precio:9999,email,metadata:state})});
-    const data=await res.json();
-    if(data.init_point) window.location.href=data.init_point;
-    else { hideLoading(); alert('Error al crear el pago. Intentá de nuevo.'); }
-  } catch(e){ hideLoading(); alert('Error de conexión. Intentá de nuevo.'); }
+    const res = await fetch('/api/crear-pago', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        titulo: `Crealo — Brief IA para ${state.brand}`,
+        precio: 9999,
+        email,
+        metadata: state
+      })
+    });
+    const data = await res.json();
+    if(data.init_point){
+      window.location.href = data.init_point;
+    } else {
+      hideLoading();
+      showPayErr(data.error || 'No se pudo crear el pago. Intentá de nuevo.');
+    }
+  } catch(e){
+    hideLoading();
+    showPayErr('Error de conexión. Revisá tu internet e intentá de nuevo.');
+  }
+}
+function showPayErr(msg){
+  const btn = document.getElementById('payBtn');
+  btn.disabled = false;
+  btn.textContent = '🔓 Comprar mi brief — $9.999';
+  let box = document.getElementById('payErrBox');
+  if(!box){
+    box = document.createElement('div');
+    box.id = 'payErrBox';
+    box.style.cssText = 'margin-top:12px;padding:12px 16px;background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.25);border-radius:10px;font-size:13px;color:#ff453a;';
+    btn.after(box);
+  }
+  box.textContent = '⚠️ ' + msg;
 }
 
 // ── AUTH MODAL ──
