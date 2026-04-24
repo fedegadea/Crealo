@@ -186,9 +186,15 @@ a{color:var(--blue);text-decoration:none}
   <div class="auth-box">
     <h1>crea<span>lo</span></h1>
     <p>Panel de administración — acceso restringido</p>
-    <input id="adminEmail" class="auth-input" type="email" placeholder="Email de admin"/>
-    <input id="adminPass" class="auth-input" type="password" placeholder="Contraseña" onkeydown="if(event.key==='Enter')loginAdmin()"/>
-    <button class="btn-auth" onclick="loginAdmin()">Ingresar</button>
+    <div id="authStep1">
+      <input id="adminEmail" class="auth-input" type="email" placeholder="Tu email de admin" onkeydown="if(event.key==='Enter')loginAdmin()"/>
+      <button class="btn-auth" onclick="loginAdmin()">Enviar link mágico</button>
+    </div>
+    <div id="authStep2" style="display:none">
+      <div style="font-size:40px;margin-bottom:16px">📬</div>
+      <p style="color:var(--white);font-size:15px;font-weight:600;margin-bottom:8px">Revisá tu email</p>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:0">Te mandamos un link para entrar. Hacé click en él y volvé acá.</p>
+    </div>
     <div id="authMsg" class="auth-msg"></div>
   </div>
 </div>
@@ -370,7 +376,7 @@ const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 // ── ADMIN CONFIG ──────────────────────────────────────────────────────────────
 // Add admin emails here — anyone who logs in with a different email is denied.
-const ADMIN_EMAILS = ['fedegadea@gmail.com']; // ← add more admins here if needed
+const ADMIN_EMAILS = ['federicosegundogadea@gmail.com']; // ← add more admins here if needed
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentAdmin = null;
@@ -381,35 +387,51 @@ let activeReqId   = null; // for accept/reject modals
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 (async () => {
+  // Handle magic link redirect (token in URL hash)
   const { data: { session } } = await sb.auth.getSession();
   if (session && ADMIN_EMAILS.includes(session.user.email)) {
     currentAdmin = session.user;
     showApp();
+    return;
   }
+  // Listen for auth state change (fires after magic link redirect)
+  sb.auth.onAuthStateChange((event, session) => {
+    if (session && ADMIN_EMAILS.includes(session.user.email)) {
+      currentAdmin = session.user;
+      showApp();
+    } else if (session && !ADMIN_EMAILS.includes(session.user.email)) {
+      sb.auth.signOut();
+      const msg = document.getElementById('authMsg');
+      msg.textContent = 'Acceso denegado: ese email no tiene permisos de admin.';
+      msg.className = 'auth-msg err';
+    }
+  });
 })();
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 async function loginAdmin() {
   const email = document.getElementById('adminEmail').value.trim();
-  const pass  = document.getElementById('adminPass').value;
   const msg   = document.getElementById('authMsg');
   msg.textContent = '';
   msg.className   = 'auth-msg';
 
-  if (!email || !pass) { msg.textContent = 'Completá email y contraseña.'; msg.className='auth-msg err'; return; }
+  if (!email) { msg.textContent = 'Ingresá tu email.'; msg.className='auth-msg err'; return; }
 
-  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) { msg.textContent = 'Error: ' + error.message; msg.className='auth-msg err'; return; }
-
-  if (!ADMIN_EMAILS.includes(data.user.email)) {
-    await sb.auth.signOut();
-    msg.textContent = 'Acceso denegado: no tenés permisos de admin.';
+  if (!ADMIN_EMAILS.includes(email)) {
+    msg.textContent = 'Acceso denegado: ese email no tiene permisos de admin.';
     msg.className = 'auth-msg err';
     return;
   }
 
-  currentAdmin = data.user;
-  showApp();
+  const { error } = await sb.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.href }
+  });
+
+  if (error) { msg.textContent = 'Error: ' + error.message; msg.className='auth-msg err'; return; }
+
+  document.getElementById('authStep1').style.display = 'none';
+  document.getElementById('authStep2').style.display = 'block';
 }
 
 async function signOut() {
