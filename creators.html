@@ -500,13 +500,15 @@ async function confirmarPago(){
 function openAuth(){ document.getElementById('authModal').classList.add('open'); }
 function closeAuth(){ document.getElementById('authModal').classList.remove('open'); }
 async function loginGoogle(){
-  const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href+'?contratar=1'}});
+  const redirectTo = window.location.origin + '/creators?contratar=1';
+  const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo}});
   if(error) showMsg('Error: '+error.message,'err');
 }
 async function loginMagic(){
   const email=document.getElementById('authEmail').value.trim();
   if(!email){showMsg('Ingresá tu email.','err');return;}
-  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:window.location.href+'?contratar=1'}});
+  const redirectTo = window.location.origin + '/creators?contratar=1';
+  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:redirectTo}});
   if(error) showMsg('Error: '+error.message,'err');
   else showMsg('✓ Revisá tu email para ingresar','ok');
 }
