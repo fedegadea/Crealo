@@ -1,5 +1,8 @@
 {
   "name": "crealo",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "mercadopago": "^2.3.0"
+  }
 }

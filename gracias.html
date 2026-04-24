@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crealo — ¡Pago recibido!</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#07070a;--green:#00ff87;--gray:#0e0e14;--gray2:#161620;--gray3:#1f1f2e;--muted:#5a5a72;--text:#d8d4ce;--white:#f5f3ef;--border:rgba(255,255,255,0.07);--orange:#ff6b2b}
+body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:540px;background:var(--gray2);border:1px solid rgba(0,255,135,.2);border-radius:24px;padding:56px 48px;text-align:center}
+.icon{font-size:64px;margin-bottom:24px;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.title{font-size:32px;font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:10px}
+.sub{font-size:15px;font-weight:400;color:var(--muted);line-height:1.7;max-width:380px;margin:0 auto 36px}
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:40px;text-align:left}
+.step-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--gray3);border-radius:10px}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(0,255,135,.15);border:1px solid rgba(0,255,135,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green);flex-shrink:0}
+.step-text{font-size:13px;font-weight:500;color:var(--text)}
+.step-sub{font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--green);color:var(--black);
+  font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;
+  padding:14px 28px;border-radius:50px;text-decoration:none;
+  transition:opacity .2s;
+}
+.btn:hover{opacity:.88}
+.pending-note{margin-top:16px;font-size:12px;font-weight:400;color:var(--muted)}
+@media(max-width:500px){.card{padding:36px 24px}.title{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon" id="icon">🎉</div>
+  <h1 class="title" id="mainTitle">¡Pago recibido!</h1>
+  <p class="sub" id="mainSub">Tu brief está en camino. En las próximas 24 horas te asignamos la creator perfecta para tu marca.</p>
+
+  <div class="steps">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div><div class="step-text">Brief completo enviado a tu email</div><div class="step-sub">Con todas las instrucciones para tu creator</div></div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div><div class="step-text">Creator asignada en 24 horas</div><div class="step-sub">Te presentamos a quien va a trabajar con vos</div></div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div><div class="step-text">Contenido entregado en 48 horas</div><div class="step-sub">Listo para subir a tus redes o usar en ads</div></div>
+    </div>
+  </div>
+
+  <a href="/" class="btn">← Volver al inicio</a>
+  <p class="pending-note" id="pendingNote" style="display:none">Tu pago está siendo procesado. Te avisamos por email cuando se confirme.</p>
+</div>
+
+<script>
+const p = new URLSearchParams(window.location.search);
+if(p.get('status') === 'pendiente'){
+  document.getElementById('icon').textContent = '⏳';
+  document.getElementById('mainTitle').textContent = 'Pago en proceso';
+  document.getElementById('mainSub').textContent = 'Tu pago está siendo verificado. Te avisamos por email en minutos.';
+  document.getElementById('pendingNote').style.display = 'block';
+}
+</script>
+</body>
+</html>

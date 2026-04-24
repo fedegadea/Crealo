@@ -1,12 +1,15 @@
 {
   "rewrites": [
-    { "source": "/landing", "destination": "/landing.html" },
-    { "source": "/",        "destination": "/app.html" },
-    { "source": "/login",   "destination": "/app.html" },
-    { "source": "/app",     "destination": "/app.html" }
+    { "source": "/landing",  "destination": "/landing.html" },
+    { "source": "/brief",    "destination": "/brief.html" },
+    { "source": "/gracias",  "destination": "/gracias.html" },
+    { "source": "/",         "destination": "/landing.html" },
+    { "source": "/login",    "destination": "/app.html" },
+    { "source": "/app",      "destination": "/app.html" }
   ],
   "headers": [
     { "source": "/app.html",     "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/landing.html", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+    { "source": "/landing.html", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/brief.html",   "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
   ]
 }

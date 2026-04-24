@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crealo — Crear mi brief</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07070a;--green:#00ff87;--green-d:#00c96a;
+  --white:#f5f3ef;--gray:#0e0e14;--gray2:#161620;--gray3:#1f1f2e;--gray4:#2a2a3a;
+  --muted:#5a5a72;--text:#d8d4ce;--border:rgba(255,255,255,0.07);--orange:#ff6b2b;--red:#ff4444;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:60px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  background:rgba(7,7,10,.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-weight:800;font-size:20px;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.back-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:color .2s}
+.back-link:hover{color:var(--white)}
+
+/* ── PROGRESS ── */
+.progress-bar{position:fixed;top:60px;left:0;right:0;z-index:199;height:3px;background:var(--gray2)}
+.progress-fill{height:100%;background:var(--green);transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px rgba(0,255,135,.5)}
+
+/* ── MAIN ── */
+main{min-height:100vh;padding:100px 24px 60px;display:flex;align-items:flex-start;justify-content:center}
+.wizard{width:100%;max-width:680px}
+
+/* STEP INDICATOR */
+.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:48px}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  background:var(--gray2);border:2px solid var(--border);
+  color:var(--muted);transition:all .3s;flex-shrink:0;
+}
+.step-dot.active{background:var(--green);border-color:var(--green);color:var(--black)}
+.step-dot.done{background:rgba(0,255,135,.15);border-color:var(--green);color:var(--green)}
+.step-line{flex:1;height:2px;background:var(--border);transition:background .3s}
+.step-line.done{background:rgba(0,255,135,.3)}
+
+/* STEP CARD */
+.step{display:none;animation:fadeUp .4s ease}
+.step.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.step-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+.step-title{font-size:clamp(24px,4vw,36px);font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:8px}
+.step-sub{font-size:14px;font-weight:400;color:var(--muted);margin-bottom:36px;line-height:1.6}
+
+/* FORM FIELDS */
+.field{margin-bottom:20px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.field input,.field textarea,.field select{
+  width:100%;padding:14px 18px;
+  background:var(--gray2);border:1.5px solid var(--border);border-radius:12px;
+  color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;font-weight:400;
+  outline:none;transition:border-color .2s,box-shadow .2s;resize:none;
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field input:focus,.field textarea:focus{border-color:rgba(0,255,135,.4);box-shadow:0 0 0 3px rgba(0,255,135,.07)}
+.field textarea{min-height:100px;line-height:1.6}
+
+/* OPTION CARDS */
+.option-group{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.opt-card{
+  flex:1;min-width:140px;
+  padding:16px 18px;border-radius:12px;
+  border:1.5px solid var(--border);background:var(--gray2);
+  cursor:pointer;transition:all .2s;text-align:left;
+  display:flex;flex-direction:column;gap:4px;
+}
+.opt-card:hover{border-color:rgba(0,255,135,.3);background:rgba(0,255,135,.04)}
+.opt-card.sel{border-color:var(--green);background:rgba(0,255,135,.08)}
+.opt-card .opt-icon{font-size:22px;margin-bottom:4px}
+.opt-card .opt-name{font-size:13px;font-weight:700;color:var(--white)}
+.opt-card.sel .opt-name{color:var(--green)}
+.opt-card .opt-price{font-size:11px;font-weight:400;color:var(--muted)}
+
+/* TIER CARDS */
+.tier-group{display:flex;flex-direction:column;gap:10px}
+.tier-card{
+  padding:18px 20px;border-radius:12px;
+  border:1.5px solid var(--border);background:var(--gray2);
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.tier-card:hover{border-color:rgba(0,255,135,.3)}
+.tier-card.sel{border-color:var(--green);background:rgba(0,255,135,.07)}
+.tier-card-left{display:flex;align-items:center;gap:16px}
+.tier-icon{font-size:28px}
+.tier-name{font-size:14px;font-weight:700;color:var(--white)}
+.tier-card.sel .tier-name{color:var(--green)}
+.tier-reach{font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.tier-mult{font-size:13px;font-weight:700;color:var(--green)}
+
+/* QTY PILLS */
+.qty-group{display:flex;gap:10px;flex-wrap:wrap}
+.qty-pill{
+  padding:12px 24px;border-radius:10px;
+  border:1.5px solid var(--border);background:var(--gray2);
+  cursor:pointer;transition:all .2s;text-align:center;
+}
+.qty-pill:hover{border-color:rgba(0,255,135,.3)}
+.qty-pill.sel{border-color:var(--green);background:rgba(0,255,135,.08)}
+.qty-pill .qn{font-size:20px;font-weight:800;color:var(--white)}
+.qty-pill.sel .qn{color:var(--green)}
+.qty-pill .qd{font-size:10px;font-weight:600;color:var(--green)}
+
+/* BUTTONS */
+.btn-next{
+  width:100%;padding:16px;border-radius:12px;
+  background:var(--green);color:var(--black);
+  font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;
+  border:none;cursor:pointer;transition:all .2s;margin-top:32px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-next:hover{background:var(--green-d);transform:translateY(-1px)}
+.btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-back{
+  background:none;border:1px solid var(--border);
+  color:var(--muted);font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;
+  padding:10px 20px;border-radius:8px;cursor:pointer;transition:all .2s;margin-top:12px;
+}
+.btn-back:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+
+/* ── STEP 3: BRIEF PREVIEW ── */
+.brief-preview{
+  background:var(--gray2);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;margin-bottom:24px;
+  position:relative;
+}
+.brief-preview-head{
+  padding:20px 24px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brief-preview-head span{font-size:12px;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+.brief-preview-head .bp-brand{font-size:14px;font-weight:700;color:var(--white)}
+.brief-body{padding:24px;display:flex;flex-direction:column;gap:16px}
+.brief-section-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.brief-line{height:12px;background:var(--gray3);border-radius:4px;margin-bottom:8px}
+.brief-line.short{width:60%}
+.brief-line.medium{width:80%}
+.brief-line.highlight{background:rgba(0,255,135,.15);border-left:3px solid var(--green);height:auto;padding:12px 14px;border-radius:6px}
+.brief-line.highlight p{font-size:13px;font-weight:400;color:var(--text);line-height:1.6}
+.brief-blur{
+  position:absolute;bottom:0;left:0;right:0;height:200px;
+  background:linear-gradient(to bottom, transparent 0%, var(--gray2) 65%);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:28px;gap:10px;
+}
+.lock-icon{font-size:28px}
+.lock-text{font-size:13px;font-weight:600;color:var(--muted);text-align:center}
+
+/* PRICE SUMMARY */
+.price-summary{
+  background:var(--gray3);border:1px solid rgba(0,255,135,.15);
+  border-radius:16px;padding:24px;margin-bottom:20px;
+}
+.ps-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.ps-row:last-child{border:none;margin:0;padding:0}
+.ps-row span:last-child{font-weight:600;color:var(--text)}
+.ps-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:var(--white);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
+.ps-total span:last-child{color:var(--green);font-size:20px}
+
+/* ── AUTH MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--gray);border:1px solid var(--border);
+  border-radius:20px;padding:40px;width:100%;max-width:420px;
+  animation:fadeUp .3s ease;
+}
+.modal-logo{font-size:22px;font-weight:800;color:var(--white);margin-bottom:6px}
+.modal-logo span{color:var(--green)}
+.modal-title{font-size:22px;font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:6px}
+.modal-sub{font-size:13px;font-weight:400;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.modal-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:11px}
+.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-btn{
+  width:100%;padding:13px;border-radius:11px;
+  font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:10px;border:1px solid var(--border);
+}
+.auth-btn-google{background:var(--gray2);color:var(--text)}
+.auth-btn-google:hover{border-color:rgba(255,255,255,.2);background:var(--gray3)}
+.auth-btn-magic{background:var(--green);color:var(--black);border-color:var(--green)}
+.auth-btn-magic:hover{background:var(--green-d)}
+.auth-input{
+  width:100%;padding:13px 16px;background:var(--gray2);border:1.5px solid var(--border);
+  border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s;margin-bottom:10px;
+}
+.auth-input:focus{border-color:rgba(0,255,135,.4)}
+.auth-input::placeholder{color:var(--muted)}
+.auth-msg{font-size:12px;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:none}
+.auth-msg.ok{background:rgba(0,255,135,.08);border:1px solid rgba(0,255,135,.2);color:var(--green)}
+.auth-msg.err{background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.2);color:var(--red)}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;position:absolute;top:20px;right:20px;font-size:20px;line-height:1;padding:4px;transition:color .2s}
+.modal-close:hover{color:var(--white)}
+
+/* LOADING STATE */
+.loading-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.9);backdrop-filter:blur(8px);align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center}
+.loading-overlay.open{display:flex}
+.spinner{width:48px;height:48px;border:3px solid var(--gray3);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:16px;font-weight:600;color:var(--white)}
+.loading-sub{font-size:13px;font-weight:400;color:var(--muted)}
+
+@media(max-width:600px){
+  .topbar{padding:0 16px}
+  main{padding:90px 16px 40px}
+  .modal{padding:28px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="/" class="logo"><div class="logo-dot"></div>crealo</a>
+  <a href="/" class="back-link">← Volver</a>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:33%"></div></div>
+
+<main>
+<div class="wizard">
+
+  <!-- STEP INDICATOR -->
+  <div class="step-indicator">
+    <div class="step-dot active" id="dot1">1</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-dot" id="dot2">2</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-dot" id="dot3">3</div>
+  </div>
+
+  <!-- ── STEP 1: Tu marca ── -->
+  <div class="step active" id="step1">
+    <div class="step-eyebrow">Paso 1 de 3</div>
+    <h1 class="step-title">Contanos tu marca</h1>
+    <p class="step-sub">3 preguntas y armamos el brief perfecto para tu creator.</p>
+
+    <div class="field">
+      <label>Nombre de tu marca o negocio</label>
+      <input type="text" id="brandName" placeholder="Ej: Skinstudio, La Botica, FitEssentials" />
+    </div>
+    <div class="field">
+      <label>¿Qué vendés? Describí tu producto</label>
+      <textarea id="product" placeholder="Ej: Cremas hidratantes naturales para piel sensible, sin parabenos ni fragancias artificiales..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Cuál es tu objetivo con este contenido?</label>
+      <div class="option-group" style="margin-top:4px">
+        <div class="opt-card" onclick="selGoal(this)" data-val="ventas"><div class="opt-icon">💰</div><div class="opt-name">Más ventas</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="awareness"><div class="opt-icon">👀</div><div class="opt-name">Dar a conocer</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="comunidad"><div class="opt-icon">❤️</div><div class="opt-name">Comunidad</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="ads"><div class="opt-icon">🎯</div><div class="opt-name">Ads pagados</div></div>
+      </div>
+    </div>
+
+    <button class="btn-next" onclick="goStep2()">Continuar →</button>
+    <div id="err1" style="font-size:12px;color:var(--red);margin-top:10px;display:none">Completá todos los campos antes de continuar.</div>
+  </div>
+
+  <!-- ── STEP 2: Tu pack ── -->
+  <div class="step" id="step2">
+    <div class="step-eyebrow">Paso 2 de 3</div>
+    <h1 class="step-title">Armá tu pack</h1>
+    <p class="step-sub">Elegí el formato, cantidad y nivel de creator. El precio se calcula solo.</p>
+
+    <!-- Formato -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Formato de contenido</div>
+      <div class="option-group">
+        <div class="opt-card sel" onclick="selFmt(this)" data-base="20000" data-name="Reel"><div class="opt-icon">🎬</div><div class="opt-name">Reel</div><div class="opt-price">desde $20.000</div></div>
+        <div class="opt-card" onclick="selFmt(this)" data-base="12000" data-name="Stories"><div class="opt-icon">📱</div><div class="opt-name">Stories</div><div class="opt-price">desde $12.000</div></div>
+        <div class="opt-card" onclick="selFmt(this)" data-base="15000" data-name="Carrusel"><div class="opt-icon">🖼️</div><div class="opt-name">Carrusel</div><div class="opt-price">desde $15.000</div></div>
+        <div class="opt-card" onclick="selFmt(this)" data-base="18000" data-name="UGC puro"><div class="opt-icon">✨</div><div class="opt-name">UGC puro</div><div class="opt-price">desde $18.000</div></div>
+        <div class="opt-card" onclick="selFmt(this)" data-base="45000" data-name="Video largo"><div class="opt-icon">🎥</div><div class="opt-name">Video largo</div><div class="opt-price">desde $45.000</div></div>
+      </div>
+    </div>
+
+    <!-- Cantidad -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Cantidad de piezas</div>
+      <div class="qty-group">
+        <div class="qty-pill sel" onclick="selQty(this)" data-qty="1" data-disc="0"><div class="qn">1</div><div class="qd">base</div></div>
+        <div class="qty-pill" onclick="selQty(this)" data-qty="3" data-disc="10"><div class="qn">3</div><div class="qd">–10%</div></div>
+        <div class="qty-pill" onclick="selQty(this)" data-qty="5" data-disc="20"><div class="qn">5</div><div class="qd">–20%</div></div>
+        <div class="qty-pill" onclick="selQty(this)" data-qty="10" data-disc="30"><div class="qn">10</div><div class="qd">–30%</div></div>
+      </div>
+    </div>
+
+    <!-- Tier -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Nivel de creator</div>
+      <div class="tier-group">
+        <div class="tier-card sel" onclick="selTier(this)" data-mult="1" data-name="Nano">
+          <div class="tier-card-left"><div class="tier-icon">🌱</div><div><div class="tier-name">Nano creator</div><div class="tier-reach">Hasta 10K seg. · Engagement muy alto</div></div></div>
+          <span class="tier-mult">×1</span>
+        </div>
+        <div class="tier-card" onclick="selTier(this)" data-mult="1.8" data-name="Micro">
+          <div class="tier-card-left"><div class="tier-icon">🌿</div><div><div class="tier-name">Micro creator</div><div class="tier-reach">10K–100K seg. · Gran alcance orgánico</div></div></div>
+          <span class="tier-mult">×1.8</span>
+        </div>
+        <div class="tier-card" onclick="selTier(this)" data-mult="3" data-name="Macro">
+          <div class="tier-card-left"><div class="tier-icon">🌳</div><div><div class="tier-name">Macro creator</div><div class="tier-reach">+100K seg. · Máximo impacto</div></div></div>
+          <span class="tier-mult">×3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live price -->
+    <div style="background:var(--gray3);border:1px solid rgba(0,255,135,.15);border-radius:12px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Total estimado</div>
+        <div style="font-size:13px;font-weight:400;color:var(--muted)" id="s2sub">1 Reel · Nano creator</div>
+      </div>
+      <div style="font-size:28px;font-weight:800;color:var(--green);letter-spacing:-1px" id="s2price">$20.000</div>
+    </div>
+
+    <button class="btn-next" onclick="goStep3()">Ver mi brief preview →</button>
+    <button class="btn-back" onclick="goStep(1)">← Atrás</button>
+  </div>
+
+  <!-- ── STEP 3: Preview + Pago ── -->
+  <div class="step" id="step3">
+    <div class="step-eyebrow">Paso 3 de 3</div>
+    <h1 class="step-title">Tu brief está listo 🎉</h1>
+    <p class="step-sub">Desbloquealo y accedé a tu creator asignada en 48 horas.</p>
+
+    <!-- Brief preview card -->
+    <div class="brief-preview">
+      <div class="brief-preview-head">
+        <span>Brief generado · IA</span>
+        <span class="bp-brand" id="prevBrand">—</span>
+      </div>
+      <div class="brief-body">
+        <div>
+          <div class="brief-section-title">Descripción de marca</div>
+          <div class="brief-line highlight"><p id="prevDesc">Marca de productos naturales con foco en piel sensible. Tono cercano, auténtico y empático. La audiencia valora la transparencia en ingredientes y el impacto ambiental positivo.</p></div>
+        </div>
+        <div>
+          <div class="brief-section-title">Objetivo de campaña</div>
+          <div class="brief-line medium"></div>
+          <div class="brief-line short"></div>
+        </div>
+        <div>
+          <div class="brief-section-title">Instrucciones para la creator</div>
+          <div class="brief-line"></div>
+          <div class="brief-line medium"></div>
+          <div class="brief-line short"></div>
+          <div class="brief-line"></div>
+        </div>
+        <div>
+          <div class="brief-section-title">Hashtags y menciones</div>
+          <div class="brief-line short"></div>
+        </div>
+        <div>
+          <div class="brief-section-title">Entregables</div>
+          <div class="brief-line medium"></div>
+          <div class="brief-line short"></div>
+        </div>
+      </div>
+      <!-- BLUR OVERLAY -->
+      <div class="brief-blur">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">Pagá para desbloquear tu brief completo<br/>y que te asignemos tu creator</div>
+      </div>
+    </div>
+
+    <!-- Price summary -->
+    <div class="price-summary">
+      <div class="ps-row"><span>Formato</span><span id="psFormat">Reel</span></div>
+      <div class="ps-row"><span>Cantidad</span><span id="psQty">1 pieza</span></div>
+      <div class="ps-row"><span>Nivel creator</span><span id="psTier">Nano creator</span></div>
+      <div class="ps-row"><span>Descuento volumen</span><span id="psDisc" style="color:var(--green)">–0%</span></div>
+      <div class="ps-total"><span>Total a pagar</span><span id="psTotal">$20.000</span></div>
+    </div>
+
+    <!-- What you get -->
+    <div style="background:var(--gray2);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:24px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Incluye</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> Brief completo generado por IA con tu marca</div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> Creator asignada según tu nicho en 24h</div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> <span id="inclQty">1</span> pieza de contenido entregada en 48h</div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> 1 ronda de revisión incluida</div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> Derechos de uso 100% tuyos</div>
+      </div>
+    </div>
+
+    <button class="btn-next" onclick="handlePay()" id="payBtn">🔓 Pagar y acceder — <span id="payTotal">$20.000</span></button>
+    <button class="btn-back" onclick="goStep(2)">← Cambiar pack</button>
+  </div>
+
+</div>
+</main>
+
+<!-- ── AUTH MODAL ── -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-logo">crea<span>lo</span></div>
+    <div class="modal-title">Antes de pagar...</div>
+    <div class="modal-sub">Creá tu cuenta gratis para guardar tu brief y gestionar tu proyecto.</div>
+
+    <div class="auth-msg" id="authMsg"></div>
+
+    <button class="auth-btn auth-btn-google" onclick="loginGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continuar con Google
+    </button>
+
+    <div class="modal-divider">o usá tu email</div>
+
+    <input class="auth-input" type="email" id="authEmail" placeholder="tu@email.com" />
+    <button class="auth-btn auth-btn-magic" onclick="loginMagic()">
+      ✉️ Recibir link de acceso
+    </button>
+  </div>
+</div>
+
+<!-- ── LOADING ── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Creando tu orden...</div>
+  <div class="loading-sub" id="loadingSub">Te redirigimos a Mercado Pago</div>
+</div>
+
+<script>
+// ── SUPABASE ──
+const SUPABASE_URL = 'TU_SUPABASE_URL';     // ← reemplazar
+const SUPABASE_KEY = 'TU_SUPABASE_ANON_KEY'; // ← reemplazar
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── STATE ──
+let state = {
+  brand: '', product: '', goal: '',
+  format: 'Reel', base: 20000,
+  qty: 1, disc: 0,
+  tier: 'Nano', mult: 1,
+};
+
+function ars(n){ return '$' + Math.round(n).toLocaleString('es-AR'); }
+function calcTotal(){
+  const sub = state.base * state.qty * state.mult;
+  return Math.round(sub * (1 - state.disc/100));
+}
+
+// ── STEP NAV ──
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  const fills = {1:'33%',2:'66%',3:'100%'};
+  document.getElementById('progressFill').style.width = fills[n];
+  for(let i=1;i<=3;i++){
+    const d=document.getElementById('dot'+i);
+    d.classList.remove('active','done');
+    if(i<n) d.classList.add('done'), d.textContent='✓';
+    else if(i===n) d.classList.add('active'), d.textContent=i;
+    else d.textContent=i;
+  }
+  for(let i=1;i<=2;i++){
+    document.getElementById('line'+i).classList.toggle('done', i<n);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── SELECTORS ──
+let selectedGoal = '';
+function selGoal(el){
+  document.querySelectorAll('[onclick="selGoal(this)"]').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedGoal = el.dataset.val;
+}
+function selFmt(el){
+  document.querySelectorAll('[onclick^="selFmt"]').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  state.format = el.dataset.name;
+  state.base = parseInt(el.dataset.base);
+  updateS2();
+}
+function selQty(el){
+  document.querySelectorAll('[onclick^="selQty"]').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  state.qty = parseInt(el.dataset.qty);
+  state.disc = parseInt(el.dataset.disc);
+  updateS2();
+}
+function selTier(el){
+  document.querySelectorAll('[onclick^="selTier"]').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  state.tier = el.dataset.name;
+  state.mult = parseFloat(el.dataset.mult);
+  updateS2();
+}
+function updateS2(){
+  const total = calcTotal();
+  document.getElementById('s2price').textContent = ars(total);
+  document.getElementById('s2sub').textContent = `${state.qty} ${state.format} · ${state.tier} creator` + (state.disc ? ` · –${state.disc}% dto.` : '');
+}
+
+// ── STEP TRANSITIONS ──
+function goStep2(){
+  const brand = document.getElementById('brandName').value.trim();
+  const product = document.getElementById('product').value.trim();
+  const err = document.getElementById('err1');
+  if(!brand || !product || !selectedGoal){
+    err.style.display='block'; return;
+  }
+  err.style.display='none';
+  state.brand = brand;
+  state.product = product;
+  state.goal = selectedGoal;
+  goStep(2);
+}
+
+function goStep3(){
+  // Populate preview
+  document.getElementById('prevBrand').textContent = state.brand;
+  const goalMap = {ventas:'Generar ventas directas',awareness:'Aumentar visibilidad de marca',comunidad:'Crecer en comunidad y engagement',ads:'Crear material para ads pagados'};
+  document.getElementById('prevDesc').textContent =
+    `${state.product}. Objetivo: ${goalMap[state.goal] || state.goal}. Tono auténtico y cercano, alineado al nicho de la creator elegida.`;
+
+  // Price summary
+  const total = calcTotal();
+  document.getElementById('psFormat').textContent = state.format;
+  document.getElementById('psQty').textContent = `${state.qty} ${state.qty===1?'pieza':'piezas'}`;
+  document.getElementById('psTier').textContent = `${state.tier} creator (×${state.mult})`;
+  document.getElementById('psDisc').textContent = state.disc ? `–${state.disc}%` : '–0%';
+  document.getElementById('psTotal').textContent = ars(total);
+  document.getElementById('payTotal').textContent = ars(total);
+  document.getElementById('inclQty').textContent = state.qty;
+  goStep(3);
+}
+
+// ── PAY FLOW ──
+async function handlePay(){
+  // Check auth first
+  const { data: { session } } = await sb.auth.getSession();
+  if(!session){
+    openModal();
+    return;
+  }
+  startPayment(session.user.email);
+}
+
+async function startPayment(email){
+  showLoading('Creando tu orden...', 'Te redirigimos a Mercado Pago en segundos');
+  try {
+    const total = calcTotal();
+    const res = await fetch('/api/crear-pago', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        titulo: `Crealo — ${state.qty} ${state.format} · ${state.tier} creator`,
+        precio: total,
+        email: email,
+        metadata: { brand: state.brand, format: state.format, qty: state.qty, tier: state.tier }
+      })
+    });
+    const data = await res.json();
+    if(data.init_point){
+      window.location.href = data.init_point;
+    } else {
+      hideLoading();
+      alert('Error al crear el pago. Intentá de nuevo.');
+    }
+  } catch(e){
+    hideLoading();
+    alert('Error de conexión. Revisá tu internet e intentá de nuevo.');
+  }
+}
+
+// ── AUTH MODAL ──
+function openModal(){ document.getElementById('authModal').classList.add('open'); }
+function closeModal(){ document.getElementById('authModal').classList.remove('open'); }
+
+async function loginGoogle(){
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href + '?pay=1' }
+  });
+  if(error) showAuthMsg('Error: ' + error.message, 'err');
+}
+
+async function loginMagic(){
+  const email = document.getElementById('authEmail').value.trim();
+  if(!email){ showAuthMsg('Ingresá tu email.', 'err'); return; }
+  const { error } = await sb.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.href + '?pay=1' }
+  });
+  if(error) showAuthMsg('Error: ' + error.message, 'err');
+  else showAuthMsg('¡Listo! Revisá tu email para acceder 📩', 'ok');
+}
+
+function showAuthMsg(txt, type){
+  const m = document.getElementById('authMsg');
+  m.textContent = txt;
+  m.className = 'auth-msg ' + type;
+  m.style.display = 'block';
+}
+
+// ── LOADING ──
+function showLoading(text, sub){
+  document.getElementById('loadingText').textContent = text;
+  document.getElementById('loadingSub').textContent = sub;
+  document.getElementById('loadingOverlay').classList.add('open');
+}
+function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('open'); }
+
+// ── AUTO-PAY AFTER AUTH REDIRECT ──
+(async () => {
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('pay') === '1'){
+    const { data: { session } } = await sb.auth.getSession();
+    if(session){
+      // Restore state from sessionStorage if available
+      const saved = sessionStorage.getItem('crealo_state');
+      if(saved) Object.assign(state, JSON.parse(saved));
+      closeModal();
+      // Re-render step 3
+      if(state.brand) goStep(3), goStep3();
+      setTimeout(() => startPayment(session.user.email), 800);
+    }
+  }
+  // Save state to sessionStorage on every change
+  window.addEventListener('beforeunload', () => {
+    sessionStorage.setItem('crealo_state', JSON.stringify(state));
+  });
+})();
+</script>
+</body>
+</html>
