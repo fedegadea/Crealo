@@ -405,7 +405,7 @@ function goStep2(){
   goStep(2);
 }
 
-function goStep3(){
+async function goStep3(){
   const audience=document.getElementById('audience').value.trim();
   const err=document.getElementById('err2');
   if(!audience||!selStyleVal){ err.style.display='block'; return; }
@@ -418,6 +418,25 @@ function goStep3(){
   state.colors=document.getElementById('colors').value.trim();
   state.reference=document.getElementById('reference').value.trim();
 
+  // ── AUTH GATE: require login before showing the brief preview ──
+  try {
+    const { data, error } = await sb.auth.getSession();
+    if(error || !data.session){
+      // Save state so we can restore after auth redirect
+      sessionStorage.setItem('crealo_state', JSON.stringify(state));
+      // Open modal — after auth the ?pay=1 redirect will pick up from sessionStorage
+      openModal();
+      return;
+    }
+    // Logged in → show preview
+    renderStep3Preview();
+  } catch(e){
+    sessionStorage.setItem('crealo_state', JSON.stringify(state));
+    openModal();
+  }
+}
+
+function renderStep3Preview(){
   // Populate preview
   document.getElementById('prevBrand').textContent=state.brand;
   document.getElementById('psBrand').textContent=state.brand;
@@ -449,20 +468,22 @@ function goStep3(){
 async function handlePay(){
   const btn = document.getElementById('payBtn');
   btn.disabled = true;
-  btn.textContent = 'Verificando...';
+  btn.textContent = 'Procesando...';
+  // User is always logged in by the time they reach step 3,
+  // but double-check just in case session expired
   try {
     const { data, error } = await sb.auth.getSession();
     if(error || !data.session){
-      openModal();
       btn.disabled = false;
       btn.textContent = '🔓 Comprar mi brief — $9.999';
+      showPayErr('Tu sesión expiró. Recargá la página e iniciá sesión de nuevo.');
       return;
     }
     startPayment(data.session.user.email);
   } catch(e){
-    openModal();
     btn.disabled = false;
     btn.textContent = '🔓 Comprar mi brief — $9.999';
+    showPayErr('Error de conexión. Revisá tu internet e intentá de nuevo.');
   }
 }
 async function startPayment(email){
@@ -508,17 +529,17 @@ function showPayErr(msg){
 function openModal(){ document.getElementById('authModal').classList.add('open'); }
 function closeModal(){ document.getElementById('authModal').classList.remove('open'); }
 async function loginGoogle(){
-  const redirectTo = window.location.origin + '/brief?pay=1';
+  const redirectTo = window.location.origin + '/brief?step3=1';
   const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo}});
   if(error) showAuthMsg('Error: '+error.message,'err');
 }
 async function loginMagic(){
   const email=document.getElementById('authEmail').value.trim();
   if(!email){showAuthMsg('Ingresá tu email.','err');return;}
-  const redirectTo = window.location.origin + '/brief?pay=1';
+  const redirectTo = window.location.origin + '/brief?step3=1';
   const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:redirectTo}});
   if(error) showAuthMsg('Error: '+error.message,'err');
-  else showAuthMsg('✓ Revisá tu email para ingresar','ok');
+  else showAuthMsg('✓ Revisá tu email — te mandamos el link para ingresar','ok');
 }
 function showAuthMsg(txt,type){ const m=document.getElementById('authMsg'); m.textContent=txt; m.className='auth-msg '+type; m.style.display='block'; }
 
@@ -526,17 +547,28 @@ function showAuthMsg(txt,type){ const m=document.getElementById('authMsg'); m.te
 function showLoading(t,s){ document.getElementById('loadingText').textContent=t; document.getElementById('loadingSub').textContent=s; document.getElementById('loadingOverlay').classList.add('open'); }
 function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('open'); }
 
-// ── AUTO-PAY AFTER REDIRECT ──
+// ── RESTORE STATE AFTER AUTH REDIRECT ──
 (async()=>{
   const p=new URLSearchParams(window.location.search);
-  if(p.get('pay')==='1'){
+  if(p.get('step3')==='1'){
     const {data:{session}}=await sb.auth.getSession();
     if(session){
+      // Restore wizard state saved before the auth redirect
       const saved=sessionStorage.getItem('crealo_state');
-      if(saved) Object.assign(state,JSON.parse(saved));
+      if(saved){
+        const restored = JSON.parse(saved);
+        Object.assign(state, restored);
+        // Restore selectors
+        if(restored.goal) selGoalVal = restored.goal;
+        if(restored.platform) selPlatformVal = restored.platform;
+        if(restored.duration) selDurVal = restored.duration;
+        if(restored.format) selFormatVal = restored.format;
+        if(restored.style) selStyleVal = restored.style;
+      }
       closeModal();
-      if(state.brand){ goStep(3); goStep3(); }
-      setTimeout(()=>startPayment(session.user.email),600);
+      if(state.brand && state.style){
+        renderStep3Preview();
+      }
     }
   }
   window.addEventListener('beforeunload',()=>sessionStorage.setItem('crealo_state',JSON.stringify(state)));
