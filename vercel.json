@@ -2,8 +2,9 @@
   "rewrites": [
     { "source": "/landing",  "destination": "/landing.html" },
     { "source": "/brief",    "destination": "/brief.html" },
-    { "source": "/gracias",  "destination": "/gracias.html" },
-    { "source": "/",         "destination": "/landing.html" },
+    { "source": "/gracias",   "destination": "/gracias.html" },
+    { "source": "/creators",  "destination": "/creators.html" },
+    { "source": "/",          "destination": "/landing.html" },
     { "source": "/login",    "destination": "/app.html" },
     { "source": "/app",      "destination": "/app.html" }
   ],

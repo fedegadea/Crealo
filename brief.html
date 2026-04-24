@@ -9,244 +9,159 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#07070a;--green:#00ff87;--green-d:#00c96a;
-  --white:#f5f3ef;--gray:#0e0e14;--gray2:#161620;--gray3:#1f1f2e;--gray4:#2a2a3a;
-  --muted:#5a5a72;--text:#d8d4ce;--border:rgba(255,255,255,0.07);--orange:#ff6b2b;--red:#ff4444;
+  --black:#000;--blue:#0071e3;--blue-d:#0058b0;--blue-l:#147ce5;
+  --white:#f5f5f7;--gray:#111;--gray2:#1c1c1e;--gray3:#2c2c2e;--gray4:#3a3a3c;
+  --muted:#6e6e73;--text:#d1d1d6;--border:rgba(255,255,255,0.08);--red:#ff453a;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);min-height:100vh;overflow-x:hidden}
+body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/* ── TOPBAR ── */
-.topbar{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:60px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;
-  background:rgba(7,7,10,.95);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-.logo{font-weight:800;font-size:20px;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
-.logo-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(0,0,0,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-weight:700;font-size:19px;color:var(--white);text-decoration:none}
+.logo span{color:var(--blue)}
 .back-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:color .2s}
 .back-link:hover{color:var(--white)}
 
-/* ── PROGRESS ── */
-.progress-bar{position:fixed;top:60px;left:0;right:0;z-index:199;height:3px;background:var(--gray2)}
-.progress-fill{height:100%;background:var(--green);transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px rgba(0,255,135,.5)}
+/* PROGRESS */
+.progress-bar{position:fixed;top:52px;left:0;right:0;z-index:199;height:2px;background:var(--gray2)}
+.progress-fill{height:100%;background:var(--blue);transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px rgba(0,113,227,.6)}
 
-/* ── MAIN ── */
-main{min-height:100vh;padding:100px 24px 60px;display:flex;align-items:flex-start;justify-content:center}
-.wizard{width:100%;max-width:680px}
+/* MAIN */
+main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start;justify-content:center}
+.wizard{width:100%;max-width:640px}
 
 /* STEP INDICATOR */
-.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:48px}
-.step-dot{
-  width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;
-  background:var(--gray2);border:2px solid var(--border);
-  color:var(--muted);transition:all .3s;flex-shrink:0;
-}
-.step-dot.active{background:var(--green);border-color:var(--green);color:var(--black)}
-.step-dot.done{background:rgba(0,255,135,.15);border-color:var(--green);color:var(--green)}
-.step-line{flex:1;height:2px;background:var(--border);transition:background .3s}
-.step-line.done{background:rgba(0,255,135,.3)}
+.step-indicator{display:flex;align-items:center;margin-bottom:48px}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--gray2);border:1.5px solid var(--border);color:var(--muted);transition:all .3s;flex-shrink:0}
+.step-dot.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.step-dot.done{background:rgba(0,113,227,.15);border-color:var(--blue);color:var(--blue)}
+.step-line{flex:1;height:1px;background:var(--border);transition:background .3s}
+.step-line.done{background:rgba(0,113,227,.3)}
 
-/* STEP CARD */
-.step{display:none;animation:fadeUp .4s ease}
+/* STEPS */
+.step{display:none;animation:fadeUp .35s ease}
 .step.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-.step-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:10px}
-.step-title{font-size:clamp(24px,4vw,36px);font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:8px}
-.step-sub{font-size:14px;font-weight:400;color:var(--muted);margin-bottom:36px;line-height:1.6}
+.step-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.step-title{font-size:clamp(22px,4vw,34px);font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:8px}
+.step-sub{font-size:14px;font-weight:400;color:var(--muted);margin-bottom:32px;line-height:1.65}
 
-/* FORM FIELDS */
-.field{margin-bottom:20px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-.field input,.field textarea,.field select{
-  width:100%;padding:14px 18px;
-  background:var(--gray2);border:1.5px solid var(--border);border-radius:12px;
-  color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;font-weight:400;
-  outline:none;transition:border-color .2s,box-shadow .2s;resize:none;
-}
+/* FIELDS */
+.field{margin-bottom:18px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.field input,.field textarea,.field select{width:100%;padding:13px 16px;background:var(--gray2);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;font-weight:400;outline:none;transition:border-color .2s;resize:none}
 .field input::placeholder,.field textarea::placeholder{color:var(--muted)}
-.field input:focus,.field textarea:focus{border-color:rgba(0,255,135,.4);box-shadow:0 0 0 3px rgba(0,255,135,.07)}
-.field textarea{min-height:100px;line-height:1.6}
+.field input:focus,.field textarea:focus{border-color:rgba(0,113,227,.5)}
+.field textarea{min-height:90px;line-height:1.6}
 
 /* OPTION CARDS */
-.option-group{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
-.opt-card{
-  flex:1;min-width:140px;
-  padding:16px 18px;border-radius:12px;
-  border:1.5px solid var(--border);background:var(--gray2);
-  cursor:pointer;transition:all .2s;text-align:left;
-  display:flex;flex-direction:column;gap:4px;
-}
-.opt-card:hover{border-color:rgba(0,255,135,.3);background:rgba(0,255,135,.04)}
-.opt-card.sel{border-color:var(--green);background:rgba(0,255,135,.08)}
-.opt-card .opt-icon{font-size:22px;margin-bottom:4px}
-.opt-card .opt-name{font-size:13px;font-weight:700;color:var(--white)}
-.opt-card.sel .opt-name{color:var(--green)}
-.opt-card .opt-price{font-size:11px;font-weight:400;color:var(--muted)}
+.option-group{display:flex;flex-wrap:wrap;gap:8px}
+.opt-card{flex:1;min-width:130px;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--gray2);cursor:pointer;transition:all .2s;text-align:left;display:flex;flex-direction:column;gap:4px}
+.opt-card:hover{border-color:rgba(0,113,227,.3);background:rgba(0,113,227,.04)}
+.opt-card.sel{border-color:var(--blue);background:rgba(0,113,227,.08)}
+.opt-icon{font-size:20px;margin-bottom:2px}
+.opt-name{font-size:13px;font-weight:600;color:var(--white)}
+.opt-card.sel .opt-name{color:var(--blue)}
+.opt-desc{font-size:11px;font-weight:400;color:var(--muted)}
 
-/* TIER CARDS */
-.tier-group{display:flex;flex-direction:column;gap:10px}
-.tier-card{
-  padding:18px 20px;border-radius:12px;
-  border:1.5px solid var(--border);background:var(--gray2);
-  cursor:pointer;transition:all .2s;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.tier-card:hover{border-color:rgba(0,255,135,.3)}
-.tier-card.sel{border-color:var(--green);background:rgba(0,255,135,.07)}
-.tier-card-left{display:flex;align-items:center;gap:16px}
-.tier-icon{font-size:28px}
-.tier-name{font-size:14px;font-weight:700;color:var(--white)}
-.tier-card.sel .tier-name{color:var(--green)}
-.tier-reach{font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
-.tier-mult{font-size:13px;font-weight:700;color:var(--green)}
-
-/* QTY PILLS */
-.qty-group{display:flex;gap:10px;flex-wrap:wrap}
-.qty-pill{
-  padding:12px 24px;border-radius:10px;
-  border:1.5px solid var(--border);background:var(--gray2);
-  cursor:pointer;transition:all .2s;text-align:center;
-}
-.qty-pill:hover{border-color:rgba(0,255,135,.3)}
-.qty-pill.sel{border-color:var(--green);background:rgba(0,255,135,.08)}
-.qty-pill .qn{font-size:20px;font-weight:800;color:var(--white)}
-.qty-pill.sel .qn{color:var(--green)}
-.qty-pill .qd{font-size:10px;font-weight:600;color:var(--green)}
+/* PLATFORM PILLS */
+.platform-group{display:flex;gap:8px;flex-wrap:wrap}
+.platform-pill{padding:10px 20px;border-radius:50px;border:1px solid var(--border);background:var(--gray2);cursor:pointer;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:8px}
+.platform-pill:hover{border-color:rgba(0,113,227,.3);color:var(--white)}
+.platform-pill.sel{border-color:var(--blue);background:rgba(0,113,227,.1);color:var(--blue);font-weight:600}
 
 /* BUTTONS */
-.btn-next{
-  width:100%;padding:16px;border-radius:12px;
-  background:var(--green);color:var(--black);
-  font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;
-  border:none;cursor:pointer;transition:all .2s;margin-top:32px;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-}
-.btn-next:hover{background:var(--green-d);transform:translateY(-1px)}
-.btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-back{
-  background:none;border:1px solid var(--border);
-  color:var(--muted);font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;
-  padding:10px 20px;border-radius:8px;cursor:pointer;transition:all .2s;margin-top:12px;
-}
-.btn-back:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+.btn-next{width:100%;padding:15px;border-radius:12px;background:var(--blue);color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;border:none;cursor:pointer;transition:all .2s;margin-top:28px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-next:hover{background:var(--blue-l);transform:translateY(-1px)}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-back{background:none;border:none;color:var(--muted);font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;padding:10px 0;cursor:pointer;transition:color .2s;margin-top:10px;display:block}
+.btn-back:hover{color:var(--white)}
+.err-msg{font-size:12px;color:var(--red);margin-top:8px;display:none}
 
-/* ── STEP 3: BRIEF PREVIEW ── */
-.brief-preview{
-  background:var(--gray2);border:1px solid var(--border);
-  border-radius:16px;overflow:hidden;margin-bottom:24px;
-  position:relative;
-}
-.brief-preview-head{
-  padding:20px 24px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.brief-preview-head span{font-size:12px;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
-.brief-preview-head .bp-brand{font-size:14px;font-weight:700;color:var(--white)}
-.brief-body{padding:24px;display:flex;flex-direction:column;gap:16px}
-.brief-section-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.brief-line{height:12px;background:var(--gray3);border-radius:4px;margin-bottom:8px}
-.brief-line.short{width:60%}
-.brief-line.medium{width:80%}
-.brief-line.highlight{background:rgba(0,255,135,.15);border-left:3px solid var(--green);height:auto;padding:12px 14px;border-radius:6px}
-.brief-line.highlight p{font-size:13px;font-weight:400;color:var(--text);line-height:1.6}
-.brief-blur{
-  position:absolute;bottom:0;left:0;right:0;height:260px;
-  background:linear-gradient(to bottom, transparent 0%, rgba(22,22,32,.97) 55%, var(--gray2) 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:32px;gap:8px;
-}
-.lock-icon{font-size:28px}
-.lock-text{font-size:13px;font-weight:600;color:var(--muted);text-align:center}
+/* BRIEF PREVIEW */
+.brief-preview{background:var(--gray2);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px;position:relative}
+.bp-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.bp-head-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue)}
+.bp-head-brand{font-size:13px;font-weight:600;color:var(--white)}
+.bp-body{padding:22px;display:flex;flex-direction:column;gap:18px}
+.bp-section-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.bp-highlight{background:rgba(0,113,227,.06);border-left:2px solid var(--blue);border-radius:6px;padding:12px 14px}
+.bp-highlight p{font-size:13px;font-weight:400;color:var(--text);line-height:1.65}
+.bp-line{height:10px;background:var(--gray3);border-radius:4px;margin-bottom:7px}
+.bp-line.med{width:72%}.bp-line.short{width:45%}
+.bp-blur{position:absolute;bottom:0;left:0;right:0;height:260px;background:linear-gradient(to bottom,transparent 0%,rgba(28,28,30,.97) 55%,var(--gray2) 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:28px;gap:8px}
+.bp-lock-icon{font-size:26px}
+.bp-lock-text{font-size:13px;font-weight:500;color:var(--muted);text-align:center;line-height:1.5}
 
 /* PRICE SUMMARY */
-.price-summary{
-  background:var(--gray3);border:1px solid rgba(0,255,135,.15);
-  border-radius:16px;padding:24px;margin-bottom:20px;
-}
+.price-summary{background:var(--gray3);border:1px solid rgba(0,113,227,.15);border-radius:14px;padding:22px;margin-bottom:18px}
 .ps-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .ps-row:last-child{border:none;margin:0;padding:0}
 .ps-row span:last-child{font-weight:600;color:var(--text)}
-.ps-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:var(--white);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
-.ps-total span:last-child{color:var(--green);font-size:20px}
+.ps-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:var(--white);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+.ps-total span:last-child{color:var(--blue);font-size:20px}
 
-/* ── AUTH MODAL ── */
-.modal-overlay{
-  display:none;position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:20px;
-}
+/* INCLUDES */
+.includes{background:var(--gray2);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:20px}
+.includes-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.inc-row{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:400;color:var(--text);margin-bottom:9px}
+.inc-row:last-child{margin:0}
+.inc-check{color:var(--blue);font-size:12px;flex-shrink:0}
+
+/* AUTH MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
-.modal{
-  background:var(--gray);border:1px solid var(--border);
-  border-radius:20px;padding:40px;width:100%;max-width:420px;
-  animation:fadeUp .3s ease;
-}
-.modal-logo{font-size:22px;font-weight:800;color:var(--white);margin-bottom:6px}
-.modal-logo span{color:var(--green)}
-.modal-title{font-size:22px;font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:6px}
-.modal-sub{font-size:13px;font-weight:400;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.modal-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:11px}
-.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.auth-btn{
-  width:100%;padding:13px;border-radius:11px;
-  font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;
-  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:10px;border:1px solid var(--border);
-}
-.auth-btn-google{background:var(--gray2);color:var(--text)}
-.auth-btn-google:hover{border-color:rgba(255,255,255,.2);background:var(--gray3)}
-.auth-btn-magic{background:var(--green);color:var(--black);border-color:var(--green)}
-.auth-btn-magic:hover{background:var(--green-d)}
-.auth-input{
-  width:100%;padding:13px 16px;background:var(--gray2);border:1.5px solid var(--border);
-  border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;
-  outline:none;transition:border-color .2s;margin-bottom:10px;
-}
-.auth-input:focus{border-color:rgba(0,255,135,.4)}
-.auth-input::placeholder{color:var(--muted)}
-.auth-msg{font-size:12px;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:none}
-.auth-msg.ok{background:rgba(0,255,135,.08);border:1px solid rgba(0,255,135,.2);color:var(--green)}
-.auth-msg.err{background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.2);color:var(--red)}
-.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;position:absolute;top:20px;right:20px;font-size:20px;line-height:1;padding:4px;transition:color .2s}
+.modal{background:var(--gray2);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:38px;width:100%;max-width:400px;animation:fadeUp .3s ease;position:relative}
+.modal-logo{font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px}
+.modal-logo span{color:var(--blue)}
+.modal-title{font-size:21px;font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:6px}
+.modal-sub{font-size:13px;font-weight:400;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.modal-close{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;transition:color .2s;line-height:1;padding:4px}
 .modal-close:hover{color:var(--white)}
+.modal-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:11px}
+.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-btn{width:100%;padding:13px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:9px}
+.auth-google{background:var(--gray3);color:var(--white);border:1px solid var(--border)}
+.auth-google:hover{border-color:rgba(255,255,255,.2)}
+.auth-magic{background:var(--blue);color:#fff;border:none}
+.auth-magic:hover{background:var(--blue-l)}
+.auth-input{width:100%;padding:12px 15px;background:var(--gray3);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;outline:none;transition:border-color .2s;margin-bottom:9px}
+.auth-input:focus{border-color:rgba(0,113,227,.5)}
+.auth-input::placeholder{color:var(--muted)}
+.auth-msg{font-size:12px;border-radius:8px;padding:9px 13px;margin-bottom:10px;display:none}
+.auth-msg.ok{background:rgba(0,113,227,.08);border:1px solid rgba(0,113,227,.2);color:var(--blue)}
+.auth-msg.err{background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.2);color:var(--red)}
 
-/* LOADING STATE */
-.loading-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.9);backdrop-filter:blur(8px);align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center}
+/* LOADING */
+.loading-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center}
 .loading-overlay.open{display:flex}
-.spinner{width:48px;height:48px;border:3px solid var(--gray3);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite}
+.spinner{width:44px;height:44px;border:2.5px solid var(--gray3);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:16px;font-weight:600;color:var(--white)}
-.loading-sub{font-size:13px;font-weight:400;color:var(--muted)}
+.loading-text{font-size:15px;font-weight:600;color:var(--white)}
+.loading-sub{font-size:13px;color:var(--muted)}
 
 @media(max-width:600px){
   .topbar{padding:0 16px}
-  main{padding:90px 16px 40px}
+  main{padding:84px 16px 40px}
   .modal{padding:28px 20px}
+  .option-group{flex-direction:column}
+  .opt-card{min-width:unset}
 }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-  <a href="/" class="logo"><div class="logo-dot"></div>crealo</a>
+  <a href="/" class="logo">crea<span>lo</span></a>
   <a href="/" class="back-link">← Volver</a>
 </div>
-
-<!-- PROGRESS BAR -->
 <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:33%"></div></div>
 
 <main>
 <div class="wizard">
 
-  <!-- STEP INDICATOR -->
   <div class="step-indicator">
     <div class="step-dot active" id="dot1">1</div>
     <div class="step-line" id="line1"></div>
@@ -255,438 +170,290 @@ main{min-height:100vh;padding:100px 24px 60px;display:flex;align-items:flex-star
     <div class="step-dot" id="dot3">3</div>
   </div>
 
-  <!-- ── STEP 1: Tu marca ── -->
+  <!-- STEP 1: Tu marca -->
   <div class="step active" id="step1">
     <div class="step-eyebrow">Paso 1 de 3</div>
     <h1 class="step-title">Contanos tu marca</h1>
-    <p class="step-sub">3 preguntas y armamos el brief perfecto para tu creator.</p>
+    <p class="step-sub">Tres preguntas y armamos el brief perfecto.</p>
 
     <div class="field">
-      <label>Nombre de tu marca o negocio</label>
-      <input type="text" id="brandName" placeholder="Ej: Skinstudio, La Botica, FitEssentials" />
+      <label>Nombre de tu marca</label>
+      <input type="text" id="brandName" placeholder="Ej: Skinstudio, FitEssentials, La Botica" />
     </div>
     <div class="field">
-      <label>¿Qué vendés? Describí tu producto</label>
+      <label>¿Qué vendés? Describilo en una oración</label>
       <textarea id="product" placeholder="Ej: Cremas hidratantes naturales para piel sensible, sin parabenos ni fragancias artificiales..."></textarea>
     </div>
     <div class="field">
-      <label>¿Cuál es tu objetivo con este contenido?</label>
+      <label>¿Cuál es tu objetivo?</label>
       <div class="option-group" style="margin-top:4px">
-        <div class="opt-card" onclick="selGoal(this)" data-val="ventas"><div class="opt-icon">💰</div><div class="opt-name">Más ventas</div></div>
-        <div class="opt-card" onclick="selGoal(this)" data-val="awareness"><div class="opt-icon">👀</div><div class="opt-name">Dar a conocer</div></div>
-        <div class="opt-card" onclick="selGoal(this)" data-val="comunidad"><div class="opt-icon">❤️</div><div class="opt-name">Comunidad</div></div>
-        <div class="opt-card" onclick="selGoal(this)" data-val="ads"><div class="opt-icon">🎯</div><div class="opt-name">Ads pagados</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="ventas"><div class="opt-icon">💰</div><div class="opt-name">Más ventas</div><div class="opt-desc">Conversiones directas</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="awareness"><div class="opt-icon">👀</div><div class="opt-name">Visibilidad</div><div class="opt-desc">Dar a conocer la marca</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="comunidad"><div class="opt-icon">❤️</div><div class="opt-name">Comunidad</div><div class="opt-desc">Crecer en engagement</div></div>
+        <div class="opt-card" onclick="selGoal(this)" data-val="ads"><div class="opt-icon">🎯</div><div class="opt-name">Ads pagados</div><div class="opt-desc">Material para campañas</div></div>
       </div>
     </div>
 
     <button class="btn-next" onclick="goStep2()">Continuar →</button>
-    <div id="err1" style="font-size:12px;color:var(--red);margin-top:10px;display:none">Completá todos los campos antes de continuar.</div>
+    <div class="err-msg" id="err1">Completá todos los campos antes de continuar.</div>
   </div>
 
-  <!-- ── STEP 2: Tu pack ── -->
+  <!-- STEP 2: Estilo -->
   <div class="step" id="step2">
     <div class="step-eyebrow">Paso 2 de 3</div>
-    <h1 class="step-title">Armá tu pack</h1>
-    <p class="step-sub">Elegí el formato, cantidad y nivel de creator. El precio se calcula solo.</p>
+    <h1 class="step-title">Estilo y plataforma</h1>
+    <p class="step-sub">Así personalizamos el brief para que la creator te entienda al toque.</p>
 
-    <!-- Formato -->
-    <div style="margin-bottom:28px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Formato de contenido</div>
-      <div class="option-group">
-        <div class="opt-card sel" onclick="selFmt(this)" data-base="20000" data-name="Reel"><div class="opt-icon">🎬</div><div class="opt-name">Reel</div><div class="opt-price">desde $20.000</div></div>
-        <div class="opt-card" onclick="selFmt(this)" data-base="12000" data-name="Stories"><div class="opt-icon">📱</div><div class="opt-name">Stories</div><div class="opt-price">desde $12.000</div></div>
-        <div class="opt-card" onclick="selFmt(this)" data-base="15000" data-name="Carrusel"><div class="opt-icon">🖼️</div><div class="opt-name">Carrusel</div><div class="opt-price">desde $15.000</div></div>
-        <div class="opt-card" onclick="selFmt(this)" data-base="18000" data-name="UGC puro"><div class="opt-icon">✨</div><div class="opt-name">UGC puro</div><div class="opt-price">desde $18.000</div></div>
-        <div class="opt-card" onclick="selFmt(this)" data-base="45000" data-name="Video largo"><div class="opt-icon">🎥</div><div class="opt-name">Video largo</div><div class="opt-price">desde $45.000</div></div>
+    <div class="field" style="margin-bottom:24px">
+      <label>¿Dónde vas a publicar el contenido?</label>
+      <div class="platform-group" style="margin-top:8px">
+        <div class="platform-pill sel" onclick="selPlatform(this)" data-val="instagram">📸 Instagram</div>
+        <div class="platform-pill" onclick="selPlatform(this)" data-val="tiktok">🎵 TikTok</div>
+        <div class="platform-pill" onclick="selPlatform(this)" data-val="ambas">✨ Ambas</div>
+        <div class="platform-pill" onclick="selPlatform(this)" data-val="youtube">▶️ YouTube Shorts</div>
       </div>
     </div>
 
-    <!-- Cantidad -->
-    <div style="margin-bottom:28px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Cantidad de piezas</div>
-      <div class="qty-group">
-        <div class="qty-pill sel" onclick="selQty(this)" data-qty="1" data-disc="0"><div class="qn">1</div><div class="qd">base</div></div>
-        <div class="qty-pill" onclick="selQty(this)" data-qty="3" data-disc="10"><div class="qn">3</div><div class="qd">–10%</div></div>
-        <div class="qty-pill" onclick="selQty(this)" data-qty="5" data-disc="20"><div class="qn">5</div><div class="qd">–20%</div></div>
-        <div class="qty-pill" onclick="selQty(this)" data-qty="10" data-disc="30"><div class="qn">10</div><div class="qd">–30%</div></div>
+    <div class="field">
+      <label>¿Quién es tu cliente ideal?</label>
+      <input type="text" id="audience" placeholder="Ej: Mujeres de 25-35 años, interesadas en skincare natural y vida saludable" />
+    </div>
+
+    <div class="field" style="margin-bottom:24px">
+      <label>Estilo visual del contenido</label>
+      <div class="option-group" style="margin-top:8px">
+        <div class="opt-card" onclick="selStyle(this)" data-val="lifestyle"><div class="opt-icon">🌿</div><div class="opt-name">Lifestyle</div><div class="opt-desc">Cotidiano y natural</div></div>
+        <div class="opt-card" onclick="selStyle(this)" data-val="minimal"><div class="opt-icon">⬜</div><div class="opt-name">Minimalista</div><div class="opt-desc">Limpio y elegante</div></div>
+        <div class="opt-card" onclick="selStyle(this)" data-val="energico"><div class="opt-icon">⚡</div><div class="opt-name">Enérgico</div><div class="opt-desc">Dinámico y vibrante</div></div>
+        <div class="opt-card" onclick="selStyle(this)" data-val="tutorial"><div class="opt-icon">📖</div><div class="opt-name">Tutorial</div><div class="opt-desc">Educativo y claro</div></div>
       </div>
     </div>
 
-    <!-- Tier -->
-    <div style="margin-bottom:28px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Nivel de creator</div>
-      <div class="tier-group">
-        <div class="tier-card sel" onclick="selTier(this)" data-mult="1" data-name="Nano">
-          <div class="tier-card-left"><div class="tier-icon">🌱</div><div><div class="tier-name">Nano creator</div><div class="tier-reach">Hasta 10K seg. · Engagement muy alto</div></div></div>
-          <span class="tier-mult">×1</span>
-        </div>
-        <div class="tier-card" onclick="selTier(this)" data-mult="1.8" data-name="Micro">
-          <div class="tier-card-left"><div class="tier-icon">🌿</div><div><div class="tier-name">Micro creator</div><div class="tier-reach">10K–100K seg. · Gran alcance orgánico</div></div></div>
-          <span class="tier-mult">×1.8</span>
-        </div>
-        <div class="tier-card" onclick="selTier(this)" data-mult="3" data-name="Macro">
-          <div class="tier-card-left"><div class="tier-icon">🌳</div><div><div class="tier-name">Macro creator</div><div class="tier-reach">+100K seg. · Máximo impacto</div></div></div>
-          <span class="tier-mult">×3</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Live price -->
-    <div style="background:var(--gray3);border:1px solid rgba(0,255,135,.15);border-radius:12px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Total estimado</div>
-        <div style="font-size:13px;font-weight:400;color:var(--muted)" id="s2sub">1 Reel · Nano creator</div>
-      </div>
-      <div style="font-size:28px;font-weight:800;color:var(--green);letter-spacing:-1px" id="s2price">$20.000</div>
-    </div>
-
-    <button class="btn-next" onclick="goStep3()">Ver mi brief preview →</button>
+    <button class="btn-next" onclick="goStep3()">Ver mi brief →</button>
     <button class="btn-back" onclick="goStep(1)">← Atrás</button>
+    <div class="err-msg" id="err2">Completá todos los campos antes de continuar.</div>
   </div>
 
-  <!-- ── STEP 3: Preview + Pago ── -->
+  <!-- STEP 3: Preview + Pago -->
   <div class="step" id="step3">
-    <div class="step-eyebrow">Paso 3 de 3</div>
-    <h1 class="step-title">Tu brief está listo 🎉</h1>
-    <p class="step-sub">Desbloquealo y accedé a tu creator asignada en 48 horas.</p>
+    <div class="step-eyebrow">Tu brief está listo</div>
+    <h1 class="step-title">Así va a quedar 🎉</h1>
+    <p class="step-sub">Pagá $9.999 para desbloquear el brief completo y poder contratar tu creator.</p>
 
-    <!-- Brief preview card -->
+    <!-- Brief preview -->
     <div class="brief-preview">
-      <div class="brief-preview-head">
-        <span>Brief generado · IA</span>
-        <span class="bp-brand" id="prevBrand">—</span>
+      <div class="bp-head">
+        <span class="bp-head-label">Brief generado · IA</span>
+        <span class="bp-head-brand" id="prevBrand">—</span>
       </div>
-      <div class="brief-body">
-
-        <!-- ✅ VISIBLE: Descripción de marca -->
+      <div class="bp-body">
+        <!-- VISIBLE -->
         <div>
-          <div class="brief-section-title">📌 Descripción de marca</div>
-          <div class="brief-line highlight"><p id="prevDesc">—</p></div>
+          <div class="bp-section-title">📌 Descripción de marca</div>
+          <div class="bp-highlight"><p id="prevDesc">—</p></div>
         </div>
-
-        <!-- ✅ VISIBLE: Objetivo -->
         <div>
-          <div class="brief-section-title">🎯 Objetivo de campaña</div>
-          <div class="brief-line highlight"><p id="prevGoal">—</p></div>
+          <div class="bp-section-title">🎯 Objetivo de campaña</div>
+          <div class="bp-highlight"><p id="prevGoal">—</p></div>
         </div>
-
-        <!-- ✅ VISIBLE: Tono (parcial) -->
         <div>
-          <div class="brief-section-title">🎨 Tono y estilo</div>
-          <div class="brief-line highlight"><p id="prevTone">—</p></div>
+          <div class="bp-section-title">🎨 Tono y estilo visual</div>
+          <div class="bp-highlight"><p id="prevTone">—</p></div>
         </div>
-
-        <!-- 🔒 BLOQUEADO: el resto -->
-        <div style="opacity:.35;pointer-events:none">
-          <div class="brief-section-title">📋 Instrucciones para la creator</div>
-          <div class="brief-line"></div>
-          <div class="brief-line medium"></div>
-          <div class="brief-line short"></div>
-          <div class="brief-line"></div>
-          <div class="brief-line medium"></div>
+        <!-- BLOQUEADO -->
+        <div style="opacity:.3;pointer-events:none">
+          <div class="bp-section-title">📋 Instrucciones para la creator</div>
+          <div class="bp-line"></div><div class="bp-line med"></div><div class="bp-line short"></div><div class="bp-line"></div><div class="bp-line med"></div>
         </div>
-        <div style="opacity:.35;pointer-events:none">
-          <div class="brief-section-title">🎬 Escenas sugeridas</div>
-          <div class="brief-line medium"></div>
-          <div class="brief-line short"></div>
-          <div class="brief-line"></div>
+        <div style="opacity:.3;pointer-events:none">
+          <div class="bp-section-title">🎬 Escenas sugeridas (escena a escena)</div>
+          <div class="bp-line med"></div><div class="bp-line"></div><div class="bp-line short"></div>
         </div>
-        <div style="opacity:.35;pointer-events:none">
-          <div class="brief-section-title">#️⃣ Hashtags y menciones</div>
-          <div class="brief-line short"></div>
-          <div class="brief-line medium"></div>
+        <div style="opacity:.3;pointer-events:none">
+          <div class="bp-section-title">#️⃣ Hashtags · Caption · CTA</div>
+          <div class="bp-line short"></div><div class="bp-line med"></div>
         </div>
-        <div style="opacity:.35;pointer-events:none">
-          <div class="brief-section-title">📦 Entregables y plazos</div>
-          <div class="brief-line medium"></div>
-          <div class="brief-line short"></div>
+        <div style="opacity:.3;pointer-events:none">
+          <div class="bp-section-title">📦 Entregables y plazos</div>
+          <div class="bp-line med"></div><div class="bp-line short"></div>
         </div>
-
       </div>
-      <!-- BLUR OVERLAY -->
-      <div class="brief-blur">
-        <div class="lock-icon">🔒</div>
-        <div class="lock-text">Desbloqueá el brief completo + creator asignada</div>
+      <div class="bp-blur">
+        <div class="bp-lock-icon">🔒</div>
+        <div class="bp-lock-text">Desbloqueá el brief completo<br/>+ acceso a contratar tu creator</div>
       </div>
     </div>
 
     <!-- Price summary -->
     <div class="price-summary">
-      <div class="ps-row"><span>Formato</span><span id="psFormat">Reel</span></div>
-      <div class="ps-row"><span>Cantidad</span><span id="psQty">1 pieza</span></div>
-      <div class="ps-row"><span>Nivel creator</span><span id="psTier">Nano creator</span></div>
-      <div class="ps-row"><span>Descuento volumen</span><span id="psDisc" style="color:var(--green)">–0%</span></div>
-      <div class="ps-total"><span>Total a pagar</span><span id="psTotal">$20.000</span></div>
+      <div class="ps-row"><span>Brief generado por IA</span><span id="psBrief">$9.999</span></div>
+      <div class="ps-row"><span>Marca</span><span id="psBrand">—</span></div>
+      <div class="ps-row"><span>Plataforma</span><span id="psPlatform">—</span></div>
+      <div class="ps-total"><span>Total</span><span>$9.999</span></div>
     </div>
 
-    <!-- What you get -->
-    <div style="background:var(--gray2);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:24px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Incluye</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> Brief completo generado por IA con tu marca</div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> Creator asignada según tu nicho en 24h</div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> <span id="inclQty">1</span> pieza de contenido entregada en 48h</div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> 1 ronda de revisión incluida</div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--text)"><span style="color:var(--green)">✓</span> Derechos de uso 100% tuyos</div>
-      </div>
+    <!-- Includes -->
+    <div class="includes">
+      <div class="includes-title">Incluye</div>
+      <div class="inc-row"><span class="inc-check">✓</span>Brief completo con tu marca personalizada</div>
+      <div class="inc-row"><span class="inc-check">✓</span>Instrucciones escena a escena para la creator</div>
+      <div class="inc-row"><span class="inc-check">✓</span>Hashtags, caption y CTA listos para usar</div>
+      <div class="inc-row"><span class="inc-check">✓</span>Acceso para contratar tu creator ($90.000)</div>
+      <div class="inc-row"><span class="inc-check">✓</span>Descargable en PDF</div>
     </div>
 
-    <button class="btn-next" onclick="handlePay()" id="payBtn">🔓 Pagar y acceder — <span id="payTotal">$20.000</span></button>
-    <button class="btn-back" onclick="goStep(2)">← Cambiar pack</button>
+    <button class="btn-next" onclick="handlePay()" id="payBtn">🔓 Comprar mi brief — $9.999</button>
+    <button class="btn-back" onclick="goStep(2)">← Atrás</button>
   </div>
 
 </div>
 </main>
 
-<!-- ── AUTH MODAL ── -->
+<!-- AUTH MODAL -->
 <div class="modal-overlay" id="authModal">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-logo">crea<span>lo</span></div>
-    <div class="modal-title">Antes de pagar...</div>
-    <div class="modal-sub">Creá tu cuenta gratis para guardar tu brief y gestionar tu proyecto.</div>
-
+    <div class="modal-title">Creá tu cuenta</div>
+    <div class="modal-sub">Para guardar tu brief y gestionar tu proyecto, necesitamos una cuenta.</div>
     <div class="auth-msg" id="authMsg"></div>
-
-    <button class="auth-btn auth-btn-google" onclick="loginGoogle()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    <button class="auth-btn auth-google" onclick="loginGoogle()">
+      <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Continuar con Google
     </button>
-
-    <div class="modal-divider">o usá tu email</div>
-
+    <div class="modal-divider">o con tu email</div>
     <input class="auth-input" type="email" id="authEmail" placeholder="tu@email.com" />
-    <button class="auth-btn auth-btn-magic" onclick="loginMagic()">
-      ✉️ Recibir link de acceso
-    </button>
+    <button class="auth-btn auth-magic" onclick="loginMagic()">✉️ Recibir link de acceso</button>
   </div>
 </div>
 
-<!-- ── LOADING ── -->
+<!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <div class="loading-text" id="loadingText">Creando tu orden...</div>
+  <div class="loading-text" id="loadingText">Procesando...</div>
   <div class="loading-sub" id="loadingSub">Te redirigimos a Mercado Pago</div>
 </div>
 
 <script>
-// ── SUPABASE ──
 const SUPABASE_URL = 'https://dtopwxldxlwgdvpjcegg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_W54QQPJ_WFtvI67N5SPniQ_jZ1kpCES';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ── STATE ──
-let state = {
-  brand: '', product: '', goal: '',
-  format: 'Reel', base: 20000,
-  qty: 1, disc: 0,
-  tier: 'Nano', mult: 1,
-};
+let state = { brand:'', product:'', goal:'', platform:'instagram', audience:'', style:'' };
 
-function ars(n){ return '$' + Math.round(n).toLocaleString('es-AR'); }
-function calcTotal(){
-  const sub = state.base * state.qty * state.mult;
-  return Math.round(sub * (1 - state.disc/100));
-}
+// ── SELECTORS ──
+let selGoalVal='', selPlatformVal='instagram', selStyleVal='';
+function selGoal(el){ document.querySelectorAll('[onclick^="selGoal"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selGoalVal=el.dataset.val; }
+function selPlatform(el){ document.querySelectorAll('[onclick^="selPlatform"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selPlatformVal=el.dataset.val; }
+function selStyle(el){ document.querySelectorAll('[onclick^="selStyle"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selStyleVal=el.dataset.val; }
 
-// ── STEP NAV ──
+// ── NAV ──
 function goStep(n){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
-  const fills = {1:'33%',2:'66%',3:'100%'};
-  document.getElementById('progressFill').style.width = fills[n];
+  document.getElementById('progressFill').style.width = {1:'33%',2:'66%',3:'100%'}[n];
   for(let i=1;i<=3;i++){
     const d=document.getElementById('dot'+i);
     d.classList.remove('active','done');
-    if(i<n) d.classList.add('done'), d.textContent='✓';
-    else if(i===n) d.classList.add('active'), d.textContent=i;
+    if(i<n){d.classList.add('done');d.textContent='✓';}
+    else if(i===n){d.classList.add('active');d.textContent=i;}
     else d.textContent=i;
   }
-  for(let i=1;i<=2;i++){
-    document.getElementById('line'+i).classList.toggle('done', i<n);
-  }
+  for(let i=1;i<=2;i++) document.getElementById('line'+i).classList.toggle('done',i<n);
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── SELECTORS ──
-let selectedGoal = '';
-function selGoal(el){
-  document.querySelectorAll('[onclick="selGoal(this)"]').forEach(x=>x.classList.remove('sel'));
-  el.classList.add('sel');
-  selectedGoal = el.dataset.val;
-}
-function selFmt(el){
-  document.querySelectorAll('[onclick^="selFmt"]').forEach(x=>x.classList.remove('sel'));
-  el.classList.add('sel');
-  state.format = el.dataset.name;
-  state.base = parseInt(el.dataset.base);
-  updateS2();
-}
-function selQty(el){
-  document.querySelectorAll('[onclick^="selQty"]').forEach(x=>x.classList.remove('sel'));
-  el.classList.add('sel');
-  state.qty = parseInt(el.dataset.qty);
-  state.disc = parseInt(el.dataset.disc);
-  updateS2();
-}
-function selTier(el){
-  document.querySelectorAll('[onclick^="selTier"]').forEach(x=>x.classList.remove('sel'));
-  el.classList.add('sel');
-  state.tier = el.dataset.name;
-  state.mult = parseFloat(el.dataset.mult);
-  updateS2();
-}
-function updateS2(){
-  const total = calcTotal();
-  document.getElementById('s2price').textContent = ars(total);
-  document.getElementById('s2sub').textContent = `${state.qty} ${state.format} · ${state.tier} creator` + (state.disc ? ` · –${state.disc}% dto.` : '');
-}
-
-// ── STEP TRANSITIONS ──
 function goStep2(){
-  const brand = document.getElementById('brandName').value.trim();
-  const product = document.getElementById('product').value.trim();
-  const err = document.getElementById('err1');
-  if(!brand || !product || !selectedGoal){
-    err.style.display='block'; return;
-  }
+  const brand=document.getElementById('brandName').value.trim();
+  const product=document.getElementById('product').value.trim();
+  const err=document.getElementById('err1');
+  if(!brand||!product||!selGoalVal){ err.style.display='block'; return; }
   err.style.display='none';
-  state.brand = brand;
-  state.product = product;
-  state.goal = selectedGoal;
+  state.brand=brand; state.product=product; state.goal=selGoalVal;
   goStep(2);
 }
 
 function goStep3(){
-  // Populate preview with real content
-  document.getElementById('prevBrand').textContent = state.brand;
+  const audience=document.getElementById('audience').value.trim();
+  const err=document.getElementById('err2');
+  if(!audience||!selStyleVal){ err.style.display='block'; return; }
+  err.style.display='none';
+  state.audience=audience; state.platform=selPlatformVal; state.style=selStyleVal;
 
-  const goalMap = {
-    ventas:    'Generar ventas directas y conversiones medibles en el corto plazo.',
-    awareness: 'Aumentar el reconocimiento de marca y llegar a nuevas audiencias orgánicamente.',
-    comunidad: 'Fortalecer el vínculo con la comunidad existente y crecer en engagement auténtico.',
-    ads:       'Producir material creativo de alto impacto para usar en campañas de publicidad paga.'
+  // Populate preview
+  document.getElementById('prevBrand').textContent=state.brand;
+  document.getElementById('psBrand').textContent=state.brand;
+  document.getElementById('psPlatform').textContent=({instagram:'Instagram',tiktok:'TikTok',ambas:'Instagram + TikTok','youtube':'YouTube Shorts'})[state.platform]||state.platform;
+
+  const goalText={
+    ventas:'Generar ventas directas y conversiones medibles. El contenido debe tener un CTA claro que lleve a la compra.',
+    awareness:'Aumentar el reconocimiento de marca y llegar a nuevas audiencias de forma orgánica.',
+    comunidad:'Fortalecer el vínculo con la comunidad existente y crecer en engagement auténtico.',
+    ads:'Producir material de alto impacto para usar en campañas de publicidad paga en Meta o TikTok Ads.'
   };
-  const toneMap = {
-    ventas:    `Directo y orientado a la acción. La creator debe mostrar el producto en uso real, destacar 1-2 beneficios clave y cerrar con una llamada a la acción clara ("link en bio", "swipe up", "conseguilo ahora"). Nada de posado ni forzado — tiene que sentirse como una recomendación genuina entre amigas.`,
-    awareness: `Cercano, curioso y aspiracional. El contenido debe presentar ${state.brand} como un descubrimiento genuino. La creator habla en primera persona: "lo encontré", "lo estoy amando", "no lo conocía y ahora no puedo dejar de usarlo". Genera intriga, no spoilear todo.`,
-    comunidad: `Cálido, honesto y conversacional. La creator comparte su experiencia real con ${state.brand}, invita a su audiencia a opinar, genera una conversación. Puede incluir preguntas al final para boosting de comentarios. Autenticidad ante todo.`,
-    ads:       `Gancho fuerte en los primeros 2 segundos. Estructura: problema → solución → beneficio → CTA. El contenido debe funcionar con y sin sonido. Evitar logotipos y textos en pantalla que puedan interferir con las herramientas de la plataforma.`
+  const styleText={
+    lifestyle:`Estilo cotidiano y natural. La creator muestra el producto integrado a su día a día, de forma genuina. Audiencia objetivo: ${state.audience}.`,
+    minimal:`Estética limpia y minimalista. Fondos neutros, enfoque en el producto, sin distracciones. Transmite confianza y calidad premium. Para: ${state.audience}.`,
+    energico:`Ritmo dinámico, cuts rápidos, música con energía. Contenido que llama la atención en el primer segundo. Para: ${state.audience}.`,
+    tutorial:`Contenido educativo y claro. La creator explica paso a paso los beneficios o el uso del producto. Para: ${state.audience}.`
   };
 
-  document.getElementById('prevDesc').textContent =
-    `${state.brand} es una marca de ${state.product.toLowerCase().replace(/\.$/,'')}. El contenido debe reflejar la identidad de la marca de forma auténtica, conectando emocionalmente con la audiencia objetivo sin parecer publicidad tradicional.`;
-
-  document.getElementById('prevGoal').textContent = goalMap[state.goal] || 'Generar impacto real en la audiencia.';
-  document.getElementById('prevTone').textContent = toneMap[state.goal] || `Auténtico y cercano, alineado al estilo natural de la creator elegida.`;
-
-  // Price summary
-  const total = calcTotal();
-  document.getElementById('psFormat').textContent = state.format;
-  document.getElementById('psQty').textContent = `${state.qty} ${state.qty===1?'pieza':'piezas'}`;
-  document.getElementById('psTier').textContent = `${state.tier} creator (×${state.mult})`;
-  document.getElementById('psDisc').textContent = state.disc ? `–${state.disc}%` : '–0%';
-  document.getElementById('psTotal').textContent = ars(total);
-  document.getElementById('payTotal').textContent = ars(total);
-  document.getElementById('inclQty').textContent = state.qty;
+  document.getElementById('prevDesc').textContent=`${state.brand} es una marca de ${state.product.toLowerCase().replace(/\.$/,'')}. El contenido debe reflejar la identidad de la marca de forma auténtica, sin parecer publicidad tradicional.`;
+  document.getElementById('prevGoal').textContent=goalText[state.goal]||'Generar impacto real.';
+  document.getElementById('prevTone').textContent=styleText[state.style]||'Auténtico y cercano.';
   goStep(3);
 }
 
-// ── PAY FLOW ──
+// ── PAY ──
 async function handlePay(){
-  // Check auth first
-  const { data: { session } } = await sb.auth.getSession();
-  if(!session){
-    openModal();
-    return;
-  }
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ openModal(); return; }
   startPayment(session.user.email);
 }
-
 async function startPayment(email){
-  showLoading('Creando tu orden...', 'Te redirigimos a Mercado Pago en segundos');
+  showLoading('Creando tu orden...','Te redirigimos a Mercado Pago');
   try {
-    const total = calcTotal();
-    const res = await fetch('/api/crear-pago', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        titulo: `Crealo — ${state.qty} ${state.format} · ${state.tier} creator`,
-        precio: total,
-        email: email,
-        metadata: { brand: state.brand, format: state.format, qty: state.qty, tier: state.tier }
-      })
-    });
-    const data = await res.json();
-    if(data.init_point){
-      window.location.href = data.init_point;
-    } else {
-      hideLoading();
-      alert('Error al crear el pago. Intentá de nuevo.');
-    }
-  } catch(e){
-    hideLoading();
-    alert('Error de conexión. Revisá tu internet e intentá de nuevo.');
-  }
+    const res=await fetch('/api/crear-pago',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titulo:`Crealo — Brief IA para ${state.brand}`,precio:9999,email,metadata:state})});
+    const data=await res.json();
+    if(data.init_point) window.location.href=data.init_point;
+    else { hideLoading(); alert('Error al crear el pago. Intentá de nuevo.'); }
+  } catch(e){ hideLoading(); alert('Error de conexión. Intentá de nuevo.'); }
 }
 
 // ── AUTH MODAL ──
 function openModal(){ document.getElementById('authModal').classList.add('open'); }
 function closeModal(){ document.getElementById('authModal').classList.remove('open'); }
-
 async function loginGoogle(){
-  const { error } = await sb.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: window.location.href + '?pay=1' }
-  });
-  if(error) showAuthMsg('Error: ' + error.message, 'err');
+  const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href+'?pay=1'}});
+  if(error) showAuthMsg('Error: '+error.message,'err');
 }
-
 async function loginMagic(){
-  const email = document.getElementById('authEmail').value.trim();
-  if(!email){ showAuthMsg('Ingresá tu email.', 'err'); return; }
-  const { error } = await sb.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: window.location.href + '?pay=1' }
-  });
-  if(error) showAuthMsg('Error: ' + error.message, 'err');
-  else showAuthMsg('¡Listo! Revisá tu email para acceder 📩', 'ok');
+  const email=document.getElementById('authEmail').value.trim();
+  if(!email){showAuthMsg('Ingresá tu email.','err');return;}
+  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:window.location.href+'?pay=1'}});
+  if(error) showAuthMsg('Error: '+error.message,'err');
+  else showAuthMsg('✓ Revisá tu email para ingresar','ok');
 }
-
-function showAuthMsg(txt, type){
-  const m = document.getElementById('authMsg');
-  m.textContent = txt;
-  m.className = 'auth-msg ' + type;
-  m.style.display = 'block';
-}
+function showAuthMsg(txt,type){ const m=document.getElementById('authMsg'); m.textContent=txt; m.className='auth-msg '+type; m.style.display='block'; }
 
 // ── LOADING ──
-function showLoading(text, sub){
-  document.getElementById('loadingText').textContent = text;
-  document.getElementById('loadingSub').textContent = sub;
-  document.getElementById('loadingOverlay').classList.add('open');
-}
+function showLoading(t,s){ document.getElementById('loadingText').textContent=t; document.getElementById('loadingSub').textContent=s; document.getElementById('loadingOverlay').classList.add('open'); }
 function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('open'); }
 
-// ── AUTO-PAY AFTER AUTH REDIRECT ──
-(async () => {
-  const params = new URLSearchParams(window.location.search);
-  if(params.get('pay') === '1'){
-    const { data: { session } } = await sb.auth.getSession();
+// ── AUTO-PAY AFTER REDIRECT ──
+(async()=>{
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('pay')==='1'){
+    const {data:{session}}=await sb.auth.getSession();
     if(session){
-      // Restore state from sessionStorage if available
-      const saved = sessionStorage.getItem('crealo_state');
-      if(saved) Object.assign(state, JSON.parse(saved));
+      const saved=sessionStorage.getItem('crealo_state');
+      if(saved) Object.assign(state,JSON.parse(saved));
       closeModal();
-      // Re-render step 3
-      if(state.brand) goStep(3), goStep3();
-      setTimeout(() => startPayment(session.user.email), 800);
+      if(state.brand){ goStep(3); goStep3(); }
+      setTimeout(()=>startPayment(session.user.email),600);
     }
   }
-  // Save state to sessionStorage on every change
-  window.addEventListener('beforeunload', () => {
-    sessionStorage.setItem('crealo_state', JSON.stringify(state));
-  });
+  window.addEventListener('beforeunload',()=>sessionStorage.setItem('crealo_state',JSON.stringify(state)));
 })();
 </script>
 </body>

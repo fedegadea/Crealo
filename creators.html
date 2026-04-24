@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crealo — Elegí tu creator</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#000;--blue:#0071e3;--blue-d:#0058b0;--blue-l:#147ce5;
+  --white:#f5f5f7;--gray:#111;--gray2:#1c1c1e;--gray3:#2c2c2e;--gray4:#3a3a3c;
+  --muted:#6e6e73;--text:#d1d1d6;--border:rgba(255,255,255,0.08);--red:#ff453a;
+}
+body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(0,0,0,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-weight:700;font-size:19px;color:var(--white);text-decoration:none}
+.logo span{color:var(--blue)}
+.back-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+.back-link:hover{color:var(--white)}
+
+/* MAIN */
+main{padding:80px 24px 60px;max-width:1060px;margin:0 auto}
+
+/* HEADER */
+.page-header{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.page-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.page-title{font-size:clamp(26px,4vw,42px);font-weight:800;color:var(--white);letter-spacing:-1.5px;line-height:1.1;margin-bottom:8px}
+.page-sub{font-size:14px;font-weight:400;color:var(--muted);line-height:1.65;max-width:520px}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}
+.filter-pill{padding:8px 18px;border-radius:50px;border:1px solid var(--border);background:transparent;font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s}
+.filter-pill:hover{border-color:rgba(0,113,227,.3);color:var(--white)}
+.filter-pill.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* CREATORS GRID */
+.creators-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* CREATOR CARD */
+.creator-card{
+  background:var(--gray2);border:1px solid var(--border);border-radius:18px;
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .22s,border-color .22s;position:relative;
+}
+.creator-card:hover{transform:translateY(-3px);border-color:rgba(0,113,227,.25)}
+.creator-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--blue);opacity:0;transition:opacity .3s}
+.creator-card:hover::before{opacity:1}
+
+.card-top{padding:24px 24px 0;display:flex;align-items:flex-start;justify-content:space-between}
+.creator-avatar-wrap{position:relative}
+.creator-avatar{width:64px;height:64px;border-radius:50%;background:var(--gray3);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px}
+.creator-verified{position:absolute;bottom:0;right:0;width:20px;height:20px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;border:2px solid var(--gray2)}
+.creator-rating{text-align:right}
+.creator-stars{color:#f59e0b;font-size:11px}
+.creator-score{font-size:11px;font-weight:600;color:var(--white);margin-top:2px}
+.creator-reviews{font-size:10px;color:var(--muted)}
+
+.card-body{padding:16px 24px}
+.creator-name{font-size:16px;font-weight:700;color:var(--white);margin-bottom:2px}
+.creator-handle{font-size:11px;font-weight:400;color:var(--muted);margin-bottom:10px}
+.creator-bio{font-size:12px;font-weight:400;color:var(--muted);line-height:1.6;margin-bottom:14px;min-height:38px}
+.creator-niches{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.niche-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--gray3);color:var(--muted);border:1px solid var(--border)}
+.creator-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.c-stat{padding:10px 8px;text-align:center;border-right:1px solid var(--border)}
+.c-stat:last-child{border-right:none}
+.c-stat-val{font-size:14px;font-weight:700;color:var(--white);display:block}
+.c-stat-label{font-size:9px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;display:block}
+
+.card-footer{padding:0 24px 24px}
+.creator-price{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:14px 16px;background:var(--gray3);border-radius:10px}
+.price-label{font-size:11px;font-weight:500;color:var(--muted)}
+.price-amount{font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.5px}
+.price-per{font-size:10px;font-weight:400;color:var(--muted)}
+.btn-contratar{
+  width:100%;padding:13px;border-radius:10px;background:var(--blue);color:#fff;
+  font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;
+  border:none;cursor:pointer;transition:background .2s;
+}
+.btn-contratar:hover{background:var(--blue-l)}
+
+/* TIER BADGE */
+.tier-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:8px}
+.tier-nano{background:rgba(52,199,89,.1);color:#34c759;border:1px solid rgba(52,199,89,.2)}
+.tier-micro{background:rgba(0,113,227,.1);color:var(--blue);border:1px solid rgba(0,113,227,.2)}
+.tier-macro{background:rgba(255,159,10,.1);color:#ff9f0a;border:1px solid rgba(255,159,10,.2)}
+
+/* AUTH MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--gray2);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:38px;width:100%;max-width:400px;position:relative}
+.modal-close{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.modal-close:hover{color:var(--white)}
+.modal-logo{font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px}
+.modal-logo span{color:var(--blue)}
+.modal-title{font-size:21px;font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.auth-btn{width:100%;padding:13px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:9px}
+.auth-google{background:var(--gray3);color:var(--white);border:1px solid var(--border)}
+.auth-google:hover{border-color:rgba(255,255,255,.2)}
+.auth-magic{background:var(--blue);color:#fff;border:none}
+.auth-magic:hover{background:var(--blue-l)}
+.auth-input{width:100%;padding:12px 15px;background:var(--gray3);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;outline:none;transition:border-color .2s;margin-bottom:9px}
+.auth-input:focus{border-color:rgba(0,113,227,.5)}
+.auth-input::placeholder{color:var(--muted)}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:11px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-msg{font-size:12px;border-radius:8px;padding:9px 13px;margin-bottom:10px;display:none}
+.auth-msg.ok{background:rgba(0,113,227,.08);border:1px solid rgba(0,113,227,.2);color:var(--blue)}
+.auth-msg.err{background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.2);color:var(--red)}
+
+/* CONFIRM MODAL */
+.confirm-modal{background:var(--gray2);border:1px solid rgba(0,113,227,.2);border-radius:20px;padding:38px;width:100%;max-width:440px;position:relative}
+.confirm-creator-info{display:flex;align-items:center;gap:14px;padding:16px;background:var(--gray3);border-radius:12px;margin-bottom:24px}
+.confirm-avatar{width:52px;height:52px;border-radius:50%;background:var(--gray4);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.confirm-name{font-size:15px;font-weight:700;color:var(--white)}
+.confirm-tier{font-size:11px;color:var(--muted);margin-top:2px}
+.confirm-price{display:flex;justify-content:space-between;align-items:center;padding:18px;background:rgba(0,113,227,.06);border:1px solid rgba(0,113,227,.15);border-radius:12px;margin-bottom:24px}
+.confirm-price-label{font-size:13px;color:var(--muted)}
+.confirm-price-amount{font-size:24px;font-weight:800;color:var(--blue);letter-spacing:-1px}
+.confirm-features{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.confirm-feat{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text)}
+.confirm-feat-icon{color:var(--blue);font-size:11px;flex-shrink:0}
+.btn-confirm{width:100%;padding:14px;border-radius:10px;background:var(--blue);color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;border:none;cursor:pointer;transition:background .2s;margin-bottom:10px}
+.btn-confirm:hover{background:var(--blue-l)}
+.btn-cancel{width:100%;padding:10px;border-radius:10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-cancel:hover{border-color:rgba(255,255,255,.2);color:var(--white)}
+
+/* LOADING */
+.loading-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center}
+.loading-overlay.open{display:flex}
+.spinner{width:44px;height:44px;border:2.5px solid var(--gray3);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:15px;font-weight:600;color:var(--white)}
+.loading-sub{font-size:13px;color:var(--muted)}
+
+@media(max-width:900px){ .creators-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:600px){ main{padding:72px 16px 40px} .creators-grid{grid-template-columns:1fr} .topbar{padding:0 16px} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="logo">crea<span>lo</span></a>
+  <a href="/" class="back-link">← Inicio</a>
+</div>
+
+<main>
+  <div class="page-header">
+    <div class="page-eyebrow">Nuestra red</div>
+    <h1 class="page-title">Elegí tu creator</h1>
+    <p class="page-sub">Cada creator es curada a mano. Elegís, ella produce con tu brief en 48 horas.</p>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-pill active" onclick="filtrar(this,'todas')">Todas</button>
+    <button class="filter-pill" onclick="filtrar(this,'nano')">🌱 Nano</button>
+    <button class="filter-pill" onclick="filtrar(this,'micro')">🌿 Micro</button>
+    <button class="filter-pill" onclick="filtrar(this,'macro')">🌳 Macro</button>
+    <button class="filter-pill" onclick="filtrar(this,'belleza')">Belleza</button>
+    <button class="filter-pill" onclick="filtrar(this,'moda')">Moda</button>
+    <button class="filter-pill" onclick="filtrar(this,'fitness')">Fitness</button>
+    <button class="filter-pill" onclick="filtrar(this,'gastronomia')">Gastronomía</button>
+    <button class="filter-pill" onclick="filtrar(this,'hogar')">Hogar</button>
+    <button class="filter-pill" onclick="filtrar(this,'tech')">Tech</button>
+  </div>
+
+  <!-- CREATORS -->
+  <div class="creators-grid" id="creatorsGrid">
+
+    <div class="creator-card" data-tier="micro" data-niches="belleza lifestyle skincare">
+      <div class="card-top">
+        <div class="creator-avatar-wrap">
+          <div class="creator-avatar">🧡</div>
+          <div class="creator-verified">✓</div>
+        </div>
+        <div class="creator-rating">
+          <div class="creator-stars">★★★★★</div>
+          <div class="creator-score">5.0</div>
+          <div class="creator-reviews">47 reseñas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="tier-badge tier-micro">🌿 Micro</div>
+        <div class="creator-name">Valentina R.</div>
+        <div class="creator-handle">@valentina.r · 28K seguidores</div>
+        <div class="creator-bio">Especializada en belleza y skincare. Mis recomendaciones se sienten como un consejo de amiga, no como publicidad.</div>
+        <div class="creator-niches">
+          <span class="niche-tag">Belleza</span><span class="niche-tag">Skincare</span><span class="niche-tag">Lifestyle</span>
+        </div>
+        <div class="creator-stats">
+          <div class="c-stat"><span class="c-stat-val">6.8%</span><span class="c-stat-label">Engagement</span></div>
+          <div class="c-stat"><span class="c-stat-val">47</span><span class="c-stat-label">Proyectos</span></div>
+          <div class="c-stat"><span class="c-stat-val">48h</span><span class="c-stat-label">Entrega</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="creator-price">
+          <div><div class="price-label">Precio por pieza</div><div class="price-per">Reel, Stories o UGC</div></div>
+          <div style="text-align:right"><div class="price-amount">$90.000</div></div>
+        </div>
+        <button class="btn-contratar" onclick="contratar({name:'Valentina R.',avatar:'🧡',tier:'Micro creator',handle:'@valentina.r'})">Contratar a Valentina →</button>
+      </div>
+    </div>
+
+    <div class="creator-card" data-tier="nano" data-niches="fitness nutricion wellness">
+      <div class="card-top">
+        <div class="creator-avatar-wrap">
+          <div class="creator-avatar">💚</div>
+          <div class="creator-verified">✓</div>
+        </div>
+        <div class="creator-rating">
+          <div class="creator-stars">★★★★★</div>
+          <div class="creator-score">4.9</div>
+          <div class="creator-reviews">23 reseñas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="tier-badge tier-nano">🌱 Nano</div>
+        <div class="creator-name">Sofía M.</div>
+        <div class="creator-handle">@sofia.fit · 9K seguidores</div>
+        <div class="creator-bio">Nutricionista y creadora de contenido sobre vida saludable. Engagement altísimo, comunidad muy fiel.</div>
+        <div class="creator-niches">
+          <span class="niche-tag">Fitness</span><span class="niche-tag">Nutrición</span><span class="niche-tag">Wellness</span>
+        </div>
+        <div class="creator-stats">
+          <div class="c-stat"><span class="c-stat-val">12.4%</span><span class="c-stat-label">Engagement</span></div>
+          <div class="c-stat"><span class="c-stat-val">23</span><span class="c-stat-label">Proyectos</span></div>
+          <div class="c-stat"><span class="c-stat-val">48h</span><span class="c-stat-label">Entrega</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="creator-price">
+          <div><div class="price-label">Precio por pieza</div><div class="price-per">Reel, Stories o UGC</div></div>
+          <div style="text-align:right"><div class="price-amount">$90.000</div></div>
+        </div>
+        <button class="btn-contratar" onclick="contratar({name:'Sofía M.',avatar:'💚',tier:'Nano creator',handle:'@sofia.fit'})">Contratar a Sofía →</button>
+      </div>
+    </div>
+
+    <div class="creator-card" data-tier="micro" data-niches="moda tendencias lifestyle">
+      <div class="card-top">
+        <div class="creator-avatar-wrap">
+          <div class="creator-avatar">💜</div>
+          <div class="creator-verified">✓</div>
+        </div>
+        <div class="creator-rating">
+          <div class="creator-stars">★★★★★</div>
+          <div class="creator-score">5.0</div>
+          <div class="creator-reviews">62 reseñas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="tier-badge tier-micro">🌿 Micro</div>
+        <div class="creator-name">Camila T.</div>
+        <div class="creator-handle">@camila.t · 41K seguidores</div>
+        <div class="creator-bio">Fashion creator con estética editorial pero tono cercano. Ideal para marcas de moda, accesorios y lifestyle premium.</div>
+        <div class="creator-niches">
+          <span class="niche-tag">Moda</span><span class="niche-tag">Tendencias</span><span class="niche-tag">OOTD</span>
+        </div>
+        <div class="creator-stats">
+          <div class="c-stat"><span class="c-stat-val">5.2%</span><span class="c-stat-label">Engagement</span></div>
+          <div class="c-stat"><span class="c-stat-val">62</span><span class="c-stat-label">Proyectos</span></div>
+          <div class="c-stat"><span class="c-stat-val">48h</span><span class="c-stat-label">Entrega</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="creator-price">
+          <div><div class="price-label">Precio por pieza</div><div class="price-per">Reel, Stories o UGC</div></div>
+          <div style="text-align:right"><div class="price-amount">$90.000</div></div>
+        </div>
+        <button class="btn-contratar" onclick="contratar({name:'Camila T.',avatar:'💜',tier:'Micro creator',handle:'@camila.t'})">Contratar a Camila →</button>
+      </div>
+    </div>
+
+    <div class="creator-card" data-tier="nano" data-niches="hogar deco organizacion">
+      <div class="card-top">
+        <div class="creator-avatar-wrap">
+          <div class="creator-avatar">🌸</div>
+          <div class="creator-verified">✓</div>
+        </div>
+        <div class="creator-rating">
+          <div class="creator-stars">★★★★★</div>
+          <div class="creator-score">4.8</div>
+          <div class="creator-reviews">19 reseñas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="tier-badge tier-nano">🌱 Nano</div>
+        <div class="creator-name">Martina L.</div>
+        <div class="creator-handle">@martina.hogar · 7K seguidores</div>
+        <div class="creator-bio">Creadora de contenido de hogar y organización. Comunidad muy activa, ideal para marcas del hogar y lifestyle cotidiano.</div>
+        <div class="creator-niches">
+          <span class="niche-tag">Hogar</span><span class="niche-tag">Deco</span><span class="niche-tag">Organización</span>
+        </div>
+        <div class="creator-stats">
+          <div class="c-stat"><span class="c-stat-val">14.1%</span><span class="c-stat-label">Engagement</span></div>
+          <div class="c-stat"><span class="c-stat-val">19</span><span class="c-stat-label">Proyectos</span></div>
+          <div class="c-stat"><span class="c-stat-val">48h</span><span class="c-stat-label">Entrega</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="creator-price">
+          <div><div class="price-label">Precio por pieza</div><div class="price-per">Reel, Stories o UGC</div></div>
+          <div style="text-align:right"><div class="price-amount">$90.000</div></div>
+        </div>
+        <button class="btn-contratar" onclick="contratar({name:'Martina L.',avatar:'🌸',tier:'Nano creator',handle:'@martina.hogar'})">Contratar a Martina →</button>
+      </div>
+    </div>
+
+    <div class="creator-card" data-tier="micro" data-niches="gastronomia recetas foodie">
+      <div class="card-top">
+        <div class="creator-avatar-wrap">
+          <div class="creator-avatar">🍊</div>
+          <div class="creator-verified">✓</div>
+        </div>
+        <div class="creator-rating">
+          <div class="creator-stars">★★★★★</div>
+          <div class="creator-score">4.9</div>
+          <div class="creator-reviews">38 reseñas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="tier-badge tier-micro">🌿 Micro</div>
+        <div class="creator-name">Julieta A.</div>
+        <div class="creator-handle">@julieta.foodie · 33K seguidores</div>
+        <div class="creator-bio">Gastronómica y food stylist. Hace ver cualquier producto comestible como irresistible. Alta conversión en ecommerce de alimentos.</div>
+        <div class="creator-niches">
+          <span class="niche-tag">Gastronomía</span><span class="niche-tag">Recetas</span><span class="niche-tag">Foodie</span>
+        </div>
+        <div class="creator-stats">
+          <div class="c-stat"><span class="c-stat-val">7.3%</span><span class="c-stat-label">Engagement</span></div>
+          <div class="c-stat"><span class="c-stat-val">38</span><span class="c-stat-label">Proyectos</span></div>
+          <div class="c-stat"><span class="c-stat-val">48h</span><span class="c-stat-label">Entrega</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="creator-price">
+          <div><div class="price-label">Precio por pieza</div><div class="price-per">Reel, Stories o UGC</div></div>
+          <div style="text-align:right"><div class="price-amount">$90.000</div></div>
+        </div>
+        <button class="btn-contratar" onclick="contratar({name:'Julieta A.',avatar:'🍊',tier:'Micro creator',handle:'@julieta.foodie'})">Contratar a Julieta →</button>
+      </div>
+    </div>
+
+    <div class="creator-card" data-tier="macro" data-niches="tech productividad emprendimiento">
+      <div class="card-top">
+        <div class="creator-avatar-wrap">
+          <div class="creator-avatar">⭐</div>
+          <div class="creator-verified">✓</div>
+        </div>
+        <div class="creator-rating">
+          <div class="creator-stars">★★★★★</div>
+          <div class="creator-score">5.0</div>
+          <div class="creator-reviews">91 reseñas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="tier-badge tier-macro">🌳 Macro</div>
+        <div class="creator-name">Lucía P.</div>
+        <div class="creator-handle">@lucia.emprendedora · 120K seguidores</div>
+        <div class="creator-bio">Referente en productividad y emprendimiento femenino. Ideal para SaaS, apps, cursos y cualquier producto digital.</div>
+        <div class="creator-niches">
+          <span class="niche-tag">Tech</span><span class="niche-tag">Productividad</span><span class="niche-tag">Emprendimiento</span>
+        </div>
+        <div class="creator-stats">
+          <div class="c-stat"><span class="c-stat-val">4.1%</span><span class="c-stat-label">Engagement</span></div>
+          <div class="c-stat"><span class="c-stat-val">91</span><span class="c-stat-label">Proyectos</span></div>
+          <div class="c-stat"><span class="c-stat-val">48h</span><span class="c-stat-label">Entrega</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="creator-price">
+          <div><div class="price-label">Precio por pieza</div><div class="price-per">Reel, Stories o UGC</div></div>
+          <div style="text-align:right"><div class="price-amount">$90.000</div></div>
+        </div>
+        <button class="btn-contratar" onclick="contratar({name:'Lucía P.',avatar:'⭐',tier:'Macro creator',handle:'@lucia.emprendedora'})">Contratar a Lucía →</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAuth()">✕</button>
+    <div class="modal-logo">crea<span>lo</span></div>
+    <div class="modal-title">Antes de contratar</div>
+    <div class="modal-sub">Necesitamos una cuenta para guardar tu pedido y coordinar con tu creator.</div>
+    <div class="auth-msg" id="authMsg"></div>
+    <button class="auth-btn auth-google" onclick="loginGoogle()">
+      <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continuar con Google
+    </button>
+    <div class="auth-divider">o con tu email</div>
+    <input class="auth-input" type="email" id="authEmail" placeholder="tu@email.com" />
+    <button class="auth-btn auth-magic" onclick="loginMagic()">✉️ Recibir link de acceso</button>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="confirm-modal">
+    <button class="modal-close" onclick="closeConfirm()">✕</button>
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:16px">Confirmar contratación</div>
+    <div class="confirm-creator-info">
+      <div class="confirm-avatar" id="confirmAvatar">🧡</div>
+      <div>
+        <div class="confirm-name" id="confirmName">—</div>
+        <div class="confirm-tier" id="confirmTier">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px" id="confirmHandle">—</div>
+      </div>
+    </div>
+    <div class="confirm-price">
+      <div class="confirm-price-label">Total a pagar</div>
+      <div class="confirm-price-amount">$90.000</div>
+    </div>
+    <div class="confirm-features">
+      <div class="confirm-feat"><span class="confirm-feat-icon">✓</span>1 pieza de contenido (Reel, Stories o UGC)</div>
+      <div class="confirm-feat"><span class="confirm-feat-icon">✓</span>Producida con tu brief personalizado</div>
+      <div class="confirm-feat"><span class="confirm-feat-icon">✓</span>Entregada en 48 horas</div>
+      <div class="confirm-feat"><span class="confirm-feat-icon">✓</span>1 ronda de revisión incluida</div>
+      <div class="confirm-feat"><span class="confirm-feat-icon">✓</span>Derechos de uso 100% tuyos</div>
+    </div>
+    <button class="btn-confirm" onclick="confirmarPago()">Pagar $90.000 →</button>
+    <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Procesando...</div>
+  <div class="loading-sub">Te redirigimos a Mercado Pago</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://dtopwxldxlwgdvpjcegg.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_W54QQPJ_WFtvI67N5SPniQ_jZ1kpCES';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let selectedCreator = null;
+
+// ── FILTERS ──
+function filtrar(btn, cat){
+  document.querySelectorAll('.filter-pill').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.creator-card').forEach(card=>{
+    if(cat==='todas'){ card.style.display='flex'; return; }
+    const tier=card.dataset.tier||'';
+    const niches=(card.dataset.niches||'').toLowerCase();
+    const match = tier===cat || niches.includes(cat);
+    card.style.display = match ? 'flex' : 'none';
+  });
+}
+
+// ── CONTRATAR ──
+async function contratar(creator){
+  selectedCreator = creator;
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ openAuth(); return; }
+  showConfirm(creator);
+}
+
+function showConfirm(c){
+  document.getElementById('confirmAvatar').textContent = c.avatar;
+  document.getElementById('confirmName').textContent = c.name;
+  document.getElementById('confirmTier').textContent = c.tier;
+  document.getElementById('confirmHandle').textContent = c.handle;
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeConfirm(){ document.getElementById('confirmModal').classList.remove('open'); }
+
+async function confirmarPago(){
+  closeConfirm();
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ openAuth(); return; }
+  document.getElementById('loadingText').textContent = 'Creando tu orden...';
+  document.getElementById('loadingOverlay').classList.add('open');
+  try {
+    const res = await fetch('/api/crear-pago',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      titulo: `Crealo — Creator ${selectedCreator.name}`,
+      precio: 90000,
+      email: session.user.email,
+      metadata: { creator: selectedCreator.name }
+    })});
+    const data = await res.json();
+    if(data.init_point) window.location.href = data.init_point;
+    else { document.getElementById('loadingOverlay').classList.remove('open'); alert('Error al crear el pago. Intentá de nuevo.'); }
+  } catch(e){ document.getElementById('loadingOverlay').classList.remove('open'); alert('Error de conexión.'); }
+}
+
+// ── AUTH ──
+function openAuth(){ document.getElementById('authModal').classList.add('open'); }
+function closeAuth(){ document.getElementById('authModal').classList.remove('open'); }
+async function loginGoogle(){
+  const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href+'?contratar=1'}});
+  if(error) showMsg('Error: '+error.message,'err');
+}
+async function loginMagic(){
+  const email=document.getElementById('authEmail').value.trim();
+  if(!email){showMsg('Ingresá tu email.','err');return;}
+  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:window.location.href+'?contratar=1'}});
+  if(error) showMsg('Error: '+error.message,'err');
+  else showMsg('✓ Revisá tu email para ingresar','ok');
+}
+function showMsg(txt,type){const m=document.getElementById('authMsg');m.textContent=txt;m.className='auth-msg '+type;m.style.display='block';}
+</script>
+</body>
+</html>
