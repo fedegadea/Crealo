@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Crealo — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#000;--blue:#0071e3;--blue-d:#0058b0;--blue-l:#147ce5;
+  --white:#f5f5f7;--gray:#111;--gray2:#1c1c1e;--gray3:#2c2c2e;--gray4:#3a3a3c;
+  --muted:#6e6e73;--text:#d1d1d6;--border:rgba(255,255,255,0.08);
+  --red:#ff453a;--green:#30d158;--orange:#ff9f0a;
+}
+body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--white);min-height:100vh;font-size:14px}
+a{color:var(--blue);text-decoration:none}
+
+/* ── AUTH ── */
+#authWall{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.auth-box{background:var(--gray2);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:380px;text-align:center}
+.auth-box h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.auth-box h1 span{color:var(--blue)}
+.auth-box p{color:var(--muted);font-size:13px;margin-bottom:28px}
+.auth-input{width:100%;background:var(--gray3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;outline:none;margin-bottom:12px}
+.auth-input:focus{border-color:var(--blue)}
+.btn-auth{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:13px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-auth:hover{background:var(--blue-d)}
+.auth-msg{font-size:13px;margin-top:10px;color:var(--muted)}
+.auth-msg.ok{color:var(--green)}
+.auth-msg.err{color:var(--red)}
+
+/* ── LAYOUT ── */
+#adminApp{display:none;min-height:100vh}
+.admin-nav{background:rgba(0,0,0,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:20px;font-weight:700;color:var(--white);background:none;border:none;cursor:default;letter-spacing:-.5px}
+.nav-logo span{color:var(--blue)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.admin-badge{font-size:11px;background:var(--blue);color:#fff;padding:3px 8px;border-radius:6px;font-weight:600;letter-spacing:.5px}
+.btn-signout{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;cursor:pointer;transition:.2s}
+.btn-signout:hover{border-color:var(--red);color:var(--red)}
+
+.admin-body{display:flex;min-height:calc(100vh - 56px)}
+.sidebar{width:210px;flex-shrink:0;background:var(--gray);border-right:1px solid var(--border);padding:20px 12px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.sidebar-item:hover{background:var(--gray2);color:var(--white)}
+.sidebar-item.active{background:rgba(0,113,227,.15);color:var(--blue)}
+.sidebar-item .si-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-badge{margin-left:auto;background:var(--orange);color:#000;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center}
+
+.main-content{flex:1;padding:28px;overflow-y:auto}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.active{display:block}
+.panel-title{font-size:20px;font-weight:700;margin-bottom:20px}
+.panel-title span{color:var(--blue)}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.stat-card{background:var(--gray2);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center}
+.stat-num{font-size:28px;font-weight:700;color:var(--white)}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* ── TABS ── */
+.tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{background:var(--gray2);border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
+.tab-btn:hover{color:var(--white)}
+.tab-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.tab-count{font-size:11px;background:rgba(255,255,255,.12);padding:1px 6px;border-radius:8px;margin-left:5px}
+
+/* ── REQUEST CARDS ── */
+.req-list{display:flex;flex-direction:column;gap:12px}
+.req-card{background:var(--gray2);border:1px solid var(--border);border-radius:14px;padding:18px}
+.req-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.req-creator{font-size:15px;font-weight:600}
+.req-client{font-size:12px;color:var(--muted);margin-top:2px}
+.req-date{font-size:11px;color:var(--muted);white-space:nowrap}
+.req-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.req-pill{font-size:11px;background:var(--gray3);border:1px solid var(--border);color:var(--text);padding:3px 10px;border-radius:20px}
+.req-brief{font-size:13px;color:var(--text);background:var(--gray3);border-radius:10px;padding:10px 12px;margin-bottom:12px;white-space:pre-wrap;line-height:1.5}
+.req-brief-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.req-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.req-note{font-size:12px;color:var(--muted);background:var(--gray3);border-radius:8px;padding:8px 10px;margin-bottom:10px;border-left:3px solid var(--muted)}
+.req-note.accepted{border-left-color:var(--green)}
+.req-note.rejected{border-left-color:var(--red)}
+.req-amount{font-size:13px;font-weight:600;color:var(--white);margin-left:auto}
+
+/* status badges */
+.sb{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.sb-pending{background:rgba(255,159,10,.15);color:var(--orange)}
+.sb-accepted{background:rgba(0,113,227,.15);color:var(--blue-l)}
+.sb-rejected{background:rgba(255,69,58,.12);color:var(--red)}
+.sb-paid{background:rgba(48,209,88,.12);color:var(--green)}
+.sb-delivered{background:rgba(48,209,88,.2);color:var(--green)}
+.sb-completed{background:rgba(48,209,88,.2);color:var(--green)}
+.sb-refunded{background:rgba(255,159,10,.12);color:var(--orange)}
+
+/* action buttons */
+.btn-sm{padding:7px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s}
+.btn-accept{background:var(--green);color:#000}
+.btn-accept:hover{background:#28b84d}
+.btn-reject{background:var(--gray3);color:var(--red);border:1px solid var(--red)}
+.btn-reject:hover{background:rgba(255,69,58,.1)}
+.btn-deliver{background:var(--blue);color:#fff}
+.btn-deliver:hover{background:var(--blue-d)}
+.btn-refund{background:var(--gray3);color:var(--orange);border:1px solid var(--orange)}
+.btn-refund:hover{background:rgba(255,159,10,.1)}
+.btn-view{background:var(--gray3);color:var(--text);border:1px solid var(--border)}
+.btn-view:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── CREATOR PANEL ── */
+.creator-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.creator-admin-card{background:var(--gray2);border:1px solid var(--border);border-radius:14px;padding:18px}
+.ca-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ca-emoji{font-size:28px;width:44px;height:44px;background:var(--gray3);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ca-name{font-size:15px;font-weight:600}
+.ca-tier{font-size:11px;color:var(--muted)}
+.ca-price{font-size:14px;font-weight:700;color:var(--blue);margin:8px 0}
+.ca-niches{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.ca-niche{font-size:11px;background:var(--gray3);color:var(--muted);padding:2px 8px;border-radius:10px}
+.ca-footer{display:flex;align-items:center;justify-content:space-between}
+.ca-status{font-size:12px;font-weight:600}
+.ca-status.on{color:var(--green)}
+.ca-status.off{color:var(--red)}
+.btn-edit{background:var(--gray3);color:var(--text);border:1px solid var(--border);padding:7px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-edit:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;opacity:0;pointer-events:none;transition:.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--gray2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:480px;padding:28px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:20px}
+.modal-title span{color:var(--blue)}
+.form-label{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.form-input,.form-textarea,.form-select{width:100%;background:var(--gray3);border:1px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--white);font-family:'Poppins',sans-serif;font-size:13px;outline:none;margin-bottom:14px;transition:.2s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--blue)}
+.form-textarea{resize:vertical;min-height:80px}
+.form-select{cursor:pointer;appearance:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-actions{display:flex;gap:10px;margin-top:6px}
+.btn-primary{flex:1;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-primary:hover{background:var(--blue-d)}
+.btn-secondary{background:var(--gray3);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.btn-secondary:hover{border-color:var(--muted)}
+.modal-err{font-size:13px;color:var(--red);margin-bottom:10px;display:none}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--gray3);border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+.toggle-label{font-size:13px;color:var(--text)}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:var(--gray4);border-radius:12px;cursor:pointer;transition:.2s}
+.toggle-track::before{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s}
+.toggle-switch input:checked+.toggle-track{background:var(--blue)}
+.toggle-switch input:checked+.toggle-track::before{transform:translateX(20px)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--gray3);border:1px solid var(--border);color:var(--white);padding:12px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:999;transition:transform .3s,opacity .3s;opacity:0;white-space:nowrap}
+.toast.ok{border-color:var(--green);color:var(--green)}
+.toast.err{border-color:var(--red);color:var(--red)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-icon{font-size:36px;margin-bottom:12px}
+
+/* ── LOADING ── */
+.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;display:none}
+.spinner{width:36px;height:36px;border:3px solid var(--gray3);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .sidebar{display:none}
+  .main-content{padding:16px}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH WALL -->
+<div id="authWall">
+  <div class="auth-box">
+    <h1>crea<span>lo</span></h1>
+    <p>Panel de administración — acceso restringido</p>
+    <input id="adminEmail" class="auth-input" type="email" placeholder="Email de admin"/>
+    <input id="adminPass" class="auth-input" type="password" placeholder="Contraseña" onkeydown="if(event.key==='Enter')loginAdmin()"/>
+    <button class="btn-auth" onclick="loginAdmin()">Ingresar</button>
+    <div id="authMsg" class="auth-msg"></div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <nav class="admin-nav">
+    <span class="nav-logo">crea<span>lo</span></span>
+    <div class="nav-right">
+      <span class="admin-badge">ADMIN</span>
+      <span id="adminEmailLabel" style="font-size:12px;color:var(--muted)"></span>
+      <button class="btn-signout" onclick="signOut()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <button class="sidebar-item active" id="si-dashboard" onclick="showPanel('dashboard')">
+        <span class="si-icon">📊</span> Dashboard
+      </button>
+      <button class="sidebar-item" id="si-solicitudes" onclick="showPanel('solicitudes')">
+        <span class="si-icon">📋</span> Solicitudes
+        <span class="sidebar-badge" id="pendingBadge" style="display:none">0</span>
+      </button>
+      <button class="sidebar-item" id="si-creators" onclick="showPanel('creators')">
+        <span class="si-icon">🎬</span> Creators
+      </button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="panel-title">Dashboard <span>·</span> Crealo</div>
+        <div class="stats-row" id="statsRow"></div>
+        <div class="panel-title" style="font-size:16px;margin-bottom:14px">Solicitudes recientes</div>
+        <div id="recentList" class="req-list"></div>
+      </div>
+
+      <!-- SOLICITUDES -->
+      <div class="panel" id="panel-solicitudes">
+        <div class="panel-title">Solicitudes</div>
+        <div class="tab-row" id="reqTabRow"></div>
+        <div id="reqList" class="req-list"></div>
+      </div>
+
+      <!-- CREATORS -->
+      <div class="panel" id="panel-creators">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div class="panel-title" style="margin:0">Creators</div>
+          <button class="btn-sm btn-deliver" onclick="openCreatorModal(null)">+ Nueva creator</button>
+        </div>
+        <div id="creatorGrid" class="creator-grid"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<!-- MODAL: Accept Request -->
+<div class="modal-overlay" id="acceptModal">
+  <div class="modal-box">
+    <div class="modal-title">✅ Aceptar <span>solicitud</span></div>
+    <label class="form-label">Nota para el cliente (opcional)</label>
+    <textarea id="acceptNote" class="form-textarea" placeholder="Ej: ¡Genial! La creadora confirmó disponibilidad. Te esperamos."></textarea>
+    <label class="form-label">Plazo de entrega</label>
+    <select id="acceptDeadline" class="form-select">
+      <option value="5">5 días hábiles (estándar)</option>
+      <option value="2">2 días hábiles (express)</option>
+      <option value="7">7 días hábiles</option>
+      <option value="10">10 días hábiles</option>
+    </select>
+    <div id="acceptErr" class="modal-err"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('acceptModal')">Cancelar</button>
+      <button class="btn-primary" onclick="confirmAccept()">Confirmar aceptación</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Reject Request -->
+<div class="modal-overlay" id="rejectModal">
+  <div class="modal-box">
+    <div class="modal-title">❌ Rechazar <span>solicitud</span></div>
+    <label class="form-label">Motivo del rechazo <span style="color:var(--red)">*</span></label>
+    <textarea id="rejectReason" class="form-textarea" placeholder="Ej: La creadora no tiene disponibilidad para esa fecha. Te invitamos a intentarlo la semana próxima."></textarea>
+    <div id="rejectErr" class="modal-err"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('rejectModal')">Cancelar</button>
+      <button class="btn-primary" style="background:var(--red)" onclick="confirmReject()">Rechazar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Creator Edit/Create -->
+<div class="modal-overlay" id="creatorModal">
+  <div class="modal-box">
+    <div class="modal-title" id="creatorModalTitle">🎬 <span>Nueva creator</span></div>
+    <input type="hidden" id="creatorId"/>
+    <div class="form-row">
+      <div>
+        <label class="form-label">Emoji</label>
+        <input id="cEmoji" class="form-input" type="text" placeholder="🎬" maxlength="4"/>
+      </div>
+      <div>
+        <label class="form-label">Tier</label>
+        <select id="cTier" class="form-select" style="margin-bottom:0">
+          <option value="nano">Nano</option>
+          <option value="micro">Micro</option>
+          <option value="mid">Mid</option>
+          <option value="macro">Macro</option>
+        </select>
+      </div>
+    </div>
+    <label class="form-label">Nombre</label>
+    <input id="cName" class="form-input" type="text" placeholder="Ej: María García"/>
+    <div class="form-row">
+      <div>
+        <label class="form-label">Seguidores (label)</label>
+        <input id="cFollowers" class="form-input" type="text" placeholder="Ej: 45K"/>
+      </div>
+      <div>
+        <label class="form-label">Engagement</label>
+        <input id="cEngagement" class="form-input" type="text" placeholder="Ej: 4.2%"/>
+      </div>
+    </div>
+    <label class="form-label">Niches (separados por coma)</label>
+    <input id="cNiches" class="form-input" type="text" placeholder="Ej: Moda, Belleza, Lifestyle"/>
+    <label class="form-label">Bio / Descripción</label>
+    <textarea id="cBio" class="form-textarea" placeholder="Descripción breve de la creadora..."></textarea>
+    <div class="form-row">
+      <div>
+        <label class="form-label">Precio (ARS sin puntos)</label>
+        <input id="cPrice" class="form-input" type="number" placeholder="90000"/>
+      </div>
+      <div>
+        <label class="form-label">Rating</label>
+        <input id="cRating" class="form-input" type="text" placeholder="5.0"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div>
+        <label class="form-label">Entrega</label>
+        <input id="cDelivery" class="form-input" type="text" placeholder="5 días"/>
+      </div>
+      <div>
+        <label class="form-label">Proyectos completados</label>
+        <input id="cProjects" class="form-input" type="number" placeholder="0"/>
+      </div>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Perfil activo (visible para clientes)</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="cActive" checked/>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+    <div id="creatorErr" class="modal-err"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('creatorModal')">Cancelar</button>
+      <button class="btn-primary" onclick="saveCreator()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+const SUPA_URL = 'https://iksohyaecjpwdmlkhbkp.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlrc29oeWFlY2pwd2RtbGtoYmtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjkxMzYsImV4cCI6MjA2MTEwNTEzNn0.DQQCxgmJUqvehBVjkL_N7P0fC9GIFiJJzXLGYoIaUZk';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ── ADMIN CONFIG ──────────────────────────────────────────────────────────────
+// Add admin emails here — anyone who logs in with a different email is denied.
+const ADMIN_EMAILS = ['fedegadea@gmail.com']; // ← add more admins here if needed
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentAdmin = null;
+let allRequests   = [];
+let allCreators   = [];
+let activeReqTab  = 'pending';
+let activeReqId   = null; // for accept/reject modals
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session && ADMIN_EMAILS.includes(session.user.email)) {
+    currentAdmin = session.user;
+    showApp();
+  }
+})();
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+async function loginAdmin() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPass').value;
+  const msg   = document.getElementById('authMsg');
+  msg.textContent = '';
+  msg.className   = 'auth-msg';
+
+  if (!email || !pass) { msg.textContent = 'Completá email y contraseña.'; msg.className='auth-msg err'; return; }
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { msg.textContent = 'Error: ' + error.message; msg.className='auth-msg err'; return; }
+
+  if (!ADMIN_EMAILS.includes(data.user.email)) {
+    await sb.auth.signOut();
+    msg.textContent = 'Acceso denegado: no tenés permisos de admin.';
+    msg.className = 'auth-msg err';
+    return;
+  }
+
+  currentAdmin = data.user;
+  showApp();
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById('authWall').style.display = 'none';
+  document.getElementById('adminApp').style.display  = 'block';
+  document.getElementById('adminEmailLabel').textContent = currentAdmin.email;
+  loadAll();
+}
+
+// ── DATA LOADING ──────────────────────────────────────────────────────────────
+async function loadAll() {
+  showLoading(true);
+  await Promise.all([loadRequests(), loadCreators()]);
+  renderDashboard();
+  renderReqPanel();
+  renderCreatorPanel();
+  showLoading(false);
+}
+
+async function loadRequests() {
+  const { data, error } = await sb.from('requests').select('*').order('created_at', { ascending: false });
+  if (data) allRequests = data;
+}
+
+async function loadCreators() {
+  const { data, error } = await sb.from('creators').select('*').order('tier');
+  if (data) allCreators = data;
+}
+
+// ── PANELS ────────────────────────────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('si-' + name).classList.add('active');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const pending   = allRequests.filter(r => r.status === 'pending').length;
+  const accepted  = allRequests.filter(r => r.status === 'accepted').length;
+  const paid      = allRequests.filter(r => r.status === 'paid').length;
+  const delivered = allRequests.filter(r => r.status === 'delivered').length;
+  const totalRev  = allRequests.filter(r => ['paid','delivered','completed'].includes(r.status)).reduce((s,r) => s+(r.amount||0), 0);
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-num" style="color:var(--orange)">${pending}</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--blue-l)">${accepted}</div><div class="stat-label">Aceptadas</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green)">${paid}</div><div class="stat-label">Pagadas</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green)">${delivered}</div><div class="stat-label">Entregadas</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--white)">$${totalRev.toLocaleString('es-AR')}</div><div class="stat-label">Ingresos</div></div>
+  `;
+
+  // Update pending badge
+  const badge = document.getElementById('pendingBadge');
+  if (pending > 0) { badge.textContent = pending; badge.style.display = 'inline'; }
+  else badge.style.display = 'none';
+
+  // Recent (top 5)
+  document.getElementById('recentList').innerHTML = allRequests.slice(0,5).map(reqCardHTML).join('') || emptyState('Sin solicitudes aún.');
+}
+
+// ── REQUESTS PANEL ────────────────────────────────────────────────────────────
+const TAB_STATUSES = {
+  pending:   'Pendientes',
+  accepted:  'Aceptadas',
+  paid:      'Pagadas',
+  delivered: 'Entregadas',
+  rejected:  'Rechazadas',
+  refunded:  'Reembolsadas',
+};
+
+function renderReqPanel() {
+  // Tab counts
+  const counts = {};
+  Object.keys(TAB_STATUSES).forEach(s => counts[s] = allRequests.filter(r => r.status === s).length);
+
+  document.getElementById('reqTabRow').innerHTML = Object.entries(TAB_STATUSES).map(([s, label]) => `
+    <button class="tab-btn ${s === activeReqTab ? 'active' : ''}" onclick="setReqTab('${s}')">
+      ${label}<span class="tab-count">${counts[s]}</span>
+    </button>
+  `).join('');
+
+  const filtered = allRequests.filter(r => r.status === activeReqTab);
+  document.getElementById('reqList').innerHTML = filtered.map(reqCardHTML).join('') || emptyState(`Sin solicitudes ${TAB_STATUSES[activeReqTab].toLowerCase()}.`);
+}
+
+function setReqTab(status) {
+  activeReqTab = status;
+  renderReqPanel();
+}
+
+function reqCardHTML(r) {
+  const statusMap = {
+    pending:   { label: 'Pendiente revisión', cls: 'sb-pending' },
+    accepted:  { label: 'Aceptada', cls: 'sb-accepted' },
+    rejected:  { label: 'Rechazada', cls: 'sb-rejected' },
+    paid:      { label: 'Pagada · En producción', cls: 'sb-paid' },
+    delivered: { label: 'Entregada ✓', cls: 'sb-delivered' },
+    completed: { label: 'Completada ✓', cls: 'sb-completed' },
+    refunded:  { label: 'Reembolsada', cls: 'sb-refunded' },
+  };
+  const st     = statusMap[r.status] || { label: r.status, cls: 'sb-pending' };
+  const date   = new Date(r.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' });
+  const types  = (r.content_types || []).join(', ');
+  const amount = r.amount > 0 ? `$${Number(r.amount).toLocaleString('es-AR')}` : 'Canje';
+
+  // Modalidad chip
+  const modLabel = { monetario:'💰 Monetario', canje:'🔄 Canje', mixto:'⚡ Mixto' }[r.modalidad] || r.modalidad;
+  const plazLabel = r.plazo === 'express' ? '⚡ Express (48h)' : '📅 Estándar (5 días)';
+
+  // Admin note
+  let noteHTML = '';
+  if (r.admin_note) noteHTML = `<div class="req-note accepted">💬 Nota al cliente: ${r.admin_note}</div>`;
+  if (r.rejection_reason) noteHTML = `<div class="req-note rejected">Motivo de rechazo: ${r.rejection_reason}</div>`;
+
+  // Action buttons
+  let actions = '';
+  if (r.status === 'pending') {
+    actions = `
+      <button class="btn-sm btn-accept" onclick="openAcceptModal('${r.id}')">✅ Aceptar</button>
+      <button class="btn-sm btn-reject" onclick="openRejectModal('${r.id}')">❌ Rechazar</button>
+    `;
+  } else if (r.status === 'paid') {
+    actions = `<button class="btn-sm btn-deliver" onclick="markDelivered('${r.id}')">📦 Marcar entregado</button>`;
+  } else if (r.status === 'accepted') {
+    actions = `<button class="btn-sm btn-refund" onclick="markRefunded('${r.id}')">↩ Reembolsar</button>`;
+  } else if (r.status === 'delivered') {
+    actions = `
+      <button class="btn-sm btn-deliver" onclick="markCompleted('${r.id}')">✓ Completar</button>
+      <button class="btn-sm btn-refund" onclick="markRefunded('${r.id}')">↩ Reembolsar</button>
+    `;
+  }
+
+  return `
+    <div class="req-card" id="req-${r.id}">
+      <div class="req-header">
+        <div>
+          <div class="req-creator">${r.creator_emoji || '🎬'} ${r.creator_name}</div>
+          <div class="req-client">👤 ${r.client_email}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="sb ${st.cls}">${st.label}</span>
+          <span class="req-date">${date}</span>
+        </div>
+      </div>
+      <div class="req-meta">
+        ${types ? `<span class="req-pill">🎥 ${types}</span>` : ''}
+        <span class="req-pill">${modLabel}</span>
+        <span class="req-pill">${plazLabel}</span>
+        <span class="req-pill">💵 ${amount}</span>
+        ${r.sends_product ? '<span class="req-pill">📦 Envía producto</span>' : ''}
+      </div>
+      ${r.product_description ? `<div class="req-brief-label">Producto para canje</div><div class="req-brief">${r.product_description}</div>` : ''}
+      ${r.brief ? `<div class="req-brief-label">Brief del cliente</div><div class="req-brief">${r.brief}</div>` : ''}
+      ${noteHTML}
+      <div class="req-actions">
+        ${actions}
+        ${r.amount > 0 ? `<span class="req-amount">${amount}</span>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// ── ACCEPT MODAL ──────────────────────────────────────────────────────────────
+function openAcceptModal(reqId) {
+  activeReqId = reqId;
+  document.getElementById('acceptNote').value = '';
+  document.getElementById('acceptDeadline').value = '5';
+  document.getElementById('acceptErr').style.display = 'none';
+  openModal('acceptModal');
+}
+
+async function confirmAccept() {
+  const note     = document.getElementById('acceptNote').value.trim();
+  const daysDays = parseInt(document.getElementById('acceptDeadline').value);
+  const err      = document.getElementById('acceptErr');
+  err.style.display = 'none';
+
+  // Calculate deadline (business days ≈ calendar days * 1.4 approximation; we just add calendar days)
+  const deadline = new Date();
+  deadline.setDate(deadline.getDate() + daysDays + Math.floor(daysDays * 0.4)); // rough business days
+
+  const { error } = await sb.from('requests').update({
+    status: 'accepted',
+    admin_note: note || null,
+    deadline: deadline.toISOString(),
+    updated_at: new Date().toISOString(),
+  }).eq('id', activeReqId);
+
+  if (error) { err.textContent = 'Error: ' + error.message; err.style.display = 'block'; return; }
+
+  closeModal('acceptModal');
+  showToast('✅ Solicitud aceptada.', 'ok');
+  await loadRequests();
+  renderDashboard();
+  renderReqPanel();
+}
+
+// ── REJECT MODAL ──────────────────────────────────────────────────────────────
+function openRejectModal(reqId) {
+  activeReqId = reqId;
+  document.getElementById('rejectReason').value = '';
+  document.getElementById('rejectErr').style.display = 'none';
+  openModal('rejectModal');
+}
+
+async function confirmReject() {
+  const reason = document.getElementById('rejectReason').value.trim();
+  const err    = document.getElementById('rejectErr');
+  err.style.display = 'none';
+
+  if (!reason) { err.textContent = 'Necesitás escribir el motivo del rechazo.'; err.style.display = 'block'; return; }
+
+  const { error } = await sb.from('requests').update({
+    status: 'rejected',
+    rejection_reason: reason,
+    updated_at: new Date().toISOString(),
+  }).eq('id', activeReqId);
+
+  if (error) { err.textContent = 'Error: ' + error.message; err.style.display = 'block'; return; }
+
+  closeModal('rejectModal');
+  showToast('❌ Solicitud rechazada.', 'ok');
+  await loadRequests();
+  renderDashboard();
+  renderReqPanel();
+}
+
+// ── MARK DELIVERED / COMPLETED / REFUNDED ─────────────────────────────────────
+async function markDelivered(reqId) {
+  if (!confirm('¿Confirmar que el contenido fue entregado al cliente?')) return;
+  const { error } = await sb.from('requests').update({ status: 'delivered', updated_at: new Date().toISOString() }).eq('id', reqId);
+  if (error) { showToast('Error: ' + error.message, 'err'); return; }
+  showToast('📦 Marcado como entregado.', 'ok');
+  await loadRequests(); renderDashboard(); renderReqPanel();
+}
+
+async function markCompleted(reqId) {
+  if (!confirm('¿Marcar como completado?')) return;
+  const { error } = await sb.from('requests').update({ status: 'completed', updated_at: new Date().toISOString() }).eq('id', reqId);
+  if (error) { showToast('Error: ' + error.message, 'err'); return; }
+  showToast('✓ Solicitud completada.', 'ok');
+  await loadRequests(); renderDashboard(); renderReqPanel();
+}
+
+async function markRefunded(reqId) {
+  if (!confirm('¿Confirmar reembolso? Esto marcará la solicitud como reembolsada.')) return;
+  const { error } = await sb.from('requests').update({ status: 'refunded', updated_at: new Date().toISOString() }).eq('id', reqId);
+  if (error) { showToast('Error: ' + error.message, 'err'); return; }
+  showToast('↩ Reembolso registrado.', 'ok');
+  await loadRequests(); renderDashboard(); renderReqPanel();
+}
+
+// ── CREATORS PANEL ────────────────────────────────────────────────────────────
+function renderCreatorPanel() {
+  document.getElementById('creatorGrid').innerHTML = allCreators.length
+    ? allCreators.map(creatorCardHTML).join('')
+    : emptyState('No hay creators cargadas aún. Creá la primera.');
+}
+
+function creatorCardHTML(c) {
+  const niches = (c.niches || []).map(n => `<span class="ca-niche">${n}</span>`).join('');
+  return `
+    <div class="creator-admin-card">
+      <div class="ca-header">
+        <div class="ca-emoji">${c.emoji || '🎬'}</div>
+        <div>
+          <div class="ca-name">${c.name}</div>
+          <div class="ca-tier">${c.tier || ''} · ${c.followers_label || ''}</div>
+        </div>
+      </div>
+      <div class="ca-price">$${Number(c.price || 90000).toLocaleString('es-AR')} / pieza</div>
+      <div class="ca-niches">${niches}</div>
+      ${c.bio ? `<div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4">${c.bio}</div>` : ''}
+      <div class="ca-footer">
+        <span class="ca-status ${c.active ? 'on' : 'off'}">${c.active ? '● Activa' : '○ Inactiva'}</span>
+        <button class="btn-edit" onclick='openCreatorModal(${JSON.stringify(c)})'>✏️ Editar</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── CREATOR MODAL ─────────────────────────────────────────────────────────────
+function openCreatorModal(creator) {
+  const isNew = !creator;
+  document.getElementById('creatorModalTitle').innerHTML = isNew ? '🎬 <span>Nueva creator</span>' : `✏️ Editar <span>${creator.name}</span>`;
+  document.getElementById('creatorId').value      = isNew ? '' : creator.id;
+  document.getElementById('cEmoji').value         = isNew ? '🎬' : (creator.emoji || '🎬');
+  document.getElementById('cTier').value          = isNew ? 'nano' : (creator.tier || 'nano');
+  document.getElementById('cName').value          = isNew ? '' : (creator.name || '');
+  document.getElementById('cFollowers').value     = isNew ? '' : (creator.followers_label || '');
+  document.getElementById('cEngagement').value    = isNew ? '' : (creator.engagement || '');
+  document.getElementById('cNiches').value        = isNew ? '' : (creator.niches || []).join(', ');
+  document.getElementById('cBio').value           = isNew ? '' : (creator.bio || '');
+  document.getElementById('cPrice').value         = isNew ? '90000' : (creator.price || 90000);
+  document.getElementById('cRating').value        = isNew ? '5.0' : (creator.rating || '5.0');
+  document.getElementById('cDelivery').value      = isNew ? '5 días' : (creator.delivery || '5 días');
+  document.getElementById('cProjects').value      = isNew ? '0' : (creator.projects || 0);
+  document.getElementById('cActive').checked      = isNew ? true : (creator.active !== false);
+  document.getElementById('creatorErr').style.display = 'none';
+  openModal('creatorModal');
+}
+
+async function saveCreator() {
+  const id      = document.getElementById('creatorId').value.trim();
+  const name    = document.getElementById('cName').value.trim();
+  const err     = document.getElementById('creatorErr');
+  err.style.display = 'none';
+
+  if (!name) { err.textContent = 'El nombre es obligatorio.'; err.style.display = 'block'; return; }
+
+  const payload = {
+    emoji:            document.getElementById('cEmoji').value.trim() || '🎬',
+    tier:             document.getElementById('cTier').value,
+    name,
+    followers_label:  document.getElementById('cFollowers').value.trim(),
+    engagement:       document.getElementById('cEngagement').value.trim(),
+    niches:           document.getElementById('cNiches').value.split(',').map(s => s.trim()).filter(Boolean),
+    bio:              document.getElementById('cBio').value.trim() || null,
+    price:            parseInt(document.getElementById('cPrice').value) || 90000,
+    rating:           document.getElementById('cRating').value.trim() || '5.0',
+    delivery:         document.getElementById('cDelivery').value.trim() || '5 días',
+    projects:         parseInt(document.getElementById('cProjects').value) || 0,
+    active:           document.getElementById('cActive').checked,
+    updated_at:       new Date().toISOString(),
+  };
+
+  let error;
+  if (id) {
+    // Update existing
+    ({ error } = await sb.from('creators').update(payload).eq('id', id));
+  } else {
+    // Insert new — generate a simple slug ID from name
+    const newId = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + Date.now();
+    ({ error } = await sb.from('creators').insert({ id: newId, ...payload, created_at: new Date().toISOString() }));
+  }
+
+  if (error) { err.textContent = 'Error al guardar: ' + error.message; err.style.display = 'block'; return; }
+
+  closeModal('creatorModal');
+  showToast('✓ Creator guardada.', 'ok');
+  await loadCreators();
+  renderCreatorPanel();
+}
+
+// ── MODAL HELPERS ─────────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── LOADING ───────────────────────────────────────────────────────────────────
+function showLoading(on) {
+  document.getElementById('loadingOverlay').style.display = on ? 'flex' : 'none';
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function emptyState(msg) {
+  return `<div class="empty-state"><div class="empty-icon">📭</div><div>${msg}</div></div>`;
+}
+</script>
+</body>
+</html>

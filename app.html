@@ -13,6 +13,7 @@
   --black:#000;--blue:#0071e3;--blue-d:#0058b0;--blue-l:#147ce5;
   --white:#f5f5f7;--gray:#111;--gray2:#1c1c1e;--gray3:#2c2c2e;--gray4:#3a3a3c;
   --muted:#6e6e73;--text:#d1d1d6;--border:rgba(255,255,255,0.08);--red:#ff453a;
+  --green:#30d158;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -23,7 +24,7 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
 #authView{display:none;min-height:100vh;background:var(--black);align-items:center;justify-content:center;padding:20px;position:relative}
 #authView::before{content:'';position:absolute;width:700px;height:500px;background:radial-gradient(ellipse,rgba(0,113,227,.08) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .auth-card{background:var(--gray2);border:1px solid var(--border);border-radius:20px;padding:44px;width:100%;max-width:420px;position:relative;z-index:1}
-.auth-logo{font-weight:800;font-size:20px;color:var(--white);margin-bottom:28px;display:block}
+.auth-logo{font-weight:800;font-size:20px;color:var(--white);margin-bottom:28px;display:block;text-decoration:none}
 .auth-logo span{color:var(--blue)}
 .auth-title{font-size:24px;font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:6px}
 .auth-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
@@ -43,14 +44,13 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
 .auth-msg.ok{background:rgba(0,113,227,.08);border:1px solid rgba(0,113,227,.2);color:var(--blue)}
 .auth-msg.err{background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.2);color:var(--red)}
 .auth-tabs{display:flex;background:var(--gray3);border-radius:10px;padding:3px;gap:3px;margin-bottom:18px}
-.auth-tab{flex:1;padding:8px;background:transparent;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all .18s}
+.auth-tab{flex:1;padding:8px;background:transparent;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .18s}
 .auth-tab.active{background:var(--gray4);color:var(--white)}
-.magic-section{display:none}
 
-/* ── APP NAV ── */
+/* ── NAV ── */
 #appView{display:none}
 .app-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-weight:700;font-size:19px;color:var(--white);text-decoration:none;letter-spacing:-.3px}
+.nav-logo{font-weight:700;font-size:19px;color:var(--white);letter-spacing:-.3px;cursor:pointer;background:none;border:none;font-family:'Poppins',sans-serif}
 .nav-logo span{color:var(--blue)}
 .nav-tabs{display:flex;gap:2px;list-style:none}
 .nav-tab{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;border:none;background:none;font-family:'Poppins',sans-serif}
@@ -60,291 +60,319 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
 .user-pill{display:flex;align-items:center;gap:8px;background:var(--gray2);border:1px solid var(--border);border-radius:20px;padding:5px 14px 5px 8px;cursor:pointer;transition:all .2s;position:relative}
 .user-pill:hover{border-color:rgba(255,255,255,.15)}
 .user-avatar{width:26px;height:26px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.user-email{font-size:11px;color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.user-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--gray2);border:1px solid var(--border);border-radius:12px;padding:6px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,.5);display:none}
+.user-email-el{font-size:11px;color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--gray2);border:1px solid var(--border);border-radius:12px;padding:6px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,.5);display:none;z-index:300}
 .user-menu.open{display:block}
-.user-menu-item{padding:9px 14px;border-radius:8px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
-.user-menu-item:hover{background:var(--gray3);color:var(--text)}
-.user-menu-item.danger{color:var(--red)}
-.user-menu-item.danger:hover{background:rgba(255,69,58,.08)}
+.umi{padding:9px 14px;border-radius:8px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.umi:hover{background:var(--gray3);color:var(--text)}
+.umi.danger{color:var(--red)}
+.umi.danger:hover{background:rgba(255,69,58,.08)}
 
-/* ── MAIN AREA ── */
+/* ── MAIN ── */
 .app-main{padding-top:52px;min-height:100vh}
 .screen{display:none;min-height:calc(100vh - 52px)}
 .screen.active{display:block}
 
-/* ── HOME SCREEN ── */
-.home-hero{padding:60px 40px 0;max-width:1060px;margin:0 auto}
-.home-greeting{font-size:clamp(26px,3.5vw,40px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:6px}
-.home-sub{font-size:15px;color:var(--muted);margin-bottom:48px}
-
-/* Product cards */
+/* ── HOME ── */
+.home-hero{padding:56px 40px 0;max-width:1060px;margin:0 auto}
+.home-greeting{font-size:clamp(24px,3vw,38px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:6px}
+.home-sub{font-size:15px;color:var(--muted);margin-bottom:44px}
 .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 40px;max-width:1060px;margin:0 auto}
-.prod-card{background:var(--gray2);border:1px solid var(--border);border-radius:20px;padding:36px;display:flex;flex-direction:column;gap:0;transition:border-color .2s;position:relative;overflow:hidden}
+.prod-card{background:var(--gray2);border:1px solid var(--border);border-radius:20px;padding:36px;display:flex;flex-direction:column;transition:border-color .2s;position:relative;overflow:hidden}
 .prod-card:hover{border-color:rgba(0,113,227,.3)}
 .prod-card.featured{border-color:var(--blue);background:rgba(0,113,227,.04)}
 .prod-card.featured::before{content:'Más popular';position:absolute;top:0;right:0;background:var(--blue);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-bottom-left-radius:10px}
 .pc-eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
 .pc-name{font-size:20px;font-weight:800;color:var(--white);margin-bottom:8px;letter-spacing:-.5px}
-.pc-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:24px;min-height:44px}
+.pc-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:24px}
 .pc-price{font-size:40px;font-weight:800;color:var(--white);letter-spacing:-2px;line-height:1;margin-bottom:4px}
 .pc-price sup{font-size:18px;vertical-align:super;font-weight:700}
 .pc-period{font-size:11px;color:var(--muted);margin-bottom:24px}
 .pc-features{display:flex;flex-direction:column;gap:9px;margin-bottom:28px;flex:1}
 .pc-feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text)}
-.pc-feat-check{color:var(--blue);font-size:11px;margin-top:2px;flex-shrink:0}
+.pc-check{color:var(--blue);font-size:11px;margin-top:2px;flex-shrink:0}
 .pc-btn{display:block;width:100%;text-align:center;padding:13px;border-radius:12px;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;text-decoration:none;border:none}
 .pc-btn-primary{background:var(--blue);color:#fff}
 .pc-btn-primary:hover{background:var(--blue-l)}
 .pc-btn-ghost{background:transparent;color:var(--white);border:1px solid var(--border)}
 .pc-btn-ghost:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
 
-/* Recent briefs */
+/* ── MIS SOLICITUDES (home section) ── */
 .recent-section{padding:48px 40px 60px;max-width:1060px;margin:0 auto}
 .section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .section-hd h3{font-size:16px;font-weight:700;color:var(--white)}
-.empty-state{background:var(--gray2);border:1px dashed rgba(255,255,255,.12);border-radius:16px;padding:48px 24px;text-align:center}
+.section-hd a,.section-hd button{font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif}
+.empty-state{background:var(--gray2);border:1px dashed rgba(255,255,255,.1);border-radius:16px;padding:48px 24px;text-align:center}
 .empty-icon{font-size:36px;margin-bottom:12px}
 .empty-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:6px}
 .empty-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:20px}
-.brief-card{background:var(--gray2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:all .2s}
-.brief-card:hover{border-color:rgba(0,113,227,.2)}
-.bc-left{}
-.bc-brand{font-size:15px;font-weight:700;color:var(--white);margin-bottom:3px}
-.bc-meta{font-size:12px;color:var(--muted)}
-.bc-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(0,113,227,.1);color:var(--blue);border:1px solid rgba(0,113,227,.2)}
+.sol-card{background:var(--gray2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:10px;display:flex;align-items:center;gap:16px;transition:all .2s;flex-wrap:wrap}
+.sol-card:hover{border-color:rgba(0,113,227,.2)}
+.sol-emoji{font-size:28px;flex-shrink:0}
+.sol-info{flex:1;min-width:180px}
+.sol-creator{font-size:15px;font-weight:700;color:var(--white);margin-bottom:3px}
+.sol-types{font-size:12px;color:var(--muted);margin-bottom:3px}
+.sol-date{font-size:11px;color:var(--gray4)}
+.sol-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.status-badge{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;white-space:nowrap}
+.sb-pending{background:rgba(255,200,0,.1);color:#ffc800;border:1px solid rgba(255,200,0,.2)}
+.sb-accepted{background:rgba(0,113,227,.1);color:var(--blue);border:1px solid rgba(0,113,227,.2)}
+.sb-rejected{background:rgba(255,69,58,.1);color:var(--red);border:1px solid rgba(255,69,58,.2)}
+.sb-paid{background:rgba(48,209,88,.1);color:var(--green);border:1px solid rgba(48,209,88,.2)}
+.sb-delivered{background:rgba(48,209,88,.15);color:var(--green);border:1px solid rgba(48,209,88,.3)}
+.sb-completed{background:rgba(48,209,88,.15);color:var(--green);border:1px solid rgba(48,209,88,.3)}
+.pay-btn{padding:9px 18px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.pay-btn:hover{background:var(--blue-l)}
 
 /* ── CREATORS SCREEN ── */
-.creators-header{padding:60px 40px 40px;max-width:1060px;margin:0 auto}
-.creators-header h2{font-size:clamp(26px,3.5vw,40px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:8px}
-.creators-header p{font-size:15px;color:var(--muted);max-width:480px;line-height:1.65}
-.filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 40px;max-width:1060px;margin:0 auto 32px}
-.filter-pill{padding:8px 18px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.creators-header{padding:56px 40px 32px;max-width:1060px;margin:0 auto}
+.creators-header h2{font-size:clamp(24px,3vw,38px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:8px}
+.creators-header p{font-size:14px;color:var(--muted);max-width:500px;line-height:1.65}
+.guarantee-banner{display:flex;align-items:center;gap:10px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.15);border-radius:10px;padding:12px 16px;margin-top:16px;font-size:12px;color:rgba(48,209,88,.9)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 40px;max-width:1060px;margin:0 auto 28px}
+.filter-pill{padding:7px 16px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
 .filter-pill:hover{border-color:rgba(255,255,255,.2);color:var(--white)}
 .filter-pill.active{border-color:var(--blue);background:rgba(0,113,227,.1);color:var(--blue);font-weight:600}
 .creators-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 40px 60px;max-width:1060px;margin:0 auto}
-.creator-card{background:var(--gray2);border:1px solid var(--border);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:16px;transition:transform .22s,border-color .22s;position:relative;overflow:hidden}
+.creator-card{background:var(--gray2);border:1px solid var(--border);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:14px;transition:transform .22s,border-color .22s;position:relative;overflow:hidden}
 .creator-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--blue);opacity:0;transition:opacity .3s}
-.creator-card:hover{transform:translateY(-3px);border-color:rgba(0,113,227,.25)}
+.creator-card:hover{transform:translateY(-2px);border-color:rgba(0,113,227,.25)}
 .creator-card:hover::before{opacity:1}
 .creator-top{display:flex;align-items:center;gap:12px}
-.creator-avatar{width:48px;height:48px;border-radius:50%;background:var(--gray3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid var(--border)}
-.creator-info{}
-.creator-name{font-size:15px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
-.creator-verified{font-size:13px;color:var(--blue)}
+.creator-av{width:46px;height:46px;border-radius:50%;background:var(--gray3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid var(--border)}
+.creator-name{font-size:14px;font-weight:700;color:var(--white)}
 .creator-tier-row{display:flex;align-items:center;gap:6px;margin-top:3px}
 .tier-badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px}
 .tier-nano{background:rgba(52,199,89,.12);color:#34c759;border:1px solid rgba(52,199,89,.2)}
 .tier-micro{background:rgba(0,113,227,.12);color:var(--blue);border:1px solid rgba(0,113,227,.2)}
 .tier-macro{background:rgba(255,159,10,.12);color:#ff9f0a;border:1px solid rgba(255,159,10,.2)}
 .creator-rating{font-size:11px;color:var(--muted)}
-.creator-rating .stars{color:#f59e0b}
 .creator-bio{font-size:12px;color:var(--muted);line-height:1.65}
 .creator-niches{display:flex;flex-wrap:wrap;gap:5px}
 .niche-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--gray3);color:var(--muted);border:1px solid var(--border)}
-.creator-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding-top:14px;border-top:1px solid var(--border)}
+.creator-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-top:12px;border-top:1px solid var(--border)}
 .cstat{text-align:center}
 .cstat-val{font-size:14px;font-weight:700;color:var(--white)}
-.cstat-label{font-size:9px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.creator-footer{padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cstat-label{font-size:9px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.creator-footer{padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .creator-price{font-size:16px;font-weight:800;color:var(--white)}
 .creator-price small{font-size:10px;font-weight:400;color:var(--muted);display:block;margin-top:1px}
-.hire-btn{padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.hire-btn:hover{background:var(--blue-l);transform:translateY(-1px)}
+.solicitar-btn{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.solicitar-btn:hover{background:var(--blue-l);transform:translateY(-1px)}
 
-/* ── MODALS ── */
-.overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
-.overlay.open{display:flex}
-.modal{background:var(--gray2);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:38px;width:100%;max-width:420px;position:relative;animation:fadeUp .3s ease}
+/* ── REQUEST MODAL ── */
+.req-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);overflow-y:auto;padding:20px}
+.req-overlay.open{display:block}
+.req-modal{background:var(--gray2);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;max-width:560px;margin:20px auto;position:relative;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px}
-.modal-close:hover{color:var(--white)}
-.modal-icon{font-size:32px;margin-bottom:12px}
-.modal-title{font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:8px}
-.modal-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:24px}
-.modal-price-row{background:var(--gray3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
-.modal-price-label{font-size:13px;color:var(--muted)}
-.modal-price-val{font-size:22px;font-weight:800;color:var(--white)}
-.modal-actions{display:flex;gap:10px}
-.modal-actions button{flex:1;padding:12px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
-.modal-confirm{background:var(--blue);color:#fff}
-.modal-confirm:hover{background:var(--blue-l)}
-.modal-cancel{background:var(--gray3);color:var(--muted)}
-.modal-cancel:hover{color:var(--white)}
+.req-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px}
+.req-close:hover{color:var(--white)}
+.req-creator-hd{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.req-creator-em{font-size:32px}
+.req-creator-info{}
+.req-creator-name{font-size:18px;font-weight:800;color:var(--white)}
+.req-creator-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.req-section{margin-bottom:22px}
+.req-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block}
+.ct-grid{display:flex;flex-wrap:wrap;gap:8px}
+.ct-pill{padding:9px 16px;border-radius:50px;border:1px solid var(--border);background:var(--gray3);color:var(--muted);font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.ct-pill:hover{border-color:rgba(0,113,227,.3);color:var(--white)}
+.ct-pill.sel{border-color:var(--blue);background:rgba(0,113,227,.12);color:var(--blue);font-weight:600}
+.mr-grid{display:flex;flex-direction:column;gap:8px}
+.mr-card{background:var(--gray3);border:1px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:space-between}
+.mr-card:hover{border-color:rgba(0,113,227,.3)}
+.mr-card.sel{border-color:var(--blue);background:rgba(0,113,227,.06)}
+.mr-left{}
+.mr-title{font-size:13px;font-weight:600;color:var(--white)}
+.mr-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.mr-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.mr-card.sel .mr-radio{border-color:var(--blue)}
+.mr-card.sel .mr-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.canje-fields{display:none;margin-top:12px;padding:16px;background:var(--gray3);border-radius:10px;border:1px solid var(--border)}
+.canje-fields.show{display:block}
+.req-textarea{width:100%;padding:12px 15px;background:var(--gray3);border:1px solid var(--border);border-radius:12px;color:var(--white);font-family:'Poppins',sans-serif;font-size:13px;outline:none;resize:vertical;min-height:90px;line-height:1.65;transition:border-color .2s}
+.req-textarea:focus{border-color:rgba(0,113,227,.5)}
+.req-textarea::placeholder{color:var(--muted)}
+.req-input{width:100%;padding:11px 15px;background:var(--gray3);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.req-input:focus{border-color:rgba(0,113,227,.5)}
+.req-input::placeholder{color:var(--muted)}
+.checkbox-row{display:flex;align-items:center;gap:10px;margin-top:10px;cursor:pointer}
+.checkbox-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--blue)}
+.checkbox-row span{font-size:13px;color:var(--text)}
+.plazo-grid{display:flex;gap:10px}
+.plazo-card{flex:1;background:var(--gray3);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.plazo-card:hover{border-color:rgba(0,113,227,.3)}
+.plazo-card.sel{border-color:var(--blue);background:rgba(0,113,227,.06)}
+.plazo-icon{font-size:20px;margin-bottom:6px}
+.plazo-title{font-size:13px;font-weight:600;color:var(--white)}
+.plazo-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.guarantee-note{background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.15);border-radius:10px;padding:12px 16px;font-size:12px;color:rgba(48,209,88,.85);margin-top:16px;display:flex;align-items:center;gap:8px;line-height:1.5}
+.req-price-row{background:var(--gray3);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.req-price-label{font-size:13px;color:var(--muted)}
+.req-price-val{font-size:22px;font-weight:800;color:var(--white)}
+.req-submit-btn{width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
+.req-submit-btn:hover{background:var(--blue-l)}
+.req-err{font-size:12px;color:var(--red);margin-bottom:10px;display:none}
 
-/* Loading */
-.loading-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center}
+/* ── CONFIRM PAY MODAL ── */
+.overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--gray2);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:36px;width:100%;max-width:400px;position:relative;animation:fadeUp .3s ease}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px}
+.modal-close:hover{color:var(--white)}
+
+/* ── LOADING / TOASTS ── */
+.loading-overlay{display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center}
 .loading-overlay.open{display:flex}
 .spinner{width:44px;height:44px;border:2.5px solid var(--gray3);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-title{font-size:16px;font-weight:600;color:var(--white)}
-.loading-sub{font-size:13px;color:var(--muted)}
-
-/* Error box */
-.err-snack{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(255,69,58,.1);border:1px solid rgba(255,69,58,.3);color:var(--red);font-size:13px;padding:12px 20px;border-radius:10px;display:none;z-index:700}
-.err-snack.show{display:block}
+.l-title{font-size:16px;font-weight:600;color:var(--white)}
+.l-sub{font-size:13px;color:var(--muted)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-size:13px;padding:12px 20px;border-radius:10px;display:none;z-index:800;white-space:nowrap}
+.toast.show{display:block}
+.toast.ok{background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.3);color:var(--green)}
+.toast.err{background:rgba(255,69,58,.1);border:1px solid rgba(255,69,58,.3);color:var(--red)}
 
 /* ── MOBILE ── */
 @media(max-width:768px){
   .app-nav{padding:0 16px}
   .nav-tabs{display:none}
-  .home-hero{padding:40px 16px 0}
+  .user-email-el{display:none}
+  .home-hero{padding:36px 16px 0}
   .products-grid{grid-template-columns:1fr;padding:0 16px}
-  .recent-section{padding:40px 16px 60px}
-  .creators-header{padding:40px 16px 24px}
+  .recent-section{padding:36px 16px 80px}
+  .creators-header{padding:36px 16px 24px}
   .filters{padding:0 16px}
-  .creators-grid{grid-template-columns:1fr;padding:0 16px 60px}
-  .modal{padding:28px 20px}
-  /* Mobile bottom nav */
-  .mob-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(17,17,17,.96);border-top:1px solid var(--border);z-index:100;backdrop-filter:blur(16px)}
+  .creators-grid{grid-template-columns:1fr;padding:0 16px 80px}
+  .req-modal{padding:28px 20px}
+  .mob-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(17,17,17,.96);border-top:1px solid var(--border);z-index:150;backdrop-filter:blur(16px)}
   .mob-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 4px 8px;cursor:pointer;color:var(--muted);font-size:9px;font-weight:600;letter-spacing:.3px;border:none;background:none;font-family:'Poppins',sans-serif}
   .mob-nav-item .mni{font-size:22px;line-height:1;margin-bottom:2px}
   .mob-nav-item.active{color:var(--blue)}
-  .app-main{padding-bottom:64px}
-  .user-email{display:none}
+  .app-main{padding-bottom:68px}
 }
-@media(min-width:769px){
-  .mob-nav{display:none}
-}
+@media(min-width:769px){.mob-nav{display:none}}
 </style>
 </head>
 <body>
 
-<!-- ══ AUTH VIEW ══ -->
+<!-- ══ AUTH ══ -->
 <div id="authView">
   <div class="auth-card">
     <a href="/" class="auth-logo">crea<span>lo</span></a>
     <div class="auth-title">Bienvenido</div>
-    <div class="auth-sub">Iniciá sesión para gestionar tus briefs y contratar creators.</div>
+    <div class="auth-sub">Iniciá sesión para gestionar tus briefs y solicitudes de contenido.</div>
     <div class="auth-msg" id="authMsg"></div>
-
     <button class="auth-google" onclick="authGoogle()">
       <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Continuar con Google
     </button>
     <div class="auth-divider">o</div>
-
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
-      <button class="auth-tab" id="tabReg" onclick="switchTab('register')">Registrarse</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Registrarse</button>
       <button class="auth-tab" id="tabMagic" onclick="switchTab('magic')">Magic link</button>
     </div>
-
     <div id="formLogin">
       <div class="auth-field"><input type="email" id="authEmail" placeholder="tu@email.com" /></div>
       <div class="auth-field"><input type="password" id="authPass" placeholder="Contraseña" /></div>
       <button class="auth-btn-primary" onclick="authLogin()">Ingresar →</button>
-      <div class="auth-link-row"><a onclick="switchTab('magic')">¿Olvidaste tu contraseña? Usá magic link</a></div>
+      <div class="auth-link-row"><a onclick="switchTab('magic')">¿Olvidaste tu contraseña?</a></div>
     </div>
-
     <div id="formRegister" style="display:none">
       <div class="auth-field"><input type="email" id="regEmail" placeholder="tu@email.com" /></div>
       <div class="auth-field"><input type="password" id="regPass" placeholder="Mínimo 6 caracteres" /></div>
       <button class="auth-btn-primary" onclick="authRegister()">Crear cuenta →</button>
     </div>
-
     <div id="formMagic" style="display:none">
       <div class="auth-field"><input type="email" id="magicEmail" placeholder="tu@email.com" /></div>
       <button class="auth-btn-primary" onclick="sendMagic()">✉️ Enviar link de acceso</button>
-      <div class="auth-link-row" style="margin-top:8px;font-size:11px;color:var(--muted)">Te mandamos un link al email. Sin contraseña.</div>
+      <div class="auth-link-row" style="margin-top:8px;font-size:11px">Sin contraseña. Solo el link al email.</div>
     </div>
   </div>
 </div>
 
-<!-- ══ APP VIEW ══ -->
+<!-- ══ APP ══ -->
 <div id="appView">
-
-  <!-- NAV -->
   <nav class="app-nav">
-    <a href="/" class="nav-logo">crea<span>lo</span></a>
+    <button class="nav-logo" onclick="goHome()">crea<span>lo</span></button>
     <ul class="nav-tabs">
       <li><button class="nav-tab active" id="ntHome" onclick="showScreen('home')">Inicio</button></li>
       <li><button class="nav-tab" id="ntCreators" onclick="showScreen('creators')">Creators</button></li>
+      <li><button class="nav-tab" id="ntSolicitudes" onclick="showScreen('solicitudes')">Mis solicitudes <span id="pendBadge" style="display:none;background:var(--blue);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:4px"></span></button></li>
     </ul>
     <div class="nav-right">
       <div class="user-pill" onclick="toggleUserMenu()">
         <div class="user-avatar" id="userAv">?</div>
-        <span class="user-email" id="userEmailEl">—</span>
+        <span class="user-email-el" id="userEmailEl">—</span>
         <div class="user-menu" id="userMenu">
-          <div class="user-menu-item" onclick="showScreen('home')">🏠 Inicio</div>
-          <div class="user-menu-item" onclick="showScreen('creators')">🎥 Creators</div>
+          <div class="umi" onclick="goHome()">🏠 Inicio</div>
+          <div class="umi" onclick="showScreen('creators')">🎬 Creators</div>
+          <div class="umi" onclick="showScreen('solicitudes')">📋 Mis solicitudes</div>
           <div style="height:1px;background:var(--border);margin:4px 0"></div>
-          <div class="user-menu-item danger" onclick="signOut()">← Cerrar sesión</div>
+          <div class="umi danger" onclick="signOut()">← Cerrar sesión</div>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- MAIN -->
   <div class="app-main">
 
-    <!-- HOME SCREEN -->
+    <!-- HOME -->
     <div class="screen active" id="screen-home">
       <div class="home-hero">
         <h1 class="home-greeting">Hola, <span id="homeUser">—</span> 👋</h1>
         <p class="home-sub">¿Qué hacemos hoy?</p>
       </div>
-
       <div class="products-grid">
-        <!-- Brief card -->
         <div class="prod-card featured">
           <div class="pc-eyebrow">⚡ Paso 1</div>
           <div class="pc-name">Brief profesional con IA</div>
-          <div class="pc-desc">El documento que toda creator necesita para producir tu contenido <em>exactamente</em> como lo imaginás.</div>
+          <div class="pc-desc">El documento que toda creator necesita para producir tu contenido exactamente como lo imaginás.</div>
           <div class="pc-price"><sup>$</sup>9.999</div>
           <div class="pc-period">pago único · recibís en segundos</div>
           <div class="pc-features">
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Descripción de marca, tono y objetivos</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Instrucciones escena a escena para la creator</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Duración, formato, plataforma especificados</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Hashtags, caption y CTA listos para usar</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>PDF descargable · compartible con cualquier creator</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Descripción de marca, tono y objetivos</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Instrucciones escena a escena</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Duración, formato y plataforma</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Hashtags, caption y CTA listos</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>PDF descargable para cualquier creator</div>
           </div>
           <a href="/brief" class="pc-btn pc-btn-primary">Generar mi brief →</a>
         </div>
-
-        <!-- Creator card -->
         <div class="prod-card">
           <div class="pc-eyebrow">🎬 Paso 2 (opcional)</div>
           <div class="pc-name">Creator que produce por vos</div>
-          <div class="pc-desc">Elegís a tu creator de nuestra red curada y ella graba, edita y entrega en 48h.</div>
+          <div class="pc-desc">Elegís tu creator de nuestra red curada. Ella graba, edita y entrega con garantía de cumplimiento.</div>
           <div class="pc-price"><sup>$</sup>90.000</div>
           <div class="pc-period">por pieza · sin suscripción</div>
           <div class="pc-features">
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Elegís la creator que más encaja con tu marca</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Produce con tu brief personalizado</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Entrega en menos de 5 días</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>1 ronda de revisión incluida</div>
-            <div class="pc-feat"><span class="pc-feat-check">✓</span>Derechos 100% tuyos, apto para ads</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Elegís la creator ideal para tu marca</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Produce con tu brief personalizado</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Entrega en hasta 5 días hábiles</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>1 ronda de revisión incluida</div>
+            <div class="pc-feat"><span class="pc-check">✓</span>Garantía: si no entrega, te devolvemos el 100%</div>
           </div>
           <button class="pc-btn pc-btn-ghost" onclick="showScreen('creators')">Ver creators →</button>
         </div>
       </div>
 
-      <!-- Recent purchases -->
       <div class="recent-section">
         <div class="section-hd">
-          <h3>Mis briefs</h3>
-          <a href="/brief" style="font-size:13px;color:var(--blue);text-decoration:none;font-weight:500">+ Nuevo brief</a>
+          <h3>Mis solicitudes recientes</h3>
+          <button onclick="showScreen('solicitudes')">Ver todas →</button>
         </div>
-        <div id="briefsList">
-          <div class="empty-state">
-            <div class="empty-icon">📄</div>
-            <div class="empty-title">Todavía no generaste ningún brief</div>
-            <div class="empty-sub">Creá el primer brief de tu marca en 10 segundos.<br/>La IA genera todo el documento listo para darle a cualquier creator.</div>
-            <a href="/brief" class="pc-btn pc-btn-primary" style="display:inline-block;padding:12px 24px;border-radius:50px;font-size:14px">Crear mi primer brief →</a>
-          </div>
-        </div>
+        <div id="recentSols"></div>
       </div>
-    </div><!-- /home -->
+    </div>
 
-    <!-- CREATORS SCREEN -->
+    <!-- CREATORS -->
     <div class="screen" id="screen-creators">
       <div class="creators-header">
         <h2>Las creators</h2>
-        <p>Curadas a mano. Solo entran las mejores. Elegí la que mejor encaja con tu marca.</p>
+        <p>Curadas a mano. Solicitar contenido es sin costo previo — solo pagás cuando aceptamos tu solicitud.</p>
+        <div class="guarantee-banner">🛡️ <span>Garantía de cumplimiento: si la creator no entrega en el plazo acordado, te devolvemos el 100% del pago. Sin preguntas.</span></div>
       </div>
-
       <div class="filters">
         <button class="filter-pill active" onclick="filterCreators('todas',this)">Todas</button>
         <button class="filter-pill" onclick="filterCreators('nano',this)">Nano</button>
@@ -355,95 +383,170 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
         <button class="filter-pill" onclick="filterCreators('moda',this)">Moda</button>
         <button class="filter-pill" onclick="filterCreators('gastronomia',this)">Gastronomía</button>
       </div>
+      <div class="creators-grid" id="creatorsGrid"></div>
+    </div>
 
-      <div class="creators-grid" id="creatorsGrid">
-        <!-- populated by JS -->
+    <!-- MIS SOLICITUDES -->
+    <div class="screen" id="screen-solicitudes">
+      <div class="creators-header">
+        <h2>Mis solicitudes</h2>
+        <p>Estado de cada solicitud de contenido que enviaste.</p>
       </div>
-    </div><!-- /creators -->
+      <div style="padding:0 40px 60px;max-width:1060px;margin:0 auto" id="allSolsContainer">
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <div class="empty-title">Todavía no enviaste solicitudes</div>
+          <div class="empty-sub">Elegí una creator y solicitá contenido. Te avisamos cuando tengamos respuesta.</div>
+          <button class="pc-btn pc-btn-primary" onclick="showScreen('creators')" style="display:inline-block;padding:12px 24px;border-radius:50px;font-size:14px;border:none;cursor:pointer">Ver creators →</button>
+        </div>
+      </div>
+    </div>
 
   </div><!-- /app-main -->
 
-  <!-- Mobile bottom nav -->
   <div class="mob-nav">
     <button class="mob-nav-item active" id="mnHome" onclick="showScreen('home')"><span class="mni">🏠</span>Inicio</button>
-    <button class="mob-nav-item" id="mnCreators" onclick="showScreen('creators')"><span class="mni">🎥</span>Creators</button>
+    <button class="mob-nav-item" id="mnCreators" onclick="showScreen('creators')"><span class="mni">🎬</span>Creators</button>
+    <button class="mob-nav-item" id="mnSolicitudes" onclick="showScreen('solicitudes')"><span class="mni">📋</span>Solicitudes</button>
   </div>
-
 </div><!-- /appView -->
 
-<!-- CONFIRM HIRE MODAL -->
-<div class="overlay" id="confirmOverlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeConfirm()">✕</button>
-    <div class="modal-icon" id="confirmIcon">🎥</div>
-    <div class="modal-title" id="confirmTitle">Contratar creator</div>
-    <div class="modal-sub" id="confirmSub">Vas a contratar a esta creator para producir tu contenido UGC con tu brief.</div>
-    <div class="modal-price-row">
-      <span class="modal-price-label">Total a pagar</span>
-      <span class="modal-price-val">$90.000</span>
+<!-- REQUEST MODAL -->
+<div class="req-overlay" id="reqOverlay">
+  <div class="req-modal">
+    <button class="req-close" onclick="closeReqModal()">✕</button>
+    <div class="req-creator-hd">
+      <div class="req-creator-em" id="reqEmoji">🎬</div>
+      <div class="req-creator-info">
+        <div class="req-creator-name" id="reqCreatorName">Creator</div>
+        <div class="req-creator-sub" id="reqCreatorSub">Solicitar contenido</div>
+      </div>
     </div>
-    <div class="modal-actions">
-      <button class="modal-cancel" onclick="closeConfirm()">Cancelar</button>
-      <button class="modal-confirm" onclick="confirmHire()">Pagar con Mercado Pago →</button>
+
+    <div class="req-section">
+      <span class="req-label">Tipo de contenido (podés elegir varios)</span>
+      <div class="ct-grid">
+        <div class="ct-pill" data-val="reel" onclick="togCT(this)">📹 Reel</div>
+        <div class="ct-pill" data-val="tiktok" onclick="togCT(this)">🎵 TikTok</div>
+        <div class="ct-pill" data-val="story" onclick="togCT(this)">📱 Story</div>
+        <div class="ct-pill" data-val="youtube_short" onclick="togCT(this)">▶️ YouTube Short</div>
+        <div class="ct-pill" data-val="ads" onclick="togCT(this)">🎯 Contenido para Ads</div>
+        <div class="ct-pill" data-val="evento" onclick="togCT(this)">🎪 Participación en evento</div>
+      </div>
     </div>
+
+    <div class="req-section">
+      <span class="req-label">Modalidad</span>
+      <div class="mr-grid">
+        <div class="mr-card sel" data-val="monetario" onclick="selModalidad(this)">
+          <div class="mr-left"><div class="mr-title">💰 Pago monetario</div><div class="mr-desc">Precio según creator · se paga al aceptar</div></div>
+          <div class="mr-radio"></div>
+        </div>
+        <div class="mr-card" data-val="canje" onclick="selModalidad(this)">
+          <div class="mr-left"><div class="mr-title">🎁 Canje de producto</div><div class="mr-desc">Sin pago monetario · enviás el producto</div></div>
+          <div class="mr-radio"></div>
+        </div>
+        <div class="mr-card" data-val="mixto" onclick="selModalidad(this)">
+          <div class="mr-left"><div class="mr-title">✨ Mixto (pago + canje)</div><div class="mr-desc">Precio reducido + enviás el producto</div></div>
+          <div class="mr-radio"></div>
+        </div>
+      </div>
+      <div class="canje-fields" id="canjeFields">
+        <div class="req-label" style="margin-top:0">Descripción del producto que ofrecés</div>
+        <input class="req-input" id="reqProductDesc" placeholder="Ej: Crema hidratante 50ml, valor $8.000" style="margin-bottom:10px" />
+        <label class="checkbox-row">
+          <input type="checkbox" id="reqSendsProduct" />
+          <span>Yo lo envío a la creator (cubrís el flete)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="req-section">
+      <span class="req-label">Brief / Instrucciones adicionales</span>
+      <textarea class="req-textarea" id="reqBrief" placeholder="Pegá el link de tu brief de Crealo, o describí qué necesitás: tono, ángulo del mensaje, referencias, etc."></textarea>
+    </div>
+
+    <div class="req-section">
+      <span class="req-label">Plazo de entrega</span>
+      <div class="plazo-grid">
+        <div class="plazo-card sel" data-val="estandar" onclick="selPlazo(this)">
+          <div class="plazo-icon">📅</div>
+          <div class="plazo-title">Estándar</div>
+          <div class="plazo-desc">Hasta 5 días hábiles</div>
+        </div>
+        <div class="plazo-card" data-val="express" onclick="selPlazo(this)">
+          <div class="plazo-icon">⚡</div>
+          <div class="plazo-title">Express</div>
+          <div class="plazo-desc">48 horas</div>
+        </div>
+      </div>
+      <div class="guarantee-note">🛡️ Si la creator no entrega en el plazo acordado, te devolvemos el 100% del pago. Sin preguntas.</div>
+    </div>
+
+    <div class="req-err" id="reqErr"></div>
+    <div class="req-price-row" id="reqPriceRow">
+      <span class="req-price-label">Precio estimado (se confirma al aceptar)</span>
+      <span class="req-price-val" id="reqPriceVal">$90.000</span>
+    </div>
+    <button class="req-submit-btn" onclick="submitRequest()">Enviar solicitud →</button>
+    <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px">Solo pagás si tu solicitud es aceptada. Sin cargo por enviarla.</div>
   </div>
 </div>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <div class="loading-title" id="loadingTitle">Creando tu orden...</div>
-  <div class="loading-sub">Te redirigimos a Mercado Pago</div>
+  <div class="l-title" id="loadingTitle">Procesando...</div>
+  <div class="l-sub">Aguantá un segundo</div>
 </div>
 
-<!-- ERROR SNACKBAR -->
-<div class="err-snack" id="errSnack"></div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
 const SUPA_URL = 'https://dtopwxldxlwgdvpjcegg.supabase.co';
 const SUPA_KEY = 'sb_publishable_W54QQPJ_WFtvI67N5SPniQ_jZ1kpCES';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-// ── CREATORS DATA ──
-const CREATORS = [
-  { id:'valentina', name:'Valentina R.', emoji:'🧡', tier:'micro', tierLabel:'Micro · 28K', niches:['belleza','skincare','lifestyle'], bio:'Especialista en skincare y rutinas de belleza. Contenido auténtico y resultados reales.', engagement:'6.8%', projects:47, delivery:'48h', rating:'5.0' },
-  { id:'sofia', name:'Sofía M.', emoji:'💚', tier:'nano', tierLabel:'Nano · 9K', niches:['fitness','nutrición','wellness'], bio:'Fitness y bienestar con enfoque holístico. Comunidad muy comprometida y alta conversión.', engagement:'12.4%', projects:23, delivery:'48h', rating:'4.9' },
-  { id:'camila', name:'Camila T.', emoji:'💜', tier:'micro', tierLabel:'Micro · 41K', niches:['moda','tendencias','ootd'], bio:'Referente de moda y tendencias. Estética cuidada y storytelling que conecta con la audiencia.', engagement:'5.2%', projects:62, delivery:'48h', rating:'5.0' },
-  { id:'martina', name:'Martina L.', emoji:'🌸', tier:'nano', tierLabel:'Nano · 7K', niches:['hogar','deco','organización'], bio:'Hogar, decoración y organización. Contenido visual premium con engagement altísimo.', engagement:'14.1%', projects:19, delivery:'48h', rating:'4.8' },
-  { id:'julieta', name:'Julieta A.', emoji:'🍊', tier:'micro', tierLabel:'Micro · 33K', niches:['gastronomia','recetas','foodie'], bio:'Gastronomía y recetas que venden. Domina el formato tutorial y el antes/después.', engagement:'7.3%', projects:38, delivery:'48h', rating:'4.9' },
-  { id:'lucia', name:'Lucía P.', emoji:'⭐', tier:'macro', tierLabel:'Macro · 120K', niches:['tech','productividad','emprendimiento'], bio:'Tech, productividad y emprendimiento. Audiencia compradora con alta intención de compra.', engagement:'4.1%', projects:91, delivery:'48h', rating:'5.0' },
+const DEFAULT_CREATORS = [
+  { id:'valentina', name:'Valentina R.', emoji:'🧡', tier:'micro', followers_label:'Micro · 28K', niches:['belleza','skincare','lifestyle'], bio:'Especialista en skincare y rutinas de belleza. Contenido auténtico con resultados reales.', price:90000, engagement:'6.8%', delivery:'5 días', rating:'5.0', active:true },
+  { id:'sofia', name:'Sofía M.', emoji:'💚', tier:'nano', followers_label:'Nano · 9K', niches:['fitness','nutrición','wellness'], bio:'Fitness y bienestar con enfoque holístico. Comunidad muy comprometida y alta conversión.', price:90000, engagement:'12.4%', delivery:'5 días', rating:'4.9', active:true },
+  { id:'camila', name:'Camila T.', emoji:'💜', tier:'micro', followers_label:'Micro · 41K', niches:['moda','tendencias','ootd'], bio:'Referente de moda y tendencias. Estética cuidada y storytelling que conecta.', price:90000, engagement:'5.2%', delivery:'5 días', rating:'5.0', active:true },
+  { id:'martina', name:'Martina L.', emoji:'🌸', tier:'nano', followers_label:'Nano · 7K', niches:['hogar','deco','organización'], bio:'Hogar, decoración y organización. Contenido visual premium con engagement altísimo.', price:90000, engagement:'14.1%', delivery:'5 días', rating:'4.8', active:true },
+  { id:'julieta', name:'Julieta A.', emoji:'🍊', tier:'micro', followers_label:'Micro · 33K', niches:['gastronomia','recetas','foodie'], bio:'Gastronomía y recetas que venden. Domina el formato tutorial y el antes/después.', price:90000, engagement:'7.3%', delivery:'5 días', rating:'4.9', active:true },
+  { id:'lucia', name:'Lucía P.', emoji:'⭐', tier:'macro', followers_label:'Macro · 120K', niches:['tech','productividad','emprendimiento'], bio:'Tech, productividad y emprendimiento. Audiencia compradora con alta intención.', price:90000, engagement:'4.1%', delivery:'5 días', rating:'5.0', active:true },
 ];
 
-let selectedCreator = null;
 let currentUser = null;
+let allCreators = DEFAULT_CREATORS;
+let selectedCreator = null;
+let selectedPlazo = 'estandar';
 
 // ── INIT ──
 (async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    currentUser = session.user;
-    showApp();
-  } else {
-    showAuth();
-  }
-  sb.auth.onAuthStateChange((event, session) => {
-    if (session) { currentUser = session.user; showApp(); }
+  const { data:{ session } } = await sb.auth.getSession();
+  if (session) { currentUser = session.user; await initApp(); }
+  else showAuth();
+  sb.auth.onAuthStateChange(async (ev, session) => {
+    if (session) { currentUser = session.user; await initApp(); }
     else { currentUser = null; showAuth(); }
   });
 })();
+
+async function initApp() {
+  showApp();
+  await loadCreators();
+  await loadSolicitudes();
+}
 
 function showApp() {
   document.getElementById('authView').style.display = 'none';
   document.getElementById('appView').style.display = 'block';
   const email = currentUser?.email || '';
-  const initials = email ? email[0].toUpperCase() : '?';
-  document.getElementById('userAv').textContent = initials;
+  document.getElementById('userAv').textContent = email ? email[0].toUpperCase() : '?';
   document.getElementById('userEmailEl').textContent = email;
-  const name = email.split('@')[0];
-  document.getElementById('homeUser').textContent = name;
-  renderCreators(CREATORS);
+  document.getElementById('homeUser').textContent = email.split('@')[0];
 }
-
 function showAuth() {
   document.getElementById('authView').style.display = 'flex';
   document.getElementById('appView').style.display = 'none';
@@ -452,185 +555,280 @@ function showAuth() {
 // ── AUTH ──
 function switchTab(tab) {
   ['login','register','magic'].forEach(t => {
-    document.getElementById('form' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = t === tab ? 'block' : 'none';
-    const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
-    if (btn) btn.classList.toggle('active', t === tab);
+    const cap = t.charAt(0).toUpperCase() + t.slice(1);
+    document.getElementById('form'+cap).style.display = t===tab ? 'block':'none';
+    document.getElementById('tab'+cap).classList.toggle('active', t===tab);
   });
   clearAuthMsg();
 }
+function showAuthMsg(txt,type){ const m=document.getElementById('authMsg'); m.textContent=txt; m.className='auth-msg '+type; m.style.display='block'; }
+function clearAuthMsg(){ const m=document.getElementById('authMsg'); m.style.display='none'; }
 
-function showAuthMsg(txt, type) {
-  const m = document.getElementById('authMsg');
-  m.textContent = txt; m.className = 'auth-msg ' + type; m.style.display = 'block';
+async function authGoogle(){
+  const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin+'/app' }});
+  if(error) showAuthMsg('Error: '+error.message,'err');
 }
-function clearAuthMsg() {
-  const m = document.getElementById('authMsg'); m.style.display = 'none'; m.textContent = '';
+async function authLogin(){
+  const email=document.getElementById('authEmail').value.trim(), pass=document.getElementById('authPass').value;
+  if(!email||!pass){ showAuthMsg('Completá email y contraseña.','err'); return; }
+  const { error } = await sb.auth.signInWithPassword({ email, password:pass });
+  if(error) showAuthMsg(error.message,'err');
 }
-
-async function authGoogle() {
-  clearAuthMsg();
-  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/app' } });
-  if (error) showAuthMsg('Error: ' + error.message, 'err');
+async function authRegister(){
+  const email=document.getElementById('regEmail').value.trim(), pass=document.getElementById('regPass').value;
+  if(!email||!pass){ showAuthMsg('Completá todos los campos.','err'); return; }
+  if(pass.length<6){ showAuthMsg('Mínimo 6 caracteres.','err'); return; }
+  const { error } = await sb.auth.signUp({ email, password:pass });
+  if(error) showAuthMsg(error.message,'err');
+  else showAuthMsg('✓ Revisá tu email para confirmar tu cuenta.','ok');
 }
-
-async function authLogin() {
-  const email = document.getElementById('authEmail').value.trim();
-  const pass = document.getElementById('authPass').value;
-  if (!email || !pass) { showAuthMsg('Completá email y contraseña.', 'err'); return; }
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) showAuthMsg(error.message, 'err');
+async function sendMagic(){
+  const email=document.getElementById('magicEmail').value.trim();
+  if(!email){ showAuthMsg('Ingresá tu email.','err'); return; }
+  const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: window.location.origin+'/app' }});
+  if(error) showAuthMsg(error.message,'err');
+  else showAuthMsg('✓ Link enviado. Revisá tu bandeja de entrada.','ok');
 }
-
-async function authRegister() {
-  const email = document.getElementById('regEmail').value.trim();
-  const pass = document.getElementById('regPass').value;
-  if (!email || !pass) { showAuthMsg('Completá email y contraseña.', 'err'); return; }
-  if (pass.length < 6) { showAuthMsg('La contraseña debe tener al menos 6 caracteres.', 'err'); return; }
-  const { error } = await sb.auth.signUp({ email, password: pass });
-  if (error) showAuthMsg(error.message, 'err');
-  else showAuthMsg('✓ Revisá tu email para confirmar tu cuenta.', 'ok');
-}
-
-async function sendMagic() {
-  const email = document.getElementById('magicEmail').value.trim();
-  if (!email) { showAuthMsg('Ingresá tu email.', 'err'); return; }
-  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin + '/app' } });
-  if (error) showAuthMsg(error.message, 'err');
-  else showAuthMsg('✓ Te mandamos el link al email. Revisá tu bandeja.', 'ok');
-}
-
-async function signOut() {
-  await sb.auth.signOut();
-  closeUserMenu();
-}
+async function signOut(){ await sb.auth.signOut(); closeUserMenu(); }
 
 // ── USER MENU ──
-function toggleUserMenu() {
-  document.getElementById('userMenu').classList.toggle('open');
-}
-function closeUserMenu() {
-  document.getElementById('userMenu').classList.remove('open');
-}
+function toggleUserMenu(){ document.getElementById('userMenu').classList.toggle('open'); }
+function closeUserMenu(){ document.getElementById('userMenu').classList.remove('open'); }
 document.addEventListener('click', e => {
   const pill = document.querySelector('.user-pill');
-  if (pill && !pill.contains(e.target)) closeUserMenu();
+  if(pill && !pill.contains(e.target)) closeUserMenu();
 });
 
 // ── SCREENS ──
+function goHome(){ showScreen('home'); }
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  // Nav tabs desktop
-  ['home','creators'].forEach(n => {
-    const btn = document.getElementById('nt' + n.charAt(0).toUpperCase() + n.slice(1));
-    if (btn) btn.classList.toggle('active', n === name);
-  });
-  // Mobile nav
-  ['home','creators'].forEach(n => {
-    const btn = document.getElementById('mn' + n.charAt(0).toUpperCase() + n.slice(1));
-    if (btn) btn.classList.toggle('active', n === name);
+  document.getElementById('screen-'+name).classList.add('active');
+  ['home','creators','solicitudes'].forEach(n => {
+    const cap = n.charAt(0).toUpperCase()+n.slice(1);
+    const dt = document.getElementById('nt'+cap); if(dt) dt.classList.toggle('active', n===name);
+    const dm = document.getElementById('mn'+cap); if(dm) dm.classList.toggle('active', n===name);
   });
   closeUserMenu();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='solicitudes') loadSolicitudes();
+  if(name==='home') loadRecentSols();
 }
 
 // ── CREATORS ──
+async function loadCreators() {
+  try {
+    const { data, error } = await sb.from('creators').select('*').eq('active',true).order('tier');
+    if(data && data.length>0) allCreators = data;
+  } catch(e) { /* use defaults */ }
+  renderCreators(allCreators);
+}
+
 function renderCreators(list) {
   const grid = document.getElementById('creatorsGrid');
+  if(!list.length){ grid.innerHTML='<p style="color:var(--muted);padding:20px">No hay creators disponibles con ese filtro.</p>'; return; }
   grid.innerHTML = list.map(c => `
-    <div class="creator-card" data-niches="${c.niches.join(',')}" data-tier="${c.tier}">
+    <div class="creator-card">
       <div class="creator-top">
-        <div class="creator-avatar">${c.emoji}</div>
-        <div class="creator-info">
-          <div class="creator-name">${c.name} <span class="creator-verified">✓</span></div>
+        <div class="creator-av">${c.emoji||'🎬'}</div>
+        <div>
+          <div class="creator-name">${c.name} <span style="color:var(--blue);font-size:13px">✓</span></div>
           <div class="creator-tier-row">
-            <span class="tier-badge tier-${c.tier}">${c.tier.toUpperCase()}</span>
-            <span class="creator-rating"><span class="stars">★</span> ${c.rating}</span>
+            <span class="tier-badge tier-${c.tier}">${c.tier?.toUpperCase()}</span>
+            <span class="creator-rating"><span style="color:#f59e0b">★</span> ${c.rating||'5.0'}</span>
           </div>
         </div>
       </div>
-      <div class="creator-bio">${c.bio}</div>
-      <div class="creator-niches">${c.niches.map(n => `<span class="niche-tag">${n}</span>`).join('')}</div>
+      <div class="creator-bio">${c.bio||''}</div>
+      <div class="creator-niches">${(c.niches||[]).map(n=>`<span class="niche-tag">${n}</span>`).join('')}</div>
       <div class="creator-stats">
-        <div class="cstat"><div class="cstat-val">${c.engagement}</div><div class="cstat-label">Engagement</div></div>
-        <div class="cstat"><div class="cstat-val">${c.projects}</div><div class="cstat-label">Proyectos</div></div>
-        <div class="cstat"><div class="cstat-val">${c.delivery}</div><div class="cstat-label">Entrega</div></div>
+        <div class="cstat"><div class="cstat-val">${c.engagement||'—'}</div><div class="cstat-label">Engagement</div></div>
+        <div class="cstat"><div class="cstat-val">${c.projects||'—'}</div><div class="cstat-label">Proyectos</div></div>
+        <div class="cstat"><div class="cstat-val">${c.delivery||'5 días'}</div><div class="cstat-label">Entrega</div></div>
       </div>
       <div class="creator-footer">
-        <div class="creator-price">$90.000 <small>por pieza</small></div>
-        <button class="hire-btn" onclick="openConfirm('${c.id}')">Contratar</button>
+        <div class="creator-price">${c.price ? '$'+Number(c.price).toLocaleString('es-AR') : '$90.000'} <small>por pieza</small></div>
+        <button class="solicitar-btn" onclick='openReqModal(${JSON.stringify(c)})'>Solicitar contenido</button>
       </div>
     </div>
   `).join('');
 }
 
 function filterCreators(filter, btn) {
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  const filtered = filter === 'todas' ? CREATORS : CREATORS.filter(c =>
-    c.tier === filter || c.niches.includes(filter)
-  );
+  const filtered = filter==='todas' ? allCreators : allCreators.filter(c=>c.tier===filter||(c.niches||[]).includes(filter));
   renderCreators(filtered);
 }
 
-// ── HIRE FLOW ──
-function openConfirm(creatorId) {
-  selectedCreator = CREATORS.find(c => c.id === creatorId);
-  if (!selectedCreator) return;
-  document.getElementById('confirmIcon').textContent = selectedCreator.emoji;
-  document.getElementById('confirmTitle').textContent = 'Contratar a ' + selectedCreator.name;
-  document.getElementById('confirmSub').textContent = 'Vas a contratar a ' + selectedCreator.name + ' para producir tu contenido UGC. Entrega en ' + selectedCreator.delivery + '.';
-  document.getElementById('confirmOverlay').classList.add('open');
+// ── REQUEST MODAL ──
+function openReqModal(creator) {
+  selectedCreator = creator;
+  document.getElementById('reqEmoji').textContent = creator.emoji||'🎬';
+  document.getElementById('reqCreatorName').textContent = creator.name;
+  document.getElementById('reqCreatorSub').textContent = creator.followers_label||'';
+  document.getElementById('reqPriceVal').textContent = creator.price ? '$'+Number(creator.price).toLocaleString('es-AR') : '$90.000';
+  // Reset form
+  document.querySelectorAll('.ct-pill').forEach(p=>p.classList.remove('sel'));
+  document.querySelectorAll('.mr-card').forEach((c,i)=>{ c.classList.toggle('sel',i===0); });
+  document.querySelectorAll('.plazo-card').forEach((c,i)=>{ c.classList.toggle('sel',i===0); });
+  document.getElementById('canjeFields').classList.remove('show');
+  document.getElementById('reqBrief').value='';
+  document.getElementById('reqErr').style.display='none';
+  document.getElementById('reqProductDesc').value='';
+  document.getElementById('reqSendsProduct').checked=false;
+  selectedPlazo = 'estandar';
+  updatePriceDisplay();
+  document.getElementById('reqOverlay').classList.add('open');
+}
+function closeReqModal(){ document.getElementById('reqOverlay').classList.remove('open'); selectedCreator=null; }
+
+function togCT(el){ el.classList.toggle('sel'); }
+function selModalidad(el){
+  document.querySelectorAll('.mr-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const val = el.dataset.val;
+  document.getElementById('canjeFields').classList.toggle('show', val==='canje'||val==='mixto');
+  updatePriceDisplay();
+}
+function selPlazo(el){
+  document.querySelectorAll('.plazo-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedPlazo = el.dataset.val;
+  updatePriceDisplay();
+}
+function updatePriceDisplay(){
+  const modalidad = document.querySelector('.mr-card.sel')?.dataset.val||'monetario';
+  const price = selectedCreator?.price||90000;
+  const express = selectedPlazo==='express';
+  if(modalidad==='canje'){ document.getElementById('reqPriceRow').style.display='none'; return; }
+  document.getElementById('reqPriceRow').style.display='flex';
+  const total = express ? Math.round(price*1.5) : price;
+  document.getElementById('reqPriceVal').textContent = '$'+Number(total).toLocaleString('es-AR')+(express?' (Express)':'');
 }
 
-function closeConfirm() {
-  document.getElementById('confirmOverlay').classList.remove('open');
-  selectedCreator = null;
+async function submitRequest() {
+  const cts = [...document.querySelectorAll('.ct-pill.sel')].map(p=>p.dataset.val);
+  if(!cts.length){ showReqErr('Seleccioná al menos un tipo de contenido.'); return; }
+  const modalidad = document.querySelector('.mr-card.sel')?.dataset.val||'monetario';
+  const brief = document.getElementById('reqBrief').value.trim();
+  const isCanje = modalidad==='canje'||modalidad==='mixto';
+  const productDesc = isCanje ? document.getElementById('reqProductDesc').value.trim() : null;
+  if(isCanje && !productDesc){ showReqErr('Describí el producto que ofrecés para el canje.'); return; }
+  const sendsProduct = isCanje ? document.getElementById('reqSendsProduct').checked : false;
+  const price = selectedCreator?.price||90000;
+  const express = selectedPlazo==='express';
+  const amount = modalidad==='canje' ? 0 : (express ? Math.round(price*1.5) : price);
+
+  document.querySelector('.req-submit-btn').disabled = true;
+  document.querySelector('.req-submit-btn').textContent = 'Enviando...';
+
+  const { error } = await sb.from('requests').insert({
+    client_id: currentUser.id,
+    client_email: currentUser.email,
+    creator_id: selectedCreator.id,
+    creator_name: selectedCreator.name,
+    creator_emoji: selectedCreator.emoji||'🎬',
+    content_types: cts,
+    modalidad,
+    product_description: productDesc,
+    sends_product: sendsProduct,
+    brief: brief||null,
+    plazo: selectedPlazo,
+    amount,
+    status: 'pending'
+  });
+
+  document.querySelector('.req-submit-btn').disabled = false;
+  document.querySelector('.req-submit-btn').textContent = 'Enviar solicitud →';
+
+  if(error){ showReqErr('Error al enviar: '+(error.message||'intentá de nuevo.')); return; }
+  closeReqModal();
+  showToast('✓ Solicitud enviada. Te avisamos cuando tengamos respuesta.','ok');
+  await loadSolicitudes();
+  showScreen('solicitudes');
+}
+function showReqErr(msg){ const e=document.getElementById('reqErr'); e.textContent=msg; e.style.display='block'; }
+
+// ── SOLICITUDES ──
+async function loadSolicitudes() {
+  const { data } = await sb.from('requests').select('*').eq('client_id',currentUser.id).order('created_at',{ascending:false});
+  const list = data||[];
+  renderAllSols(list);
+  renderRecentSols(list.slice(0,3));
+  // Badge
+  const pending = list.filter(r=>r.status==='accepted').length;
+  const badge = document.getElementById('pendBadge');
+  if(pending>0){ badge.textContent=pending; badge.style.display='inline'; }
+  else badge.style.display='none';
+}
+async function loadRecentSols() {
+  const { data } = await sb.from('requests').select('*').eq('client_id',currentUser.id).order('created_at',{ascending:false}).limit(3);
+  renderRecentSols(data||[]);
 }
 
-async function confirmHire() {
-  if (!selectedCreator) return;
-  if (!currentUser) { closeConfirm(); showAuth(); return; }
-  closeConfirm();
+function solCardHTML(r) {
+  const statusMap = {
+    pending:   {label:'Pendiente revisión', cls:'sb-pending'},
+    accepted:  {label:'Aceptada ·  Podés pagar', cls:'sb-accepted'},
+    rejected:  {label:'Rechazada', cls:'sb-rejected'},
+    paid:      {label:'Pagada · En producción', cls:'sb-paid'},
+    delivered: {label:'Entregada ✓', cls:'sb-delivered'},
+    completed: {label:'Completada ✓', cls:'sb-completed'},
+    refunded:  {label:'Reembolsada', cls:'sb-pending'},
+  };
+  const st = statusMap[r.status]||{label:r.status, cls:'sb-pending'};
+  const types = (r.content_types||[]).join(', ')||'—';
+  const date = new Date(r.created_at).toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
+  const payBtn = r.status==='accepted' && r.amount>0 ? `<button class="pay-btn" onclick="payRequest('${r.id}',${r.amount},'${r.creator_name.replace(/'/g,"\\'")}')">Pagar $${Number(r.amount).toLocaleString('es-AR')} →</button>` : '';
+  const rejNote = r.status==='rejected' && r.rejection_reason ? `<div style="font-size:11px;color:var(--red);margin-top:4px">Motivo: ${r.rejection_reason}</div>` : '';
+  const adminNote = r.admin_note ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">📝 ${r.admin_note}</div>` : '';
+  return `
+    <div class="sol-card">
+      <div class="sol-emoji">${r.creator_emoji||'🎬'}</div>
+      <div class="sol-info">
+        <div class="sol-creator">${r.creator_name}</div>
+        <div class="sol-types">${types} · ${r.modalidad==='canje'?'Canje':r.modalidad==='mixto'?'Mixto':'Pago monetario'}</div>
+        ${rejNote}${adminNote}
+        <div class="sol-date">${date}</div>
+      </div>
+      <div class="sol-right">
+        <span class="status-badge ${st.cls}">${st.label}</span>
+        ${payBtn}
+      </div>
+    </div>
+  `;
+}
+
+function renderAllSols(list) {
+  const c = document.getElementById('allSolsContainer');
+  if(!list.length){ c.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Todavía no enviaste solicitudes</div><div class="empty-sub">Elegí una creator y solicitá contenido.</div><button class="pc-btn pc-btn-primary" onclick="showScreen('creators')" style="display:inline-block;padding:12px 24px;border-radius:50px;font-size:14px;border:none;cursor:pointer">Ver creators →</button></div>`; return; }
+  c.innerHTML = list.map(solCardHTML).join('');
+}
+function renderRecentSols(list) {
+  const c = document.getElementById('recentSols');
+  if(!list.length){ c.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Todavía no enviaste solicitudes</div><div class="empty-sub">Elegí una creator y solicitá tu primer contenido.</div><button class="pc-btn pc-btn-primary" onclick="showScreen('creators')" style="display:inline-block;padding:12px 24px;border-radius:50px;font-size:14px;border:none;cursor:pointer">Ver creators →</button></div>`; return; }
+  c.innerHTML = list.map(solCardHTML).join('');
+}
+
+// ── PAYMENT ──
+async function payRequest(reqId, amount, creatorName) {
   showLoading('Creando tu orden...');
   try {
     const res = await fetch('/api/crear-pago', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        titulo: `Crealo — Creator ${selectedCreator.name}`,
-        precio: 90000,
-        email: currentUser.email,
-        metadata: { creator: selectedCreator.id, creatorName: selectedCreator.name }
-      })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ titulo:`Crealo — Contenido UGC · ${creatorName}`, precio:amount, email:currentUser.email, metadata:{ request_id:reqId, creator:creatorName } })
     });
-    const data = await res.json();
-    if (data.init_point) {
-      window.location.href = data.init_point;
-    } else {
-      hideLoading();
-      showErr(data.error || 'No se pudo crear el pago. Intentá de nuevo.');
-    }
-  } catch (e) {
-    hideLoading();
-    showErr('Error de conexión. Revisá tu internet e intentá de nuevo.');
-  }
+    const d = await res.json();
+    if(d.init_point) window.location.href = d.init_point;
+    else { hideLoading(); showToast('Error: '+(d.error||'no se pudo crear el pago.'),'err'); }
+  } catch(e){ hideLoading(); showToast('Error de conexión. Intentá de nuevo.','err'); }
 }
 
-// ── LOADING / ERR ──
-function showLoading(title) {
-  document.getElementById('loadingTitle').textContent = title;
-  document.getElementById('loadingOverlay').classList.add('open');
-}
-function hideLoading() {
-  document.getElementById('loadingOverlay').classList.remove('open');
-}
-function showErr(msg) {
-  const s = document.getElementById('errSnack');
-  s.textContent = '⚠️ ' + msg;
-  s.classList.add('show');
-  setTimeout(() => s.classList.remove('show'), 5000);
-}
+// ── UTILS ──
+function showLoading(title){ document.getElementById('loadingTitle').textContent=title||'Procesando...'; document.getElementById('loadingOverlay').classList.add('open'); }
+function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('open'); }
+function showToast(msg,type='ok'){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+type+' show'; setTimeout(()=>t.classList.remove('show'),4000); }
 </script>
 </body>
 </html>
