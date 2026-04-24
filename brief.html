@@ -157,10 +157,10 @@ main{min-height:100vh;padding:100px 24px 60px;display:flex;align-items:flex-star
 .brief-line.highlight{background:rgba(0,255,135,.15);border-left:3px solid var(--green);height:auto;padding:12px 14px;border-radius:6px}
 .brief-line.highlight p{font-size:13px;font-weight:400;color:var(--text);line-height:1.6}
 .brief-blur{
-  position:absolute;bottom:0;left:0;right:0;height:200px;
-  background:linear-gradient(to bottom, transparent 0%, var(--gray2) 65%);
+  position:absolute;bottom:0;left:0;right:0;height:260px;
+  background:linear-gradient(to bottom, transparent 0%, rgba(22,22,32,.97) 55%, var(--gray2) 100%);
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:28px;gap:10px;
+  padding-bottom:32px;gap:8px;
 }
 .lock-icon{font-size:28px}
 .lock-text{font-size:13px;font-weight:600;color:var(--muted);text-align:center}
@@ -357,36 +357,56 @@ main{min-height:100vh;padding:100px 24px 60px;display:flex;align-items:flex-star
         <span class="bp-brand" id="prevBrand">—</span>
       </div>
       <div class="brief-body">
+
+        <!-- ✅ VISIBLE: Descripción de marca -->
         <div>
-          <div class="brief-section-title">Descripción de marca</div>
-          <div class="brief-line highlight"><p id="prevDesc">Marca de productos naturales con foco en piel sensible. Tono cercano, auténtico y empático. La audiencia valora la transparencia en ingredientes y el impacto ambiental positivo.</p></div>
+          <div class="brief-section-title">📌 Descripción de marca</div>
+          <div class="brief-line highlight"><p id="prevDesc">—</p></div>
         </div>
+
+        <!-- ✅ VISIBLE: Objetivo -->
         <div>
-          <div class="brief-section-title">Objetivo de campaña</div>
-          <div class="brief-line medium"></div>
-          <div class="brief-line short"></div>
+          <div class="brief-section-title">🎯 Objetivo de campaña</div>
+          <div class="brief-line highlight"><p id="prevGoal">—</p></div>
         </div>
+
+        <!-- ✅ VISIBLE: Tono (parcial) -->
         <div>
-          <div class="brief-section-title">Instrucciones para la creator</div>
+          <div class="brief-section-title">🎨 Tono y estilo</div>
+          <div class="brief-line highlight"><p id="prevTone">—</p></div>
+        </div>
+
+        <!-- 🔒 BLOQUEADO: el resto -->
+        <div style="opacity:.35;pointer-events:none">
+          <div class="brief-section-title">📋 Instrucciones para la creator</div>
           <div class="brief-line"></div>
           <div class="brief-line medium"></div>
           <div class="brief-line short"></div>
           <div class="brief-line"></div>
+          <div class="brief-line medium"></div>
         </div>
-        <div>
-          <div class="brief-section-title">Hashtags y menciones</div>
+        <div style="opacity:.35;pointer-events:none">
+          <div class="brief-section-title">🎬 Escenas sugeridas</div>
+          <div class="brief-line medium"></div>
           <div class="brief-line short"></div>
+          <div class="brief-line"></div>
         </div>
-        <div>
-          <div class="brief-section-title">Entregables</div>
+        <div style="opacity:.35;pointer-events:none">
+          <div class="brief-section-title">#️⃣ Hashtags y menciones</div>
+          <div class="brief-line short"></div>
+          <div class="brief-line medium"></div>
+        </div>
+        <div style="opacity:.35;pointer-events:none">
+          <div class="brief-section-title">📦 Entregables y plazos</div>
           <div class="brief-line medium"></div>
           <div class="brief-line short"></div>
         </div>
+
       </div>
       <!-- BLUR OVERLAY -->
       <div class="brief-blur">
         <div class="lock-icon">🔒</div>
-        <div class="lock-text">Pagá para desbloquear tu brief completo<br/>y que te asignemos tu creator</div>
+        <div class="lock-text">Desbloqueá el brief completo + creator asignada</div>
       </div>
     </div>
 
@@ -538,11 +558,27 @@ function goStep2(){
 }
 
 function goStep3(){
-  // Populate preview
+  // Populate preview with real content
   document.getElementById('prevBrand').textContent = state.brand;
-  const goalMap = {ventas:'Generar ventas directas',awareness:'Aumentar visibilidad de marca',comunidad:'Crecer en comunidad y engagement',ads:'Crear material para ads pagados'};
+
+  const goalMap = {
+    ventas:    'Generar ventas directas y conversiones medibles en el corto plazo.',
+    awareness: 'Aumentar el reconocimiento de marca y llegar a nuevas audiencias orgánicamente.',
+    comunidad: 'Fortalecer el vínculo con la comunidad existente y crecer en engagement auténtico.',
+    ads:       'Producir material creativo de alto impacto para usar en campañas de publicidad paga.'
+  };
+  const toneMap = {
+    ventas:    `Directo y orientado a la acción. La creator debe mostrar el producto en uso real, destacar 1-2 beneficios clave y cerrar con una llamada a la acción clara ("link en bio", "swipe up", "conseguilo ahora"). Nada de posado ni forzado — tiene que sentirse como una recomendación genuina entre amigas.`,
+    awareness: `Cercano, curioso y aspiracional. El contenido debe presentar ${state.brand} como un descubrimiento genuino. La creator habla en primera persona: "lo encontré", "lo estoy amando", "no lo conocía y ahora no puedo dejar de usarlo". Genera intriga, no spoilear todo.`,
+    comunidad: `Cálido, honesto y conversacional. La creator comparte su experiencia real con ${state.brand}, invita a su audiencia a opinar, genera una conversación. Puede incluir preguntas al final para boosting de comentarios. Autenticidad ante todo.`,
+    ads:       `Gancho fuerte en los primeros 2 segundos. Estructura: problema → solución → beneficio → CTA. El contenido debe funcionar con y sin sonido. Evitar logotipos y textos en pantalla que puedan interferir con las herramientas de la plataforma.`
+  };
+
   document.getElementById('prevDesc').textContent =
-    `${state.product}. Objetivo: ${goalMap[state.goal] || state.goal}. Tono auténtico y cercano, alineado al nicho de la creator elegida.`;
+    `${state.brand} es una marca de ${state.product.toLowerCase().replace(/\.$/,'')}. El contenido debe reflejar la identidad de la marca de forma auténtica, conectando emocionalmente con la audiencia objetivo sin parecer publicidad tradicional.`;
+
+  document.getElementById('prevGoal').textContent = goalMap[state.goal] || 'Generar impacto real en la audiencia.';
+  document.getElementById('prevTone').textContent = toneMap[state.goal] || `Auténtico y cercano, alineado al estilo natural de la creator elegida.`;
 
   // Price summary
   const total = calcTotal();
