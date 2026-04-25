@@ -221,6 +221,32 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
 .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px}
 .modal-close:hover{color:var(--white)}
 
+/* ── BRIEFS SCREEN ── */
+.briefs-header{padding:56px 40px 32px;max-width:1060px;margin:0 auto}
+.briefs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:0 40px 60px;max-width:1060px;margin:0 auto}
+.brief-card{background:var(--gray2);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .2s;position:relative}
+.brief-card:hover{border-color:rgba(0,113,227,.3)}
+.brief-card-brand{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
+.brief-card-goal{font-size:12px;color:var(--muted);margin-bottom:10px}
+.brief-card-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.brief-chip{font-size:10px;background:var(--gray3);color:var(--muted);padding:2px 8px;border-radius:10px}
+.brief-card-date{font-size:11px;color:var(--gray4)}
+.brief-card-actions{display:flex;gap:8px;margin-top:12px}
+.brief-use-btn{flex:1;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:8px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:.2s}
+.brief-use-btn:hover{background:var(--blue-d)}
+.brief-del-btn{background:var(--gray3);color:var(--muted);border:none;border-radius:8px;padding:8px 12px;font-family:'Poppins',sans-serif;font-size:12px;cursor:pointer}
+.brief-del-btn:hover{color:var(--red)}
+
+/* ── FILE UPLOAD ── */
+.file-drop{border:1.5px dashed var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:8px}
+.file-drop:hover{border-color:var(--blue);background:rgba(0,113,227,.04)}
+.file-drop input{display:none}
+.file-drop-label{font-size:12px;color:var(--muted)}
+.file-list{display:flex;flex-direction:column;gap:5px}
+.file-item{display:flex;align-items:center;justify-content:space-between;background:var(--gray3);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--text)}
+.file-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0 2px}
+.file-remove:hover{color:var(--red)}
+
 /* ── CHAT ── */
 .chat-bubble{max-width:78%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.5;word-break:break-word}
 .chat-bubble.mine{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
@@ -309,6 +335,7 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
       <li><button class="nav-tab active" id="ntHome" onclick="showScreen('home')">Inicio</button></li>
       <li><button class="nav-tab" id="ntCreators" onclick="showScreen('creators')">Creators</button></li>
       <li><button class="nav-tab" id="ntSolicitudes" onclick="showScreen('solicitudes')">Mis solicitudes <span id="pendBadge" style="display:none;background:var(--blue);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:4px"></span></button></li>
+      <li><button class="nav-tab" id="ntBriefs" onclick="showScreen('briefs')">📄 Mis briefs</button></li>
     </ul>
     <div class="nav-right">
       <div class="user-pill" onclick="toggleUserMenu()">
@@ -318,6 +345,7 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
           <div class="umi" onclick="goHome()">🏠 Inicio</div>
           <div class="umi" onclick="showScreen('creators')">🎬 Creators</div>
           <div class="umi" onclick="showScreen('solicitudes')">📋 Mis solicitudes</div>
+          <div class="umi" onclick="showScreen('briefs')">📄 Mis briefs</div>
           <div style="height:1px;background:var(--border);margin:4px 0"></div>
           <div class="umi danger" onclick="signOut()">← Cerrar sesión</div>
         </div>
@@ -411,12 +439,23 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
       </div>
     </div>
 
+    <!-- MIS BRIEFS -->
+    <div class="screen" id="screen-briefs">
+      <div class="briefs-header">
+        <h2 style="font-size:clamp(24px,3vw,38px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:8px">Mis briefs</h2>
+        <p style="font-size:15px;color:var(--muted);margin-bottom:20px">Todos los briefs que generaste con IA. Podés adjuntarlos a cualquier solicitud.</p>
+        <a href="/brief" style="display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;text-decoration:none;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600">+ Crear nuevo brief</a>
+      </div>
+      <div id="briefsGrid" class="briefs-grid"></div>
+    </div>
+
   </div><!-- /app-main -->
 
   <div class="mob-nav">
     <button class="mob-nav-item active" id="mnHome" onclick="showScreen('home')"><span class="mni">🏠</span>Inicio</button>
     <button class="mob-nav-item" id="mnCreators" onclick="showScreen('creators')"><span class="mni">🎬</span>Creators</button>
     <button class="mob-nav-item" id="mnSolicitudes" onclick="showScreen('solicitudes')"><span class="mni">📋</span>Solicitudes</button>
+    <button class="mob-nav-item" id="mnBriefs" onclick="showScreen('briefs')"><span class="mni">📄</span>Briefs</button>
   </div>
 </div><!-- /appView -->
 
@@ -467,12 +506,23 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
     </div>
 
     <div class="req-section">
-      <span class="req-label">Brief / Instrucciones adicionales</span>
-      <div id="savedBriefBanner" style="display:none;background:rgba(0,113,227,.08);border:1px solid rgba(0,113,227,.2);border-radius:10px;padding:10px 13px;margin-bottom:8px;display:none;align-items:center;justify-content:space-between;gap:8px">
-        <span style="font-size:12px;color:var(--blue-l)">📋 Tenés un brief guardado de Crealo</span>
-        <button onclick="loadSavedBrief()" style="background:var(--blue);color:#fff;border:none;border-radius:7px;padding:5px 12px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer">Vincular →</button>
-      </div>
+      <span class="req-label">Adjuntar brief guardado</span>
+      <div id="briefPickerList" style="display:flex;flex-direction:column;gap:7px;margin-bottom:8px"></div>
+      <a href="/brief" style="font-size:12px;color:var(--blue)">+ Crear nuevo brief →</a>
+    </div>
+
+    <div class="req-section">
+      <span class="req-label">Instrucciones adicionales</span>
       <textarea class="req-textarea" id="reqBrief" placeholder="Describí qué necesitás: tono, producto, referencias, ángulo del mensaje, etc."></textarea>
+    </div>
+
+    <div class="req-section">
+      <span class="req-label">Adjuntar documentos o imágenes (opcional)</span>
+      <div class="file-drop" onclick="document.getElementById('reqFiles').click()">
+        <input type="file" id="reqFiles" multiple accept="image/*,.pdf,.doc,.docx" onchange="handleFiles(this.files)"/>
+        <div class="file-drop-label">📎 Hacé click para subir archivos<br><span style="font-size:10px">Imágenes, PDF, Word · máx 10MB por archivo</span></div>
+      </div>
+      <div id="fileList" class="file-list"></div>
     </div>
 
     <div class="req-section">
@@ -505,15 +555,18 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
 <!-- CHAT MODAL -->
 <div class="req-overlay" id="chatOverlay" style="align-items:flex-end;padding:0">
   <div class="req-modal" style="border-radius:20px 20px 0 0;max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden">
-    <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div id="chatCreatorEmoji" style="font-size:22px;width:38px;height:38px;background:var(--gray3);border-radius:10px;display:flex;align-items:center;justify-content:center">🎬</div>
-        <div>
-          <div id="chatCreatorName" style="font-size:14px;font-weight:600;color:var(--white)">Creator</div>
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0">
+        <div id="chatCreatorEmoji" style="font-size:22px;width:38px;height:38px;background:var(--gray3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">🎬</div>
+        <div style="min-width:0">
+          <div id="chatCreatorName" style="font-size:14px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Creator</div>
           <div style="font-size:11px;color:var(--green)">● En línea</div>
         </div>
       </div>
-      <button onclick="closeChat()" style="background:var(--gray3);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px">✕</button>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <button id="chatSolicitarBtn" onclick="chatToSolicitar()" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:7px 13px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">Solicitar →</button>
+        <button onclick="closeChat()" style="background:var(--gray3);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;flex-shrink:0">✕</button>
+      </div>
     </div>
     <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:55vh"></div>
     <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0">
@@ -567,6 +620,7 @@ async function initApp() {
   showApp();
   await loadCreators();
   await loadSolicitudes();
+  loadBriefs();
 }
 
 function showApp() {
@@ -634,7 +688,7 @@ function goHome(){ showScreen('home'); }
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
-  ['home','creators','solicitudes'].forEach(n => {
+  ['home','creators','solicitudes','briefs'].forEach(n => {
     const cap = n.charAt(0).toUpperCase()+n.slice(1);
     const dt = document.getElementById('nt'+cap); if(dt) dt.classList.toggle('active', n===name);
     const dm = document.getElementById('mn'+cap); if(dm) dm.classList.toggle('active', n===name);
@@ -643,6 +697,7 @@ function showScreen(name) {
   window.scrollTo({top:0,behavior:'smooth'});
   if(name==='solicitudes') loadSolicitudes();
   if(name==='home') loadRecentSols();
+  if(name==='briefs') loadBriefs();
 }
 
 // ── CREATORS ──
@@ -678,7 +733,10 @@ function renderCreators(list) {
       </div>
       <div class="creator-footer">
         <div class="creator-price">${c.price ? '$'+Number(c.price).toLocaleString('es-AR') : '$90.000'} <small>por pieza</small></div>
-        <button class="solicitar-btn" onclick='openReqModal(${JSON.stringify(c)})'>Solicitar contenido</button>
+        <div style="display:flex;gap:7px">
+          <button class="solicitar-btn" style="flex:1" onclick='openReqModal(${JSON.stringify(c)})'>Solicitar contenido</button>
+          <button onclick='openDirectChat(${JSON.stringify(c)})' style="background:var(--gray3);border:1px solid var(--border);color:var(--text);padding:0 13px;border-radius:10px;font-size:16px;cursor:pointer;transition:.2s" title="Mandar mensaje">💬</button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -707,9 +765,11 @@ function openReqModal(creator) {
   document.getElementById('reqErr').style.display='none';
   document.getElementById('reqProductDesc').value='';
   document.getElementById('reqSendsProduct').checked=false;
+  document.getElementById('fileList').innerHTML='';
+  selectedFiles=[];
   selectedPlazo = 'estandar';
   updatePriceDisplay();
-  checkSavedBrief();
+  renderBriefPicker();
   document.getElementById('reqOverlay').classList.add('open');
 }
 function closeReqModal(){ document.getElementById('reqOverlay').classList.remove('open'); selectedCreator=null; }
@@ -742,36 +802,137 @@ function updatePriceDisplay(){
   document.getElementById('reqPriceVal').innerHTML = label;
 }
 
-// Brief linking from sessionStorage
-function checkSavedBrief(){
+// ── BRIEFS (localStorage) ──────────────────────────────────────────────────────
+function getSavedBriefs() {
+  try { return JSON.parse(localStorage.getItem('crealo_briefs') || '[]'); } catch(e){ return []; }
+}
+function saveBriefLocally(briefData) {
+  const briefs = getSavedBriefs();
+  briefs.unshift({ ...briefData, id: Date.now(), savedAt: new Date().toISOString() });
+  localStorage.setItem('crealo_briefs', JSON.stringify(briefs.slice(0,20))); // keep latest 20
+}
+function deleteBrief(id) {
+  const briefs = getSavedBriefs().filter(b => b.id !== id);
+  localStorage.setItem('crealo_briefs', JSON.stringify(briefs));
+  loadBriefs();
+  showToast('Brief eliminado.','ok');
+}
+function loadBriefs() {
+  // Also pick up any brief from sessionStorage (just created)
   try {
-    const saved = sessionStorage.getItem('crealo_state');
-    if(!saved) return;
-    const s = JSON.parse(saved);
-    if(s.brand || s.goal){
-      document.getElementById('savedBriefBanner').style.display='flex';
+    const sess = sessionStorage.getItem('crealo_state');
+    if(sess){
+      const s = JSON.parse(sess);
+      if(s.brand){
+        const existing = getSavedBriefs();
+        if(!existing.find(b => b.brand===s.brand && b.goal===s.goal)){
+          saveBriefLocally(s);
+          sessionStorage.removeItem('crealo_state');
+        }
+      }
     }
   } catch(e){}
+  renderBriefs(getSavedBriefs());
 }
-function loadSavedBrief(){
-  try {
-    const saved = sessionStorage.getItem('crealo_state');
-    if(!saved) return;
-    const s = JSON.parse(saved);
-    const parts = [];
-    if(s.brand) parts.push(`Marca: ${s.brand}`);
-    if(s.goal) parts.push(`Objetivo: ${s.goal}`);
-    if(s.platform) parts.push(`Plataforma: ${s.platform}`);
-    if(s.duration) parts.push(`Duración: ${s.duration}`);
-    if(s.format) parts.push(`Formato: ${s.format}`);
-    if(s.style) parts.push(`Estilo: ${s.style}`);
-    if(s.audience) parts.push(`Audiencia: ${s.audience}`);
-    if(s.colors) parts.push(`Paleta: ${s.colors}`);
-    if(s.reference) parts.push(`Referencias: ${s.reference}`);
-    document.getElementById('reqBrief').value = parts.join('\n');
-    document.getElementById('savedBriefBanner').style.display='none';
-    showToast('✓ Brief vinculado.','ok');
-  } catch(e){}
+function renderBriefs(briefs) {
+  const grid = document.getElementById('briefsGrid');
+  if(!briefs.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📄</div><div class="empty-title">Todavía no creaste ningún brief</div><div class="empty-sub">Usá el generador con IA para crear tu primer brief profesional.</div><a href="/brief" style="display:inline-block;background:var(--blue);color:#fff;text-decoration:none;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;margin-top:8px">Crear mi brief →</a></div>`;
+    return;
+  }
+  grid.innerHTML = briefs.map(b => `
+    <div class="brief-card">
+      <div class="brief-card-brand">${b.brand||'Sin nombre'}</div>
+      <div class="brief-card-goal">${b.goal||''}</div>
+      <div class="brief-card-chips">
+        ${b.platform?`<span class="brief-chip">📱 ${b.platform}</span>`:''}
+        ${b.format?`<span class="brief-chip">🎬 ${b.format}</span>`:''}
+        ${b.style?`<span class="brief-chip">🎨 ${b.style}</span>`:''}
+      </div>
+      <div class="brief-card-date">${b.savedAt ? new Date(b.savedAt).toLocaleDateString('es-AR',{day:'2-digit',month:'short',year:'numeric'}) : ''}</div>
+      <div class="brief-card-actions">
+        <button class="brief-use-btn" onclick="useBriefInRequest(${b.id})">📎 Usar en solicitud</button>
+        <button class="brief-del-btn" onclick="deleteBrief(${b.id})">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+function renderBriefPicker() {
+  const briefs = getSavedBriefs();
+  const container = document.getElementById('briefPickerList');
+  if(!briefs.length){
+    container.innerHTML = '<span style="font-size:12px;color:var(--muted)">Aún no tenés briefs guardados. <a href="/brief" style="color:var(--blue)">Crear uno →</a></span>';
+    return;
+  }
+  container.innerHTML = briefs.map(b => `
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--gray3);border-radius:9px;padding:9px 12px;border:1px solid var(--border)">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--white)">${b.brand||'Sin nombre'}</div>
+        <div style="font-size:11px;color:var(--muted)">${b.goal||''} ${b.platform?'· '+b.platform:''}</div>
+      </div>
+      <button onclick="attachBrief(${b.id})" style="background:var(--blue);color:#fff;border:none;border-radius:7px;padding:5px 11px;font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;cursor:pointer" id="attachBtn_${b.id}">Vincular</button>
+    </div>
+  `).join('');
+}
+let attachedBriefId = null;
+function attachBrief(id) {
+  const briefs = getSavedBriefs();
+  const b = briefs.find(x => x.id === id);
+  if(!b) return;
+  attachedBriefId = id;
+  const parts = [];
+  if(b.brand) parts.push(`Marca: ${b.brand}`);
+  if(b.goal) parts.push(`Objetivo: ${b.goal}`);
+  if(b.platform) parts.push(`Plataforma: ${b.platform}`);
+  if(b.duration) parts.push(`Duración: ${b.duration}`);
+  if(b.format) parts.push(`Formato: ${b.format}`);
+  if(b.style) parts.push(`Estilo: ${b.style}`);
+  if(b.audience) parts.push(`Audiencia: ${b.audience}`);
+  if(b.colors) parts.push(`Paleta: ${b.colors}`);
+  if(b.reference) parts.push(`Referencias: ${b.reference}`);
+  document.getElementById('reqBrief').value = parts.join('\n');
+  // Mark as linked
+  document.querySelectorAll('[id^="attachBtn_"]').forEach(btn => { btn.textContent='Vincular'; btn.style.background='var(--blue)'; });
+  const btn = document.getElementById('attachBtn_'+id);
+  if(btn){ btn.textContent='✓ Vinculado'; btn.style.background='var(--green)'; }
+  showToast('✓ Brief vinculado.','ok');
+}
+function useBriefInRequest(id) {
+  attachedBriefId = id;
+  showScreen('creators');
+  showToast('Elegí una creator para usar este brief.','ok');
+}
+
+// ── FILE UPLOAD ────────────────────────────────────────────────────────────────
+let selectedFiles = [];
+function handleFiles(files) {
+  for(const f of files){
+    if(f.size > 10*1024*1024){ showToast('El archivo "'+f.name+'" supera los 10MB.','err'); continue; }
+    if(!selectedFiles.find(sf => sf.name===f.name && sf.size===f.size)) selectedFiles.push(f);
+  }
+  renderFileList();
+}
+function renderFileList() {
+  document.getElementById('fileList').innerHTML = selectedFiles.map((f,i) => `
+    <div class="file-item">
+      <span>📎 ${f.name} <span style="color:var(--muted)">(${(f.size/1024).toFixed(0)}KB)</span></span>
+      <button class="file-remove" onclick="removeFile(${i})">✕</button>
+    </div>
+  `).join('');
+}
+function removeFile(i) { selectedFiles.splice(i,1); renderFileList(); }
+async function uploadFiles(requestId) {
+  if(!selectedFiles.length) return [];
+  const urls = [];
+  for(const f of selectedFiles){
+    const path = `${currentUser.id}/${requestId}/${Date.now()}_${f.name}`;
+    const { data, error } = await sb.storage.from('request-files').upload(path, f, { upsert:true });
+    if(!error && data){
+      const { data: urlData } = sb.storage.from('request-files').getPublicUrl(path);
+      if(urlData?.publicUrl) urls.push(urlData.publicUrl);
+    }
+  }
+  return urls;
 }
 
 async function submitRequest() {
@@ -788,10 +949,10 @@ async function submitRequest() {
   const base = isMixto ? Math.round(price*0.7) : price;
   const amount = express ? Math.round(base*1.5) : base;
 
-  document.querySelector('.req-submit-btn').disabled = true;
-  document.querySelector('.req-submit-btn').textContent = 'Enviando...';
+  const btn = document.querySelector('.req-submit-btn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
 
-  const { error } = await sb.from('requests').insert({
+  const { data: inserted, error } = await sb.from('requests').insert({
     client_id: currentUser.id,
     client_email: currentUser.email,
     creator_id: selectedCreator.id,
@@ -805,12 +966,19 @@ async function submitRequest() {
     plazo: selectedPlazo,
     amount,
     status: 'pending'
-  });
+  }).select().single();
 
-  document.querySelector('.req-submit-btn').disabled = false;
-  document.querySelector('.req-submit-btn').textContent = 'Enviar solicitud →';
+  if(error){ btn.disabled=false; btn.textContent='Enviar solicitud →'; showReqErr('Error al enviar: '+(error.message||'intentá de nuevo.')); return; }
 
-  if(error){ showReqErr('Error al enviar: '+(error.message||'intentá de nuevo.')); return; }
+  // Upload files if any
+  if(selectedFiles.length && inserted?.id){
+    btn.textContent = 'Subiendo archivos...';
+    const urls = await uploadFiles(inserted.id);
+    if(urls.length) await sb.from('requests').update({ attachments: urls }).eq('id', inserted.id);
+  }
+
+  btn.disabled=false; btn.textContent='Enviar solicitud →';
+  attachedBriefId=null; selectedFiles=[];
   closeReqModal();
   showToast('✓ Solicitud enviada. Te avisamos cuando tengamos respuesta.','ok');
   await loadSolicitudes();
@@ -901,34 +1069,69 @@ function showToast(msg,type='ok'){ const t=document.getElementById('toast'); t.t
 
 // ── CHAT ──
 let activeChatReqId = null;
+let activeChatCreator = null; // full creator object for direct chats
 let chatChannel = null;
 
+// Open chat from a solicitud card
 async function openChat(reqId, creatorName, creatorEmoji){
   activeChatReqId = reqId;
+  activeChatCreator = { name: creatorName, emoji: creatorEmoji };
   document.getElementById('chatCreatorName').textContent = creatorName;
   document.getElementById('chatCreatorEmoji').textContent = creatorEmoji;
   document.getElementById('chatInput').value = '';
+  document.getElementById('chatSolicitarBtn').style.display = 'none'; // already has a request
   document.getElementById('chatOverlay').classList.add('open');
   await fetchMessages();
-  // Realtime subscription
+  subscribeChat('req-'+reqId);
+}
+
+// Open direct chat from creator card (no request yet)
+async function openDirectChat(creator){
+  activeChatReqId = null;
+  activeChatCreator = creator;
+  document.getElementById('chatCreatorName').textContent = creator.name;
+  document.getElementById('chatCreatorEmoji').textContent = creator.emoji||'🎬';
+  document.getElementById('chatInput').value = '';
+  document.getElementById('chatSolicitarBtn').style.display = 'block';
+  document.getElementById('chatOverlay').classList.add('open');
+  await fetchMessages();
+  subscribeChat('direct-'+creator.id+'-'+currentUser.id);
+}
+
+// Button in chat header → open request modal for this creator
+function chatToSolicitar(){
+  closeChat();
+  if(activeChatCreator) openReqModal(activeChatCreator);
+}
+
+function subscribeChat(channelKey){
   if(chatChannel) chatChannel.unsubscribe();
-  chatChannel = sb.channel('chat-'+reqId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'request_id=eq.'+reqId},()=>fetchMessages())
+  chatChannel = sb.channel(channelKey)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},()=>fetchMessages())
     .subscribe();
 }
 
 function closeChat(){
   document.getElementById('chatOverlay').classList.remove('open');
   if(chatChannel){ chatChannel.unsubscribe(); chatChannel=null; }
-  activeChatReqId = null;
 }
 
 async function fetchMessages(){
-  if(!activeChatReqId) return;
-  const { data } = await sb.from('messages').select('*').eq('request_id', activeChatReqId).order('created_at');
+  let query;
+  if(activeChatReqId){
+    query = sb.from('messages').select('*').eq('request_id', activeChatReqId);
+  } else if(activeChatCreator){
+    // Direct chat: filter by creator_id and user_id (no request)
+    query = sb.from('messages').select('*')
+      .is('request_id', null)
+      .eq('creator_id', activeChatCreator.id)
+      .eq('user_id', currentUser.id);
+  } else return;
+
+  const { data } = await query.order('created_at');
   const box = document.getElementById('chatMessages');
   if(!data || !data.length){
-    box.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;margin:auto;padding:20px">Todavía no hay mensajes. ¡Escribile a la creator!</div>';
+    box.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:24px">Todavía no hay mensajes. ¡Escribile!</div>';
     return;
   }
   box.innerHTML = data.map(m => {
@@ -946,15 +1149,18 @@ async function fetchMessages(){
 async function sendMessage(){
   const input = document.getElementById('chatInput');
   const content = input.value.trim();
-  if(!content || !activeChatReqId) return;
+  if(!content) return;
   input.value = '';
-  input.style.height = '42px';
-  const { error } = await sb.from('messages').insert({
-    request_id: activeChatReqId,
-    sender_type: 'client',
-    content
-  });
+  const payload = { sender_type:'client', content };
+  if(activeChatReqId){
+    payload.request_id = activeChatReqId;
+  } else if(activeChatCreator){
+    payload.creator_id = activeChatCreator.id;
+    payload.user_id = currentUser.id;
+  } else return;
+  const { error } = await sb.from('messages').insert(payload);
   if(error) showToast('Error al enviar: '+error.message, 'err');
+  else fetchMessages();
 }
 </script>
 </body>
