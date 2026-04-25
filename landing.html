@@ -461,8 +461,8 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 (async()=>{
   try{
     const sb = supabase.createClient(
-      'https://iksohyaecjpwdmlkhbkp.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlrc29oeWFlY2pwd2RtbGtoYmtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjkxMzYsImV4cCI6MjA2MTEwNTEzNn0.DQQCxgmJUqvehBVjkL_N7P0fC9GIFiJJzXLGYoIaUZk'
+      'https://dtopwxldxlwgdvpjcegg.supabase.co',
+      'sb_publishable_W54QQPJ_WFtvI67N5SPniQ_jZ1kpCES'
     );
     const { data:{ session } } = await sb.auth.getSession();
     if(session){
