@@ -552,6 +552,17 @@ body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);
   </div>
 </div>
 
+<!-- REEL MODAL -->
+<div class="req-overlay" id="reelOverlay" onclick="if(event.target===this)closeReel()">
+  <div style="background:var(--gray2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;overflow:hidden;position:relative">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+      <div id="reelCreatorName" style="font-size:14px;font-weight:600;color:var(--white)"></div>
+      <button onclick="closeReel()" style="background:var(--gray3);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px">✕</button>
+    </div>
+    <div id="reelContainer" style="width:100%;min-height:520px;display:flex;align-items:center;justify-content:center;background:#000"></div>
+  </div>
+</div>
+
 <!-- CHAT MODAL -->
 <div class="req-overlay" id="chatOverlay" style="align-items:flex-end;padding:0">
   <div class="req-modal" style="border-radius:20px 20px 0 0;max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden">
@@ -731,6 +742,11 @@ function renderCreators(list) {
         <div class="cstat"><div class="cstat-val">${c.projects||'—'}</div><div class="cstat-label">Proyectos</div></div>
         <div class="cstat"><div class="cstat-val">${c.delivery||'5 días'}</div><div class="cstat-label">Entrega</div></div>
       </div>
+      ${c.instagram_url||c.reel_url ? `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-top:10px;border-top:1px solid var(--border)">
+        ${c.instagram_url ? `<a href="${c.instagram_url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);text-decoration:none;background:var(--gray3);padding:4px 10px;border-radius:8px;transition:.2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">📷 Instagram</a>` : ''}
+        ${c.reel_url ? `<button onclick='openReel("${c.reel_url}","${(c.name||'').replace(/'/g,"\\'")}")' style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--white);background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:600">▶ Ver reel</button>` : ''}
+      </div>` : ''}
       <div class="creator-footer">
         <div class="creator-price">${c.price ? '$'+Number(c.price).toLocaleString('es-AR') : '$90.000'} <small>por pieza</small></div>
         <div style="display:flex;gap:7px">
@@ -1066,6 +1082,27 @@ async function payRequest(reqId, amount, creatorName) {
 function showLoading(title){ document.getElementById('loadingTitle').textContent=title||'Procesando...'; document.getElementById('loadingOverlay').classList.add('open'); }
 function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('open'); }
 function showToast(msg,type='ok'){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+type+' show'; setTimeout(()=>t.classList.remove('show'),4000); }
+
+// ── REEL EMBED ──
+function openReel(url, creatorName){
+  document.getElementById('reelCreatorName').textContent = '▶ ' + creatorName;
+  // Extract shortcode from Instagram URL
+  const match = url.match(/\/(reel|p)\/([A-Za-z0-9_-]+)/);
+  const container = document.getElementById('reelContainer');
+  if(match){
+    const type = match[1]; // 'reel' or 'p'
+    const shortcode = match[2];
+    const embedUrl = `https://www.instagram.com/${type}/${shortcode}/embed/`;
+    container.innerHTML = `<iframe src="${embedUrl}" width="400" height="520" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" style="border:0;display:block;max-width:100%"></iframe>`;
+  } else {
+    container.innerHTML = `<div style="text-align:center;padding:40px"><a href="${url}" target="_blank" style="color:var(--blue);font-size:14px">Ver en Instagram →</a></div>`;
+  }
+  document.getElementById('reelOverlay').classList.add('open');
+}
+function closeReel(){
+  document.getElementById('reelOverlay').classList.remove('open');
+  document.getElementById('reelContainer').innerHTML = '';
+}
 
 // ── CHAT ──
 let activeChatReqId = null;

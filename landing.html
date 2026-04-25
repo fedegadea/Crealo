@@ -164,6 +164,8 @@ nav{
 .c-stat-val{font-size:15px;font-weight:700;color:var(--white)}
 .c-stat-label{font-size:9px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
 .creator-rating{position:absolute;top:16px;right:16px;font-size:10px;color:var(--muted)}
+.creator-solicitar-btn{display:block;margin-top:14px;background:var(--blue);color:#fff;text-decoration:none;text-align:center;padding:10px;border-radius:10px;font-size:12px;font-weight:600;transition:background .2s}
+.creator-solicitar-btn:hover{background:var(--blue-d)}
 .creator-rating .stars{color:#f59e0b}
 
 /* ── WHY ── */
@@ -351,40 +353,46 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
       <div class="creator-top"><div class="creator-avatar">🧡</div><div><div class="creator-name">Valentina R.</div><div class="creator-tier">Micro · 28K</div></div></div>
       <div class="creator-niches"><span class="niche-tag">Belleza</span><span class="niche-tag">Skincare</span><span class="niche-tag">Lifestyle</span></div>
       <div class="creator-stats"><div><div class="c-stat-val">6.8%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">47</div><div class="c-stat-label">Proyectos</div></div></div>
+      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
     </div>
     <div class="creator-card">
       <div class="creator-rating"><span class="stars">★★★★★</span> 4.9</div>
       <div class="creator-top"><div class="creator-avatar">💚</div><div><div class="creator-name">Sofía M.</div><div class="creator-tier">Nano · 9K</div></div></div>
       <div class="creator-niches"><span class="niche-tag">Fitness</span><span class="niche-tag">Nutrición</span><span class="niche-tag">Wellness</span></div>
       <div class="creator-stats"><div><div class="c-stat-val">12.4%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">23</div><div class="c-stat-label">Proyectos</div></div></div>
+      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
     </div>
     <div class="creator-card">
       <div class="creator-rating"><span class="stars">★★★★★</span> 5.0</div>
       <div class="creator-top"><div class="creator-avatar">💜</div><div><div class="creator-name">Camila T.</div><div class="creator-tier">Micro · 41K</div></div></div>
       <div class="creator-niches"><span class="niche-tag">Moda</span><span class="niche-tag">Tendencias</span><span class="niche-tag">OOTD</span></div>
       <div class="creator-stats"><div><div class="c-stat-val">5.2%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">62</div><div class="c-stat-label">Proyectos</div></div></div>
+      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
     </div>
     <div class="creator-card">
       <div class="creator-rating"><span class="stars">★★★★★</span> 4.8</div>
       <div class="creator-top"><div class="creator-avatar">🌸</div><div><div class="creator-name">Martina L.</div><div class="creator-tier">Nano · 7K</div></div></div>
       <div class="creator-niches"><span class="niche-tag">Hogar</span><span class="niche-tag">Deco</span><span class="niche-tag">Organización</span></div>
       <div class="creator-stats"><div><div class="c-stat-val">14.1%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">19</div><div class="c-stat-label">Proyectos</div></div></div>
+      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
     </div>
     <div class="creator-card">
       <div class="creator-rating"><span class="stars">★★★★★</span> 4.9</div>
       <div class="creator-top"><div class="creator-avatar">🍊</div><div><div class="creator-name">Julieta A.</div><div class="creator-tier">Micro · 33K</div></div></div>
       <div class="creator-niches"><span class="niche-tag">Gastronomía</span><span class="niche-tag">Recetas</span><span class="niche-tag">Foodie</span></div>
       <div class="creator-stats"><div><div class="c-stat-val">7.3%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">38</div><div class="c-stat-label">Proyectos</div></div></div>
+      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
     </div>
     <div class="creator-card">
       <div class="creator-rating"><span class="stars">★★★★★</span> 5.0</div>
       <div class="creator-top"><div class="creator-avatar">⭐</div><div><div class="creator-name">Lucía P.</div><div class="creator-tier">Macro · 120K</div></div></div>
       <div class="creator-niches"><span class="niche-tag">Tech</span><span class="niche-tag">Productividad</span><span class="niche-tag">Emprendimiento</span></div>
       <div class="creator-stats"><div><div class="c-stat-val">4.1%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">91</div><div class="c-stat-label">Proyectos</div></div></div>
+      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
     </div>
   </div>
   <div style="text-align:center;margin-top:32px">
-    <a href="/creators" class="btn-ghost">Ver todas las creators →</a>
+    <a href="/app" onclick="goToApp(event)" class="btn-ghost">Ver todas las creators →</a>
   </div>
 </div>
 
@@ -443,9 +451,35 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// Scroll animations
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Session check — if logged in, redirect logo to /app and show account button
+(async()=>{
+  try{
+    const sb = supabase.createClient(
+      'https://iksohyaecjpwdmlkhbkp.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlrc29oeWFlY2pwd2RtbGtoYmtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MjkxMzYsImV4cCI6MjA2MTEwNTEzNn0.DQQCxgmJUqvehBVjkL_N7P0fC9GIFiJJzXLGYoIaUZk'
+    );
+    const { data:{ session } } = await sb.auth.getSession();
+    if(session){
+      // Logo goes to app
+      document.querySelector('.nav-logo').href = '/app';
+      // Swap nav CTA to "Mi cuenta"
+      const cta = document.querySelector('.nav-cta');
+      if(cta){ cta.textContent='Mi cuenta →'; cta.href='/app'; }
+    }
+  }catch(e){}
+})();
+
+// Gate: any button going to creator flow checks session first
+function goToApp(e){
+  e.preventDefault();
+  window.location.href='/app';
+}
 </script>
 </body>
 </html>

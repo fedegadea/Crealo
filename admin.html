@@ -377,6 +377,10 @@ a{color:var(--blue);text-decoration:none}
         <input id="cProjects" class="form-input" type="number" placeholder="0"/>
       </div>
     </div>
+    <label class="form-label">Instagram (URL del perfil)</label>
+    <input id="cInstagram" class="form-input" type="url" placeholder="https://www.instagram.com/nombreusuario/"/>
+    <label class="form-label">Reel destacado (URL del reel)</label>
+    <input id="cReel" class="form-input" type="url" placeholder="https://www.instagram.com/reel/XXXXXXX/"/>
     <div class="toggle-row">
       <span class="toggle-label">Perfil activo (visible para clientes)</span>
       <label class="toggle-switch">
@@ -765,6 +769,8 @@ function openCreatorModal(creator) {
   document.getElementById('cDelivery').value      = isNew ? '5 días' : (creator.delivery || '5 días');
   document.getElementById('cProjects').value      = isNew ? '0' : (creator.projects || 0);
   document.getElementById('cActive').checked      = isNew ? true : (creator.active !== false);
+  document.getElementById('cInstagram').value     = isNew ? '' : (creator.instagram_url || '');
+  document.getElementById('cReel').value          = isNew ? '' : (creator.reel_url || '');
   document.getElementById('creatorErr').style.display = 'none';
   openModal('creatorModal');
 }
@@ -790,6 +796,8 @@ async function saveCreator() {
     delivery:         document.getElementById('cDelivery').value.trim() || '5 días',
     projects:         parseInt(document.getElementById('cProjects').value) || 0,
     active:           document.getElementById('cActive').checked,
+    instagram_url:    document.getElementById('cInstagram').value.trim() || null,
+    reel_url:         document.getElementById('cReel').value.trim() || null,
     updated_at:       new Date().toISOString(),
   };
 
