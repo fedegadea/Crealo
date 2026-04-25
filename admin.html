@@ -380,7 +380,10 @@ a{color:var(--blue);text-decoration:none}
     <label class="form-label">Instagram (URL del perfil)</label>
     <input id="cInstagram" class="form-input" type="url" placeholder="https://www.instagram.com/nombreusuario/"/>
     <label class="form-label">Reel destacado (URL del reel)</label>
-    <input id="cReel" class="form-input" type="url" placeholder="https://www.instagram.com/reel/XXXXXXX/"/>
+    <input id="cReel" class="form-input" type="url" placeholder="https://www.instagram.com/reel/XXXXXXX/" oninput="previewReel(this.value)" style="margin-bottom:8px"/>
+    <div id="reelPreview" style="display:none;border-radius:12px;overflow:hidden;background:#000;margin-bottom:14px;text-align:center">
+      <iframe id="reelPreviewFrame" src="" width="100%" height="480" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" style="border:0;display:block;max-width:100%"></iframe>
+    </div>
     <div class="toggle-row">
       <span class="toggle-label">Perfil activo (visible para clientes)</span>
       <label class="toggle-switch">
@@ -770,7 +773,9 @@ function openCreatorModal(creator) {
   document.getElementById('cProjects').value      = isNew ? '0' : (creator.projects || 0);
   document.getElementById('cActive').checked      = isNew ? true : (creator.active !== false);
   document.getElementById('cInstagram').value     = isNew ? '' : (creator.instagram_url || '');
-  document.getElementById('cReel').value          = isNew ? '' : (creator.reel_url || '');
+  const reelVal = isNew ? '' : (creator.reel_url || '');
+  document.getElementById('cReel').value = reelVal;
+  previewReel(reelVal);
   document.getElementById('creatorErr').style.display = 'none';
   openModal('creatorModal');
 }
@@ -821,7 +826,10 @@ async function saveCreator() {
 
 // ── MODAL HELPERS ─────────────────────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if(id==='creatorModal'){ previewReel(''); }
+}
 
 // Close on overlay click
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -904,6 +912,26 @@ async function adminSendMessage() {
   if(error) showToast('Error: '+error.message,'err');
 }
 
+// ── REEL PREVIEW ─────────────────────────────────────────────────────────────
+let reelPreviewTimer = null;
+function previewReel(url) {
+  clearTimeout(reelPreviewTimer);
+  const preview = document.getElementById('reelPreview');
+  const frame   = document.getElementById('reelPreviewFrame');
+  if(!url){ preview.style.display='none'; frame.src=''; return; }
+  reelPreviewTimer = setTimeout(()=>{
+    const match = url.match(/\/(reel|p)\/([A-Za-z0-9_-]+)/);
+    if(match){
+      const embedUrl = `https://www.instagram.com/${match[1]}/${match[2]}/embed/`;
+      frame.src = embedUrl;
+      preview.style.display = 'block';
+    } else {
+      preview.style.display = 'none';
+    }
+  }, 600); // espera 600ms después de que dejás de escribir
+}
+
+// ── CLEANUP CHAT CHANNEL ON MODAL CLOSE ──────────────────────────────────────
 // Cleanup chat channel on modal close
 document.getElementById('chatModal').addEventListener('click', e => {
   if(e.target === document.getElementById('chatModal')){
