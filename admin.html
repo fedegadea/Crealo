@@ -379,11 +379,20 @@ a{color:var(--blue);text-decoration:none}
     </div>
     <label class="form-label">Instagram (URL del perfil)</label>
     <input id="cInstagram" class="form-input" type="url" placeholder="https://www.instagram.com/nombreusuario/"/>
-    <label class="form-label">Reel destacado (URL del reel)</label>
-    <input id="cReel" class="form-input" type="url" placeholder="https://www.instagram.com/reel/XXXXXXX/" oninput="previewReel(this.value)" style="margin-bottom:8px"/>
-    <div id="reelPreview" style="display:none;border-radius:12px;overflow:hidden;background:#000;margin-bottom:14px;text-align:center">
-      <iframe id="reelPreviewFrame" src="" width="100%" height="480" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" style="border:0;display:block;max-width:100%"></iframe>
+    <label class="form-label">Reel destacado — subí el video (MP4)</label>
+    <div id="reelDropZone" onclick="document.getElementById('reelFileInput').click()" style="border:1.5px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:8px" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+      <input type="file" id="reelFileInput" accept="video/mp4,video/mov,video/webm" style="display:none" onchange="onReelFileSelected(this)"/>
+      <div id="reelDropLabel" style="font-size:12px;color:var(--muted)">📹 Hacé click para subir el video del reel<br><span style="font-size:10px">MP4 · MOV · máx 50MB</span></div>
     </div>
+    <div id="reelPreview" style="display:none;border-radius:12px;overflow:hidden;background:#000;margin-bottom:8px;position:relative">
+      <video id="reelPreviewVideo" src="" autoplay muted loop playsinline style="width:100%;max-height:400px;object-fit:cover;display:block"></video>
+      <button onclick="clearReelVideo()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:12px">✕</button>
+    </div>
+    <div id="reelExistingWrap" style="display:none;margin-bottom:8px">
+      <video id="reelExistingVideo" src="" autoplay muted loop playsinline style="width:100%;max-height:360px;object-fit:cover;border-radius:10px;display:block"></video>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Video actual — subí uno nuevo para reemplazarlo</div>
+    </div>
+    <input id="cReelVideoUrl" type="hidden" value=""/>
     <div class="toggle-row">
       <span class="toggle-label">Perfil activo (visible para clientes)</span>
       <label class="toggle-switch">
@@ -773,9 +782,16 @@ function openCreatorModal(creator) {
   document.getElementById('cProjects').value      = isNew ? '0' : (creator.projects || 0);
   document.getElementById('cActive').checked      = isNew ? true : (creator.active !== false);
   document.getElementById('cInstagram').value     = isNew ? '' : (creator.instagram_url || '');
-  const reelVal = isNew ? '' : (creator.reel_url || '');
-  document.getElementById('cReel').value = reelVal;
-  previewReel(reelVal);
+  pendingReelFile = null;
+  document.getElementById('reelFileInput').value = '';
+  document.getElementById('reelDropLabel').innerHTML = '📹 Hacé click para subir el video del reel<br><span style="font-size:10px">MP4 · MOV · máx 50MB</span>';
+  document.getElementById('reelPreview').style.display = 'none';
+  document.getElementById('reelPreviewVideo').src = '';
+  const existingVideo = isNew ? '' : (creator.reel_video_url || '');
+  document.getElementById('cReelVideoUrl').value = existingVideo;
+  const existWrap = document.getElementById('reelExistingWrap');
+  if(existingVideo){ document.getElementById('reelExistingVideo').src = existingVideo; existWrap.style.display='block'; }
+  else { existWrap.style.display='none'; }
   document.getElementById('creatorErr').style.display = 'none';
   openModal('creatorModal');
 }
@@ -802,18 +818,25 @@ async function saveCreator() {
     projects:         parseInt(document.getElementById('cProjects').value) || 0,
     active:           document.getElementById('cActive').checked,
     instagram_url:    document.getElementById('cInstagram').value.trim() || null,
-    reel_url:         document.getElementById('cReel').value.trim() || null,
     updated_at:       new Date().toISOString(),
   };
 
+  const targetId = id || (name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + Date.now());
+
+  // Upload reel video if a new one was selected
+  if(pendingReelFile) {
+    const videoUrl = await uploadReelVideo(targetId);
+    if(videoUrl) payload.reel_video_url = videoUrl;
+  } else {
+    const existing = document.getElementById('cReelVideoUrl').value;
+    if(existing) payload.reel_video_url = existing;
+  }
+
   let error;
   if (id) {
-    // Update existing
     ({ error } = await sb.from('creators').update(payload).eq('id', id));
   } else {
-    // Insert new — generate a simple slug ID from name
-    const newId = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + Date.now();
-    ({ error } = await sb.from('creators').insert({ id: newId, ...payload, created_at: new Date().toISOString() }));
+    ({ error } = await sb.from('creators').insert({ id: targetId, ...payload, created_at: new Date().toISOString() }));
   }
 
   if (error) { err.textContent = 'Error al guardar: ' + error.message; err.style.display = 'block'; return; }
@@ -828,7 +851,6 @@ async function saveCreator() {
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
-  if(id==='creatorModal'){ previewReel(''); }
 }
 
 // Close on overlay click
@@ -912,23 +934,42 @@ async function adminSendMessage() {
   if(error) showToast('Error: '+error.message,'err');
 }
 
-// ── REEL PREVIEW ─────────────────────────────────────────────────────────────
-let reelPreviewTimer = null;
-function previewReel(url) {
-  clearTimeout(reelPreviewTimer);
-  const preview = document.getElementById('reelPreview');
-  const frame   = document.getElementById('reelPreviewFrame');
-  if(!url){ preview.style.display='none'; frame.src=''; return; }
-  reelPreviewTimer = setTimeout(()=>{
-    const match = url.match(/\/(reel|p)\/([A-Za-z0-9_-]+)/);
-    if(match){
-      const embedUrl = `https://www.instagram.com/${match[1]}/${match[2]}/embed/`;
-      frame.src = embedUrl;
-      preview.style.display = 'block';
-    } else {
-      preview.style.display = 'none';
-    }
-  }, 600); // espera 600ms después de que dejás de escribir
+// ── REEL VIDEO UPLOAD ─────────────────────────────────────────────────────────
+let pendingReelFile = null;
+
+function onReelFileSelected(input) {
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 50 * 1024 * 1024) { showToast('El video supera los 50MB.','err'); return; }
+  pendingReelFile = file;
+  const url = URL.createObjectURL(file);
+  document.getElementById('reelPreviewVideo').src = url;
+  document.getElementById('reelPreview').style.display = 'block';
+  document.getElementById('reelExistingWrap').style.display = 'none';
+  document.getElementById('reelDropLabel').textContent = '✓ ' + file.name;
+}
+
+function clearReelVideo() {
+  pendingReelFile = null;
+  document.getElementById('reelPreview').style.display = 'none';
+  document.getElementById('reelPreviewVideo').src = '';
+  document.getElementById('reelFileInput').value = '';
+  document.getElementById('reelDropLabel').innerHTML = '📹 Hacé click para subir el video del reel<br><span style="font-size:10px">MP4 · MOV · máx 50MB</span>';
+  document.getElementById('cReelVideoUrl').value = '';
+  // Show existing if there was one
+  const existing = document.getElementById('reelExistingVideo').src;
+  if(existing && !existing.endsWith('/')) document.getElementById('reelExistingWrap').style.display = 'block';
+}
+
+async function uploadReelVideo(creatorId) {
+  if(!pendingReelFile) return null;
+  showToast('Subiendo video...', 'ok');
+  const ext = pendingReelFile.name.split('.').pop();
+  const path = `reels/${creatorId}.${ext}`;
+  const { data, error } = await sb.storage.from('creator-media').upload(path, pendingReelFile, { upsert: true, contentType: pendingReelFile.type });
+  if(error) { showToast('Error subiendo video: '+error.message,'err'); return null; }
+  const { data: urlData } = sb.storage.from('creator-media').getPublicUrl(path);
+  return urlData?.publicUrl || null;
 }
 
 // ── CLEANUP CHAT CHANNEL ON MODAL CLOSE ──────────────────────────────────────
