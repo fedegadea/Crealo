@@ -1,22 +1,18 @@
 {
   "rewrites": [
-    { "source": "/landing",      "destination": "/landing.html" },
-    { "source": "/brief",        "destination": "/brief.html" },
-    { "source": "/gracias",      "destination": "/gracias.html" },
-    { "source": "/creators",     "destination": "/creators.html" },
-    { "source": "/",             "destination": "/landing.html" },
-    { "source": "/login",        "destination": "/app.html" },
-    { "source": "/app",          "destination": "/app.html" },
-    { "source": "/admin",        "destination": "/admin.html" },
-    { "source": "/haven",        "destination": "/haven.html" },
-    { "source": "/haven/admin",  "destination": "/haven-admin.html" }
+    { "source": "/landing",  "destination": "/landing.html" },
+    { "source": "/brief",    "destination": "/brief.html" },
+    { "source": "/gracias",  "destination": "/gracias.html" },
+    { "source": "/creators", "destination": "/creators.html" },
+    { "source": "/",         "destination": "/landing.html" },
+    { "source": "/login",    "destination": "/app.html" },
+    { "source": "/app",      "destination": "/app.html" },
+    { "source": "/admin",    "destination": "/admin.html" }
   ],
   "headers": [
-    { "source": "/app.html",         "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/admin.html",       "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/landing.html",     "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/brief.html",       "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/haven.html",       "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/haven-admin.html", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+    { "source": "/app.html",    "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/admin.html",  "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/landing.html","headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/brief.html",  "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
   ]
 }
