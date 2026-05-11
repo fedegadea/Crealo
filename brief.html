@@ -142,6 +142,26 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
 .loading-text{font-size:15px;font-weight:600;color:var(--white)}
 .loading-sub{font-size:13px;color:var(--muted)}
 
+/* FREE BRIEF */
+.badge-free{display:inline-flex;align-items:center;gap:7px;background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.3);border-radius:50px;padding:7px 16px;font-size:12px;font-weight:600;color:#34c759;margin-bottom:16px}
+.btn-free{background:linear-gradient(135deg,#28a745,#34c759)!important;color:#fff!important}
+.btn-free:hover{background:linear-gradient(135deg,#218838,#28a745)!important}
+
+/* FULL BRIEF */
+.brief-full{display:none;background:var(--gray2);border:1px solid rgba(52,199,89,.25);border-radius:16px;overflow:hidden;margin-bottom:20px}
+.bf-section{padding:18px 22px;border-bottom:1px solid var(--border)}
+.bf-section:last-child{border:none}
+.bf-section-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.bf-text{font-size:13px;color:var(--text);line-height:1.7}
+.bf-scene{margin-bottom:8px;padding:10px 14px;background:var(--gray3);border-radius:8px;font-size:13px;color:var(--text);line-height:1.6;border-left:2px solid var(--blue)}
+.bf-scene:last-child{margin:0}
+.bf-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.bf-chip{padding:4px 12px;border-radius:20px;background:var(--gray3);border:1px solid var(--border);font-size:11px;color:var(--blue)}
+.btn-copy{width:100%;padding:13px;border-radius:12px;background:var(--gray3);border:1px solid var(--border);color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.btn-copy:hover{border-color:rgba(255,255,255,.2);background:var(--gray4)}
+.btn-creators{width:100%;padding:15px;border-radius:12px;background:var(--blue);color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-creators:hover{background:var(--blue-l);transform:translateY(-1px)}
+
 @media(max-width:600px){
   .topbar{padding:0 16px}
   main{padding:84px 16px 40px}
@@ -263,11 +283,16 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
     <div class="err-msg" id="err2">Completá los campos obligatorios antes de continuar.</div>
   </div>
 
-  <!-- STEP 3: Preview + Pago -->
+  <!-- STEP 3: Preview + Pago / Free -->
   <div class="step" id="step3">
     <div class="step-eyebrow">Tu brief está listo</div>
-    <h1 class="step-title">Así va a quedar 🎉</h1>
-    <p class="step-sub">Pagá $9.999 para desbloquear el brief completo y poder contratar tu creator.</p>
+    <h1 class="step-title" id="s3Title">Así va a quedar 🎉</h1>
+    <p class="step-sub" id="s3Sub">Pagá $9.999 para desbloquear el brief completo y poder contratar tu creator.</p>
+
+    <!-- FREE BADGE (shown for eligible users) -->
+    <div id="freeBadge" style="display:none">
+      <span class="badge-free">🎁 Tu primer brief es completamente gratis</span>
+    </div>
 
     <!-- Brief preview -->
     <div class="brief-preview">
@@ -314,7 +339,7 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
     </div>
 
     <!-- Price summary -->
-    <div class="price-summary">
+    <div class="price-summary" id="priceSummary">
       <div class="ps-row"><span>Brief generado por IA</span><span>$9.999</span></div>
       <div class="ps-row"><span>Marca</span><span id="psBrand">—</span></div>
       <div class="ps-row"><span>Plataforma · Formato · Duración</span><span id="psPlatform">—</span></div>
@@ -332,7 +357,37 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
       <div class="inc-row"><span class="inc-check">✓</span>Descargable en PDF</div>
     </div>
 
-    <button class="btn-next" onclick="handlePay()" id="payBtn">🔓 Comprar mi brief — $9.999</button>
+    <!-- FULL BRIEF (shown after free generation) -->
+    <div class="brief-full" id="briefFull">
+      <div class="bf-section">
+        <div class="bf-section-title">📋 Instrucciones para la creator</div>
+        <div class="bf-text" id="bfInstrucciones"></div>
+      </div>
+      <div class="bf-section">
+        <div class="bf-section-title">🎬 Escenas sugeridas</div>
+        <div id="bfEscenas"></div>
+      </div>
+      <div class="bf-section">
+        <div class="bf-section-title">#️⃣ Hashtags</div>
+        <div class="bf-chips" id="bfHashtags"></div>
+        <div class="bf-section-title" style="margin-top:14px">📝 Caption</div>
+        <div class="bf-text" id="bfCaption"></div>
+        <div class="bf-section-title" style="margin-top:14px">🎯 CTA del video</div>
+        <div class="bf-text" style="color:var(--blue);font-weight:500" id="bfCta"></div>
+      </div>
+      <div class="bf-section">
+        <div class="bf-section-title">📦 Entregables y plazos</div>
+        <div class="bf-text" id="bfEntregables"></div>
+      </div>
+    </div>
+
+    <!-- ACTIONS after free brief (copy + creators) -->
+    <div id="briefActions" style="display:none">
+      <button class="btn-copy" onclick="copyBrief()">📋 Copiar brief completo</button>
+      <a href="/creators" class="btn-creators">Ver creators disponibles →</a>
+    </div>
+
+    <button class="btn-next" id="payBtn">🔓 Comprar mi brief — $9.999</button>
     <button class="btn-back" onclick="goStep(2)">← Atrás</button>
   </div>
 
@@ -436,8 +491,8 @@ async function goStep3(){
   }
 }
 
-function renderStep3Preview(){
-  // Save brief to localStorage for use in solicitudes
+async function renderStep3Preview(){
+  // Save brief to localStorage
   try {
     const existing = JSON.parse(localStorage.getItem('crealo_briefs')||'[]');
     if(!existing.find(b=>b.brand===state.brand && b.goal===state.goal)){
@@ -452,7 +507,6 @@ function renderStep3Preview(){
   document.getElementById('psPlatform').textContent=`${platMap[state.platform]||state.platform} · ${state.format} · ${state.duration}`;
   if(state.colors) document.getElementById('psColors').textContent=state.colors;
   else document.getElementById('psColorsRow').style.display='none';
-
   const goalText={
     ventas:'Generar ventas directas y conversiones medibles. El contenido debe tener un CTA claro que lleve a la compra.',
     awareness:'Aumentar el reconocimiento de marca y llegar a nuevas audiencias de forma orgánica.',
@@ -465,11 +519,125 @@ function renderStep3Preview(){
     energico:`Ritmo dinámico, cuts rápidos, música con energía. Contenido que llama la atención en el primer segundo. Para: ${state.audience}.`,
     tutorial:`Contenido educativo y claro. La creator explica paso a paso los beneficios o el uso del producto. Para: ${state.audience}.`
   };
-
   document.getElementById('prevDesc').textContent=`${state.brand} es una marca de ${state.product.toLowerCase().replace(/\.$/,'')}. El contenido debe reflejar la identidad de la marca de forma auténtica, sin parecer publicidad tradicional.`;
   document.getElementById('prevGoal').textContent=goalText[state.goal]||'Generar impacto real.';
   document.getElementById('prevTone').textContent=styleText[state.style]||'Auténtico y cercano.';
+
+  // Check free brief eligibility
+  try {
+    const { data:{ session } } = await sb.auth.getSession();
+    const email = session?.user?.email || '';
+    const isAdmin = email === 'federicosegundogadea@gmail.com';
+    const freeUsed = session?.user?.user_metadata?.free_brief_used === true;
+    const isFree = isAdmin || !freeUsed;
+    const btn = document.getElementById('payBtn');
+    if(isFree){
+      document.getElementById('s3Sub').textContent = 'Tu primer brief es completamente gratis. Generalo ahora con IA.';
+      document.getElementById('freeBadge').style.display = 'block';
+      document.getElementById('priceSummary').style.display = 'none';
+      document.querySelector('.includes').style.display = 'none';
+      btn.textContent = '🎁 Generar mi brief gratis';
+      btn.className = 'btn-next btn-free';
+      btn.onclick = () => handleFreeBrief(isAdmin);
+    } else {
+      btn.textContent = '🔓 Comprar mi brief — $9.999';
+      btn.className = 'btn-next';
+      btn.onclick = handlePay;
+    }
+  } catch(e){
+    // On error, default to pay flow
+    const btn = document.getElementById('payBtn');
+    btn.textContent = '🔓 Comprar mi brief — $9.999';
+    btn.onclick = handlePay;
+  }
   goStep(3);
+}
+
+// ── FREE BRIEF ──
+async function handleFreeBrief(isAdmin){
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  showLoading('Generando tu brief con IA...','Esto toma solo unos segundos ✨');
+  try {
+    const prompt = `Generá un brief de contenido UGC profesional en español (Argentina) para esta marca. Respondé ÚNICAMENTE con JSON válido, sin markdown ni texto adicional.
+
+Marca: ${state.brand}
+Producto/servicio: ${state.product}
+Objetivo: ${state.goal}
+Plataforma: ${state.platform}
+Duración del video: ${state.duration}
+Formato: ${state.format}
+Audiencia objetivo: ${state.audience}
+Estilo visual: ${state.style}${state.colors?'\nColores de marca: '+state.colors:''}${state.reference?'\nReferencia/inspiración: '+state.reference:''}
+
+Generá este JSON exacto (sin nada más):
+{
+  "instrucciones": "Párrafo de instrucciones completas para la creator (4-5 oraciones). Tono a usar, qué mostrar del producto, cómo presentarlo, qué evitar, qué debe transmitir.",
+  "escenas": ["Escena 1 (hook 0-3s): descripción detallada del gancho de apertura","Escena 2 (desarrollo 3-20s): descripción de la parte central con el producto","Escena 3 (cierre): descripción del remate con CTA"],
+  "hashtags": ["#tag1","#tag2","#tag3","#tag4","#tag5","#tag6","#tag7","#tag8"],
+  "caption": "Caption completo con emojis listo para publicar (máx 200 chars)",
+  "cta": "El call to action verbal que dice la creator en el video (máx 12 palabras)",
+  "entregables": "Descripción breve de los archivos a entregar, formato y plazos"
+}`;
+    const res = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1200,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    if(!res.ok || data.error) throw new Error(data.error?.message||'Error del servidor');
+    const raw = data.content?.[0]?.text||'';
+    let brief;
+    try { brief = JSON.parse(raw); }
+    catch(e){ const m=raw.match(/\{[\s\S]*\}/); if(m) brief=JSON.parse(m[0]); else throw new Error('Respuesta inválida'); }
+
+    // Populate full brief
+    document.getElementById('bfInstrucciones').textContent = brief.instrucciones||'';
+    document.getElementById('bfEscenas').innerHTML = (brief.escenas||[]).map(s=>`<div class="bf-scene">${s}</div>`).join('');
+    document.getElementById('bfHashtags').innerHTML = (brief.hashtags||[]).map(h=>`<span class="bf-chip">${h}</span>`).join('');
+    document.getElementById('bfCaption').textContent = brief.caption||'';
+    document.getElementById('bfCta').textContent = `"${brief.cta||''}"`;
+    document.getElementById('bfEntregables').textContent = brief.entregables||'';
+    window._genBrief = brief;
+
+    // Mark used (skip for admin)
+    if(!isAdmin){ try{ await sb.auth.updateUser({data:{free_brief_used:true}}); }catch(e){} }
+
+    // Swap UI
+    document.querySelector('.brief-preview').style.display='none';
+    document.getElementById('priceSummary').style.display='none';
+    document.querySelector('.includes').style.display='none';
+    document.getElementById('freeBadge').style.display='none';
+    btn.style.display='none';
+    document.getElementById('briefFull').style.display='block';
+    document.getElementById('briefActions').style.display='block';
+    document.getElementById('s3Title').textContent='🎉 ¡Tu brief está listo!';
+    document.getElementById('s3Sub').textContent='Copialo y compartilo con tu creator — o contratá una de las nuestras.';
+    document.querySelector('#step3 .step-eyebrow').textContent='Brief generado con IA';
+    hideLoading();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } catch(e){
+    hideLoading();
+    btn.disabled=false;
+    btn.textContent='🎁 Generar mi brief gratis';
+    showPayErr(e.message||'Error generando el brief. Intentá de nuevo.');
+  }
+}
+
+function copyBrief(){
+  const b = window._genBrief;
+  if(!b) return;
+  const txt = `BRIEF CREALO — ${state.brand}\n\n📋 INSTRUCCIONES PARA LA CREATOR\n${b.instrucciones}\n\n🎬 ESCENAS\n${(b.escenas||[]).map((s,i)=>`${i+1}. ${s}`).join('\n')}\n\n#️⃣ HASHTAGS\n${(b.hashtags||[]).join(' ')}\n\n📝 CAPTION\n${b.caption}\n\n🎯 CTA\n${b.cta}\n\n📦 ENTREGABLES\n${b.entregables}`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.querySelector('[onclick="copyBrief()"]');
+    if(btn){btn.textContent='✓ ¡Copiado!';setTimeout(()=>btn.textContent='📋 Copiar brief completo',2500);}
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
 }
 
 // ── PAY ──
@@ -477,8 +645,6 @@ async function handlePay(){
   const btn = document.getElementById('payBtn');
   btn.disabled = true;
   btn.textContent = 'Procesando...';
-  // User is always logged in by the time they reach step 3,
-  // but double-check just in case session expired
   try {
     const { data, error } = await sb.auth.getSession();
     if(error || !data.session){
