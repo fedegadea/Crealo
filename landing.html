@@ -72,7 +72,9 @@ nav{
   font-size:clamp(15px,1.8vw,19px);font-weight:400;color:var(--muted);
   max-width:500px;line-height:1.7;margin-bottom:48px;
 }
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.btn-hero-cta{font-size:16px!important;padding:16px 32px!important;box-shadow:0 0 40px rgba(0,113,227,.35),0 8px 32px rgba(0,113,227,.2);animation:pulseCta 2.8s ease-in-out infinite}
+@keyframes pulseCta{0%,100%{box-shadow:0 0 40px rgba(0,113,227,.35),0 8px 32px rgba(0,113,227,.2)}50%{box-shadow:0 0 60px rgba(0,113,227,.55),0 12px 40px rgba(0,113,227,.35)}}
 .btn-primary{
   display:inline-flex;align-items:center;gap:9px;
   background:var(--blue);color:#fff;
@@ -238,23 +240,23 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
 <!-- HERO -->
 <section class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-badge">✦ Plataforma UGC · Argentina</div>
-  <h1>El brief perfecto<br/>en <span class="b">10 segundos.</span><br/>El contenido, en 48h.</h1>
-  <p>Generá el brief profesional que toda creator necesita para producir exactamente lo que imaginás. Y si querés, contratá a una de las nuestras para que lo haga.</p>
+  <div class="hero-badge">🔥 Brief Viral con IA · Argentina</div>
+  <h1>El brief <span class="b">viral</span> perfecto<br/>en <span class="b">10 segundos.</span><br/>El contenido, en 48h.</h1>
+  <p>Generá el brief profesional optimizado para contenido viral que toda creator necesita para producir exactamente lo que imaginás.</p>
   <div class="hero-actions">
-    <a href="/brief" class="btn-primary">🎁 Crear mi primer brief gratis →</a>
+    <a href="/brief" class="btn-primary btn-hero-cta">🎁 Probar Brief Viral Gratis →</a>
     <a href="#como-funciona" class="btn-ghost">Ver cómo funciona</a>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin-top:-28px;margin-bottom:0">Sin tarjeta de crédito · El primero gratis, los siguientes $3.999</p>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px;margin-bottom:0;opacity:.7">Sin tarjeta de crédito · El primero gratis, los siguientes $3.999</p>
 </section>
 
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stats-inner">
-    <div class="stat"><div class="stat-val">10s</div><div class="stat-label">Brief generado</div></div>
-    <div class="stat"><div class="stat-val">48h</div><div class="stat-label">Primer entrega</div></div>
-    <div class="stat"><div class="stat-val" style="color:#34c759">GRATIS</div><div class="stat-label">Primer brief IA</div></div>
-    <div class="stat"><div class="stat-val">$90.000</div><div class="stat-label">Por pieza de contenido</div></div>
+    <div class="stat"><div class="stat-val">10s</div><div class="stat-label">Brief viral generado</div></div>
+    <div class="stat"><div class="stat-val">48h</div><div class="stat-label">Primera entrega</div></div>
+    <div class="stat"><div class="stat-val" style="color:#34c759">GRATIS</div><div class="stat-label">Tu primer brief</div></div>
+    <div class="stat"><div class="stat-val">$3.999</div><div class="stat-label">Briefs siguientes</div></div>
     <div class="stat"><div class="stat-val">+20</div><div class="stat-label">Creators activas</div></div>
   </div>
 </div>
