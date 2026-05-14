@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Fondo negro redondeado -->
+  <rect width="32" height="32" rx="8" fill="#000000"/>
+  <!-- "c" blanco -->
+  <text x="3" y="23" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="900" fill="#ffffff">c</text>
+  <!-- "lo" azul Crealo -->
+  <text x="15" y="23" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="900" fill="#0071e3">lo</text>
+</svg>
