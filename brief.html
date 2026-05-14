@@ -225,12 +225,12 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
     <p class="step-sub">Con esto la creator va a entender tu marca al 100% antes de grabar.</p>
 
     <div class="field" style="margin-bottom:22px">
-      <label>¿Dónde vas a publicar?</label>
+      <label>¿Para qué canal/destino es el contenido?</label>
       <div class="platform-group" style="margin-top:8px">
+        <div class="platform-pill" onclick="selPlatform(this)" data-val="meta-ads">🎯 Meta Ads</div>
         <div class="platform-pill sel" onclick="selPlatform(this)" data-val="instagram">📸 Instagram</div>
         <div class="platform-pill" onclick="selPlatform(this)" data-val="tiktok">🎵 TikTok</div>
-        <div class="platform-pill" onclick="selPlatform(this)" data-val="ambas">✨ Ambas</div>
-        <div class="platform-pill" onclick="selPlatform(this)" data-val="youtube">▶️ YouTube Shorts</div>
+        <div class="platform-pill" onclick="selPlatform(this)" data-val="marca-personal">🌟 Marca Personal</div>
       </div>
     </div>
 
@@ -278,16 +278,41 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
       <input type="text" id="reference" placeholder="Ej: @cuenta o link a video que te gusta como referencia de estilo" />
     </div>
 
+    <div style="margin:28px 0 16px;padding-top:20px;border-top:1px solid var(--border)">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:4px">🔥 Optimización viral</div>
+      <div style="font-size:12px;color:var(--muted)">Estos datos permiten a la IA crear hooks y estructura que generan más alcance orgánico</div>
+    </div>
+
+    <div class="field">
+      <label>¿Qué hace único a tu producto o servicio? <span style="color:#ff453a;font-size:9px">REQUERIDO</span></label>
+      <textarea id="uniqueness" placeholder="Ej: Es el único suplemento en Argentina sin azúcar que ayuda a dormir en 20 minutos. Resultado probado en 30 días o devolución." style="min-height:80px"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Hook o frase de apertura <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(opcional — si no, la IA crea uno)</span></label>
+      <input type="text" id="hook" placeholder='Ej: "¿Por qué el 90% de la gente lo hace mal?" o "Esto cambió mi vida en 7 días"' />
+    </div>
+
+    <div class="field" style="margin-bottom:22px">
+      <label>Llamada a la acción principal (CTA)</label>
+      <div class="platform-group" style="margin-top:8px">
+        <div class="platform-pill" onclick="selCta(this)" data-val="compra-ahora">🛒 Comprá ahora</div>
+        <div class="platform-pill sel" onclick="selCta(this)" data-val="link-bio">🔗 Link en bio</div>
+        <div class="platform-pill" onclick="selCta(this)" data-val="sigue-cuenta">👆 Seguinos</div>
+        <div class="platform-pill" onclick="selCta(this)" data-val="escribe-wapp">💬 Escribinos</div>
+      </div>
+    </div>
+
     <button class="btn-next" onclick="goStep3()">Ver mi brief →</button>
     <button class="btn-back" onclick="goStep(1)">← Atrás</button>
-    <div class="err-msg" id="err2">Completá los campos obligatorios antes de continuar.</div>
+    <div class="err-msg" id="err2">Completá todos los campos requeridos: cliente ideal, estilo visual y diferenciador de tu marca.</div>
   </div>
 
   <!-- STEP 3: Preview + Pago / Free -->
   <div class="step" id="step3">
     <div class="step-eyebrow">Tu brief está listo</div>
     <h1 class="step-title" id="s3Title">Así va a quedar 🎉</h1>
-    <p class="step-sub" id="s3Sub">Pagá $9.999 para desbloquear el brief completo y poder contratar tu creator.</p>
+    <p class="step-sub" id="s3Sub">Pagá $3.999 para desbloquear el brief completo optimizado para contenido viral.</p>
 
     <!-- FREE BADGE (shown for eligible users) -->
     <div id="freeBadge" style="display:none">
@@ -340,11 +365,11 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
 
     <!-- Price summary -->
     <div class="price-summary" id="priceSummary">
-      <div class="ps-row"><span>Brief generado por IA</span><span>$9.999</span></div>
+      <div class="ps-row"><span>Brief generado por IA</span><span>$3.999</span></div>
       <div class="ps-row"><span>Marca</span><span id="psBrand">—</span></div>
       <div class="ps-row"><span>Plataforma · Formato · Duración</span><span id="psPlatform">—</span></div>
       <div class="ps-row" id="psColorsRow"><span>Colores de marca</span><span id="psColors">—</span></div>
-      <div class="ps-total"><span>Total</span><span>$9.999</span></div>
+      <div class="ps-total"><span>Total</span><span>$3.999</span></div>
     </div>
 
     <!-- Includes -->
@@ -353,7 +378,7 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
       <div class="inc-row"><span class="inc-check">✓</span>Brief completo con tu marca personalizada</div>
       <div class="inc-row"><span class="inc-check">✓</span>Instrucciones escena a escena para la creator</div>
       <div class="inc-row"><span class="inc-check">✓</span>Hashtags, caption y CTA listos para usar</div>
-      <div class="inc-row"><span class="inc-check">✓</span>Acceso para contratar tu creator ($90.000)</div>
+      <div class="inc-row"><span class="inc-check">✓</span>Acceso para contratar tu creator vía WhatsApp</div>
       <div class="inc-row"><span class="inc-check">✓</span>Descargable en PDF</div>
     </div>
 
@@ -384,10 +409,10 @@ main{min-height:100vh;padding:96px 24px 60px;display:flex;align-items:flex-start
     <!-- ACTIONS after free brief (copy + creators) -->
     <div id="briefActions" style="display:none">
       <button class="btn-copy" onclick="copyBrief()">📋 Copiar brief completo</button>
-      <a href="/creators" class="btn-creators">Ver creators disponibles →</a>
+      <a href="/#creators" class="btn-creators">Contratar una creator →</a>
     </div>
 
-    <button class="btn-next" id="payBtn">🔓 Comprar mi brief — $9.999</button>
+    <button class="btn-next" id="payBtn">🔓 Comprar mi brief — $3.999</button>
     <button class="btn-back" onclick="goStep(2)">← Atrás</button>
   </div>
 
@@ -424,15 +449,16 @@ const SUPABASE_URL = 'https://dtopwxldxlwgdvpjcegg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_W54QQPJ_WFtvI67N5SPniQ_jZ1kpCES';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let state = { brand:'', product:'', goal:'', platform:'instagram', duration:'30s', format:'9:16', audience:'', colors:'', style:'', reference:'' };
+let state = { brand:'', product:'', goal:'', platform:'instagram', duration:'30s', format:'9:16', audience:'', colors:'', style:'', reference:'', uniqueness:'', hook:'', cta:'link-bio' };
 
 // ── SELECTORS ──
-let selGoalVal='', selPlatformVal='instagram', selDurVal='30s', selFormatVal='9:16', selStyleVal='';
+let selGoalVal='', selPlatformVal='instagram', selDurVal='30s', selFormatVal='9:16', selStyleVal='', selCtaVal='link-bio';
 function selGoal(el){ document.querySelectorAll('[onclick^="selGoal"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selGoalVal=el.dataset.val; }
 function selPlatform(el){ document.querySelectorAll('[onclick^="selPlatform"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selPlatformVal=el.dataset.val; }
 function selDur(el){ document.querySelectorAll('[onclick^="selDur"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selDurVal=el.dataset.val; }
 function selFormat(el){ document.querySelectorAll('[onclick^="selFormat"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selFormatVal=el.dataset.val; }
 function selStyle(el){ document.querySelectorAll('[onclick^="selStyle"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selStyleVal=el.dataset.val; }
+function selCta(el){ document.querySelectorAll('[onclick^="selCta"]').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); selCtaVal=el.dataset.val; }
 
 // ── NAV ──
 function goStep(n){
@@ -462,8 +488,9 @@ function goStep2(){
 
 async function goStep3(){
   const audience=document.getElementById('audience').value.trim();
+  const uniqueness=document.getElementById('uniqueness').value.trim();
   const err=document.getElementById('err2');
-  if(!audience||!selStyleVal){ err.style.display='block'; return; }
+  if(!audience||!selStyleVal||!uniqueness){ err.style.display='block'; return; }
   err.style.display='none';
   state.audience=audience;
   state.platform=selPlatformVal;
@@ -472,6 +499,9 @@ async function goStep3(){
   state.style=selStyleVal;
   state.colors=document.getElementById('colors').value.trim();
   state.reference=document.getElementById('reference').value.trim();
+  state.uniqueness=uniqueness;
+  state.hook=document.getElementById('hook').value.trim();
+  state.cta=selCtaVal;
 
   // ── AUTH GATE: require login before showing the brief preview ──
   try {
@@ -503,25 +533,33 @@ async function renderStep3Preview(){
   // Populate preview
   document.getElementById('prevBrand').textContent=state.brand;
   document.getElementById('psBrand').textContent=state.brand;
-  const platMap={instagram:'Instagram',tiktok:'TikTok',ambas:'Instagram + TikTok',youtube:'YouTube Shorts'};
+  const platMap={'meta-ads':'Meta Ads (Facebook/IG)','instagram':'Instagram','tiktok':'TikTok','marca-personal':'Marca Personal'};
   document.getElementById('psPlatform').textContent=`${platMap[state.platform]||state.platform} · ${state.format} · ${state.duration}`;
   if(state.colors) document.getElementById('psColors').textContent=state.colors;
   else document.getElementById('psColorsRow').style.display='none';
+  const platDestMap={'meta-ads':'campañas de Meta Ads (Facebook e Instagram)','instagram':'contenido orgánico en Instagram','tiktok':'el algoritmo de TikTok','marca-personal':'construir autoridad de marca personal'};
+  const ctaTextMap={'compra-ahora':'CTA directo a compra — urgencia y beneficio en las últimas palabras.','link-bio':'CTA a link en bio — frase que genere suficiente curiosidad para que vayan al perfil.','sigue-cuenta':'CTA a seguir la cuenta — mostrar valor para que el seguir se justifique.','escribe-wapp':'CTA a escribir por WhatsApp — generar sensación de atención personalizada.'};
   const goalText={
-    ventas:'Generar ventas directas y conversiones medibles. El contenido debe tener un CTA claro que lleve a la compra.',
-    awareness:'Aumentar el reconocimiento de marca y llegar a nuevas audiencias de forma orgánica.',
-    comunidad:'Fortalecer el vínculo con la comunidad existente y crecer en engagement auténtico.',
-    ads:'Producir material de alto impacto para usar en campañas de publicidad paga en Meta o TikTok Ads.'
+    ventas:`Generar ventas directas y conversiones medibles. Optimizado para ${platDestMap[state.platform]||'redes sociales'}. El CTA debe ser urgente y específico. Sin rodeos, la primera frase vende.`,
+    awareness:`Maximizar alcance y llegar a nuevas audiencias. Hook diseñado para ser compartido. Optimizado para ${platDestMap[state.platform]||'redes sociales'}.`,
+    comunidad:`Crecer en engagement auténtico. Priorizar comentarios, shares y guardados. Preguntar algo al final para generar conversación. Para ${platDestMap[state.platform]||'redes sociales'}.`,
+    ads:`Material de alto impacto para ${platDestMap[state.platform]||'publicidad paga'}. Formato directo-a-respuesta: hook fuerte en 1 segundo, propuesta de valor clara, CTA que detiene el scroll.`
   };
   const styleText={
-    lifestyle:`Estilo cotidiano y natural. La creator muestra el producto integrado a su día a día, de forma genuina. Audiencia objetivo: ${state.audience}.`,
-    minimal:`Estética limpia y minimalista. Fondos neutros, enfoque en el producto, sin distracciones. Transmite confianza y calidad premium. Para: ${state.audience}.`,
-    energico:`Ritmo dinámico, cuts rápidos, música con energía. Contenido que llama la atención en el primer segundo. Para: ${state.audience}.`,
-    tutorial:`Contenido educativo y claro. La creator explica paso a paso los beneficios o el uso del producto. Para: ${state.audience}.`
+    lifestyle:`Estilo cotidiano y auténtico — sin guión aparente. La creator integra el producto a su día a día de forma genuina. Nada que parezca publicidad. Para ${state.audience}.`,
+    minimal:`Estética limpia y premium. Fondos neutros, silencio visual, foco total en el producto. Cada frame comunica calidad. Para ${state.audience}.`,
+    energico:`Ritmo rápido, cuts en cada beat, música con energía alta. La atención capturada en el frame 1. Sin transiciones lentas. Para ${state.audience}.`,
+    tutorial:`Formato educativo paso a paso. La creator explica el "problema" antes de presentar el producto como solución. Para ${state.audience}.`
   };
-  document.getElementById('prevDesc').textContent=`${state.brand} es una marca de ${state.product.toLowerCase().replace(/\.$/,'')}. El contenido debe reflejar la identidad de la marca de forma auténtica, sin parecer publicidad tradicional.`;
-  document.getElementById('prevGoal').textContent=goalText[state.goal]||'Generar impacto real.';
-  document.getElementById('prevTone').textContent=styleText[state.style]||'Auténtico y cercano.';
+  const hookText = state.hook
+    ? `🔥 Hook de apertura: "${state.hook}" — arrancar en el primer segundo, sin intro ni presentación.`
+    : `🔥 La apertura debe generar curiosidad o mostrar el problema en las primeras 3 palabras. Sin intro ni presentación.`;
+  const uniqueText = state.uniqueness
+    ? `Diferenciador clave: ${state.uniqueness}`
+    : `${state.brand} es una marca de ${state.product.toLowerCase().replace(/\.$/,'')}.`;
+  document.getElementById('prevDesc').textContent=`${uniqueText} El contenido debe reflejar este diferenciador de forma nativa, sin parecer publicidad tradicional.`;
+  document.getElementById('prevGoal').textContent=goalText[state.goal]||'Generar impacto real y conversiones medibles.';
+  document.getElementById('prevTone').textContent=`${styleText[state.style]||'Auténtico y cercano.'} ${hookText} ${ctaTextMap[state.cta]||''}`;
 
   // Check free brief eligibility
   try {
@@ -540,14 +578,14 @@ async function renderStep3Preview(){
       btn.className = 'btn-next btn-free';
       btn.onclick = () => handleFreeBrief(isAdmin);
     } else {
-      btn.textContent = '🔓 Comprar mi brief — $9.999';
+      btn.textContent = '🔓 Comprar mi brief — $3.999';
       btn.className = 'btn-next';
       btn.onclick = handlePay;
     }
   } catch(e){
     // On error, default to pay flow
     const btn = document.getElementById('payBtn');
-    btn.textContent = '🔓 Comprar mi brief — $9.999';
+    btn.textContent = '🔓 Comprar mi brief — $3.999';
     btn.onclick = handlePay;
   }
   goStep(3);
@@ -564,20 +602,28 @@ async function handleFreeBrief(isAdmin){
 Marca: ${state.brand}
 Producto/servicio: ${state.product}
 Objetivo: ${state.goal}
-Plataforma: ${state.platform}
+Canal/destino: ${state.platform}
 Duración del video: ${state.duration}
 Formato: ${state.format}
 Audiencia objetivo: ${state.audience}
-Estilo visual: ${state.style}${state.colors?'\nColores de marca: '+state.colors:''}${state.reference?'\nReferencia/inspiración: '+state.reference:''}
+Estilo visual: ${state.style}
+Diferenciador clave de la marca: ${state.uniqueness}${state.hook?'\nHook sugerido por el cliente: '+state.hook:''}${state.cta?'\nCTA preferido: '+state.cta:''}${state.colors?'\nColores de marca: '+state.colors:''}${state.reference?'\nReferencia/inspiración: '+state.reference:''}
+
+IMPORTANTE — Este brief debe estar OPTIMIZADO PARA CONTENIDO VIRAL:
+- El hook debe capturar atención en los primeros 3 segundos o menos
+- Cada escena debe tener un propósito específico y ritmo dinámico
+- Los hashtags deben mezclar masivos (>1M) con de nicho (<200K) para maximizar alcance
+- El caption debe usar estructura de patrón interruptor (pregunta, dato sorprendente o afirmación polémica)
+- El CTA verbal debe sonar natural, no publicitario
 
 Generá este JSON exacto (sin nada más):
 {
-  "instrucciones": "Párrafo de instrucciones completas para la creator (4-5 oraciones). Tono a usar, qué mostrar del producto, cómo presentarlo, qué evitar, qué debe transmitir.",
-  "escenas": ["Escena 1 (hook 0-3s): descripción detallada del gancho de apertura","Escena 2 (desarrollo 3-20s): descripción de la parte central con el producto","Escena 3 (cierre): descripción del remate con CTA"],
-  "hashtags": ["#tag1","#tag2","#tag3","#tag4","#tag5","#tag6","#tag7","#tag8"],
-  "caption": "Caption completo con emojis listo para publicar (máx 200 chars)",
-  "cta": "El call to action verbal que dice la creator en el video (máx 12 palabras)",
-  "entregables": "Descripción breve de los archivos a entregar, formato y plazos"
+  "instrucciones": "Párrafo de instrucciones completas para la creator (4-5 oraciones). Incluí: tono, qué mostrar del producto enfatizando el diferenciador, cómo arranca sin intro, qué evitar, qué debe transmitir para el canal ${state.platform}.",
+  "escenas": ["Escena 1 HOOK (0-3s): descripción detallada del gancho viral de apertura — debe generar curiosidad o mostrar el problema sin presentación","Escena 2 DESARROLLO (3-20s): cómo la creator muestra el producto y su diferenciador de forma auténtica","Escena 3 CIERRE + CTA (últimos 3-5s): remate memorable con call to action natural"],
+  "hashtags": ["#tag1","#tag2","#tag3","#tag4","#tag5","#tag6","#tag7","#tag8","#tag9","#tag10"],
+  "caption": "Caption con estructura viral (pregunta o dato sorprendente en la primera línea). Con emojis estratégicos. Máx 220 chars.",
+  "cta": "El call to action verbal que dice la creator en el video (máx 12 palabras, sonar natural)",
+  "entregables": "Descripción breve de archivos a entregar, formato y plazos sugeridos"
 }`;
     const res = await fetch('/api/generate',{
       method:'POST',
@@ -649,14 +695,14 @@ async function handlePay(){
     const { data, error } = await sb.auth.getSession();
     if(error || !data.session){
       btn.disabled = false;
-      btn.textContent = '🔓 Comprar mi brief — $9.999';
+      btn.textContent = '🔓 Comprar mi brief — $3.999';
       showPayErr('Tu sesión expiró. Recargá la página e iniciá sesión de nuevo.');
       return;
     }
     startPayment(data.session.user.email);
   } catch(e){
     btn.disabled = false;
-    btn.textContent = '🔓 Comprar mi brief — $9.999';
+    btn.textContent = '🔓 Comprar mi brief — $3.999';
     showPayErr('Error de conexión. Revisá tu internet e intentá de nuevo.');
   }
 }
@@ -667,8 +713,8 @@ async function startPayment(email){
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        titulo: `Crealo — Brief IA para ${state.brand}`,
-        precio: 9999,
+        titulo: `Crealo — Brief IA viral para ${state.brand}`,
+        precio: 3999,
         email,
         metadata: state
       })
@@ -688,7 +734,7 @@ async function startPayment(email){
 function showPayErr(msg){
   const btn = document.getElementById('payBtn');
   btn.disabled = false;
-  btn.textContent = '🔓 Comprar mi brief — $9.999';
+  btn.textContent = '🔓 Comprar mi brief — $3.999';
   let box = document.getElementById('payErrBox');
   if(!box){
     box = document.createElement('div');
@@ -738,6 +784,7 @@ function hideLoading(){ document.getElementById('loadingOverlay').classList.remo
         if(restored.duration) selDurVal = restored.duration;
         if(restored.format) selFormatVal = restored.format;
         if(restored.style) selStyleVal = restored.style;
+        if(restored.cta) selCtaVal = restored.cta;
       }
       closeModal();
       if(state.brand && state.style){

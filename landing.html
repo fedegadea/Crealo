@@ -144,29 +144,25 @@ nav{
 .pc-cta-ghost{background:transparent;color:var(--white);border:1px solid var(--border)}
 .pc-cta-ghost:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
 
-/* ── CREATORS ── */
-.creators-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
-.creator-card{
-  background:var(--gray2);border:1px solid var(--border);border-radius:16px;
-  padding:24px;display:flex;flex-direction:column;gap:14px;
-  transition:transform .22s,border-color .22s;position:relative;overflow:hidden;
-}
-.creator-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--blue);opacity:0;transition:opacity .3s}
-.creator-card:hover{transform:translateY(-3px);border-color:rgba(0,113,227,.25)}
-.creator-card:hover::after{opacity:1}
-.creator-top{display:flex;align-items:center;gap:12px}
-.creator-avatar{width:46px;height:46px;border-radius:50%;background:var(--gray3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid var(--border)}
-.creator-name{font-size:14px;font-weight:700;color:var(--white)}
-.creator-tier{font-size:10px;font-weight:600;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-.creator-niches{display:flex;flex-wrap:wrap;gap:5px}
-.niche-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--gray3);color:var(--muted);border:1px solid var(--border)}
-.creator-stats{display:flex;gap:16px;padding-top:12px;border-top:1px solid var(--border)}
-.c-stat-val{font-size:15px;font-weight:700;color:var(--white)}
-.c-stat-label{font-size:9px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
-.creator-rating{position:absolute;top:16px;right:16px;font-size:10px;color:var(--muted)}
-.creator-solicitar-btn{display:block;margin-top:14px;background:var(--blue);color:#fff;text-decoration:none;text-align:center;padding:10px;border-radius:10px;font-size:12px;font-weight:600;transition:background .2s}
-.creator-solicitar-btn:hover{background:var(--blue-d)}
-.creator-rating .stars{color:#f59e0b}
+/* ── CREATOR CONTACT ── */
+.creator-contact-wrap{max-width:720px;margin:56px auto 0}
+.cc-how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px}
+.cc-step-box{background:var(--gray2);border:1px solid var(--border);border-radius:16px;padding:22px 18px;text-align:center}
+.cc-step-num{font-size:28px;margin-bottom:10px}
+.cc-step-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px}
+.cc-step-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.cc-form-card{background:var(--gray2);border:1px solid rgba(0,113,227,.18);border-radius:22px;padding:40px}
+.cc-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cc-field{display:flex;flex-direction:column;gap:7px}
+.cc-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.cc-input,.cc-select{width:100%;padding:13px 15px;background:var(--gray3);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
+.cc-input:focus,.cc-select:focus{border-color:rgba(0,113,227,.5)}
+.cc-input::placeholder{color:var(--muted)}
+.cc-select option{background:var(--gray2)}
+.cc-wapp-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:14px;background:#25D366;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;border:none;cursor:pointer;margin-top:24px;transition:all .2s}
+.cc-wapp-btn:hover{background:#20b858;transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,211,102,.25)}
+.cc-note{text-align:center;font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6}
+.cc-wapp-icon{width:20px;height:20px;flex-shrink:0}
 
 /* ── WHY ── */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:18px;overflow:hidden;margin-top:56px}
@@ -233,9 +229,9 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
   <a href="/" class="nav-logo">crea<span>lo</span></a>
   <ul class="nav-links">
     <li><a href="#como-funciona">Cómo funciona</a></li>
-    <li><a href="#creators">Creators</a></li>
+    <li><a href="#creators">Contratar creator</a></li>
     <li><a href="#precios">Precios</a></li>
-    <li><a href="/brief" class="nav-cta">Crear brief de contenido →</a></li>
+    <li><a href="/brief" class="nav-cta">Crear brief →</a></li>
   </ul>
 </nav>
 
@@ -249,7 +245,7 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
     <a href="/brief" class="btn-primary">🎁 Crear mi primer brief gratis →</a>
     <a href="#como-funciona" class="btn-ghost">Ver cómo funciona</a>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin-top:-28px;margin-bottom:0">Sin tarjeta de crédito · El primero gratis, los siguientes $9.999</p>
+  <p style="font-size:12px;color:var(--muted);margin-top:-28px;margin-bottom:0">Sin tarjeta de crédito · El primero gratis, los siguientes $3.999</p>
 </section>
 
 <!-- STATS -->
@@ -281,14 +277,14 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
       <div class="flow-icon">📄</div>
       <div class="flow-title">Recibís el brief completo</div>
       <p class="flow-desc">Tono, colores, escenas, hashtags, duración y formato. Un documento listo para darle a cualquier creator — tuya o de nuestra red.</p>
-      <span class="flow-pill pill-blue">$9.999</span>
+      <span class="flow-pill pill-blue">$3.999</span>
     </div>
     <div class="flow-card">
       <span class="flow-num">03</span>
       <div class="flow-icon">🎯</div>
       <div class="flow-title">Opcional: contratá una creator</div>
-      <p class="flow-desc">Si querés que alguien lo produzca, elegís una de nuestra red curada. Ella graba con tu brief y entrega en 48h.</p>
-      <span class="flow-pill pill-blue">$90.000</span>
+      <p class="flow-desc">Completá el form con tu nicho, presupuesto y fecha. Te conectamos con la creator ideal por WhatsApp y ella entrega en 48h.</p>
+      <span class="flow-pill pill-blue">Vía WhatsApp</span>
     </div>
     <div class="flow-card">
       <span class="flow-num">04</span>
@@ -311,8 +307,8 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
         <div class="pc-step">🎁 Primer brief GRATIS</div>
         <div class="pc-name">Brief profesional con IA</div>
         <div class="pc-desc">El documento que toda creator necesita para producir tu contenido <em>exactamente</em> como lo imaginás. Listo para usar con cualquier creator — tuya o nuestra.</div>
-        <div class="pc-price" style="display:flex;align-items:baseline;gap:10px"><span style="font-size:18px;text-decoration:line-through;color:var(--muted);font-weight:400">$9.999</span><span style="color:#34c759">GRATIS</span></div>
-        <div class="pc-period">el primero · los siguientes $9.999</div>
+        <div class="pc-price" style="display:flex;align-items:baseline;gap:10px"><span style="font-size:18px;text-decoration:line-through;color:var(--muted);font-weight:400">$3.999</span><span style="color:#34c759">GRATIS</span></div>
+        <div class="pc-period">el primero · los siguientes $3.999</div>
         <div class="pc-features">
           <div class="pc-feat"><span class="pc-feat-icon">✓</span>Descripción de marca y tono de comunicación</div>
           <div class="pc-feat"><span class="pc-feat-icon">✓</span>Instrucciones detalladas escena a escena</div>
@@ -337,63 +333,98 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
           <div class="pc-feat"><span class="pc-feat-icon">✓</span>Reel, Stories o UGC — vos elegís</div>
           <div class="pc-feat"><span class="pc-feat-icon">✓</span>Derechos 100% tuyos, apto para ads</div>
         </div>
-        <a href="/creators" class="pc-cta pc-cta-ghost">Ver creators →</a>
+        <a href="#creators" onclick="document.getElementById('creators').scrollIntoView({behavior:'smooth'});return false;" class="pc-cta pc-cta-ghost">Consultar por WhatsApp →</a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- CREATORS -->
+<!-- CONTRATAR CREATOR -->
 <div class="section" id="creators">
   <span class="section-label reveal">Nuestra red</span>
-  <h2 class="section-title reveal">Las creators</h2>
-  <p class="section-sub reveal">Curadas a mano. Solo entran las mejores.</p>
-  <div class="creators-grid reveal">
-    <div class="creator-card">
-      <div class="creator-rating"><span class="stars">★★★★★</span> 5.0</div>
-      <div class="creator-top"><div class="creator-avatar">🧡</div><div><div class="creator-name">Valentina R.</div><div class="creator-tier">Micro · 28K</div></div></div>
-      <div class="creator-niches"><span class="niche-tag">Belleza</span><span class="niche-tag">Skincare</span><span class="niche-tag">Lifestyle</span></div>
-      <div class="creator-stats"><div><div class="c-stat-val">6.8%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">47</div><div class="c-stat-label">Proyectos</div></div></div>
-      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
+  <h2 class="section-title reveal">Contratá una creator</h2>
+  <p class="section-sub reveal">Curadas a mano. Completá el formulario y te conectamos con la creator perfecta para tu marca por WhatsApp.</p>
+
+  <div class="creator-contact-wrap reveal">
+    <div class="cc-how">
+      <div class="cc-step-box">
+        <div class="cc-step-num">📋</div>
+        <div class="cc-step-title">Completá el form</div>
+        <div class="cc-step-desc">Contanos tu nicho, presupuesto y cuándo necesitás el contenido</div>
+      </div>
+      <div class="cc-step-box">
+        <div class="cc-step-num">🤝</div>
+        <div class="cc-step-title">Te conectamos</div>
+        <div class="cc-step-desc">Buscamos la creator que más encaja con tu marca y objetivo</div>
+      </div>
+      <div class="cc-step-box">
+        <div class="cc-step-num">🚀</div>
+        <div class="cc-step-title">Recibís el contenido</div>
+        <div class="cc-step-desc">La creator produce con tu brief y entrega en menos de 5 días</div>
+      </div>
     </div>
-    <div class="creator-card">
-      <div class="creator-rating"><span class="stars">★★★★★</span> 4.9</div>
-      <div class="creator-top"><div class="creator-avatar">💚</div><div><div class="creator-name">Sofía M.</div><div class="creator-tier">Nano · 9K</div></div></div>
-      <div class="creator-niches"><span class="niche-tag">Fitness</span><span class="niche-tag">Nutrición</span><span class="niche-tag">Wellness</span></div>
-      <div class="creator-stats"><div><div class="c-stat-val">12.4%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">23</div><div class="c-stat-label">Proyectos</div></div></div>
-      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
+    <div class="cc-form-card">
+      <div style="margin-bottom:28px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Consulta por WhatsApp</div>
+        <div style="font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.5px">Encontramos tu creator ideal</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">Completá los datos y te respondemos en menos de 24h</div>
+      </div>
+      <div class="cc-form-grid">
+        <div class="cc-field">
+          <label class="cc-label">Seguidores aprox. de la creator</label>
+          <select class="cc-select" id="cc-seguidores">
+            <option value="">Seleccioná un rango</option>
+            <option value="Nano (1K–10K)">Nano (1K–10K)</option>
+            <option value="Micro (10K–50K)">Micro (10K–50K)</option>
+            <option value="Mid (50K–200K)">Mid (50K–200K)</option>
+            <option value="Macro (200K+)">Macro (200K+)</option>
+            <option value="No importa, priorizo calidad">No importa, priorizo calidad</option>
+          </select>
+        </div>
+        <div class="cc-field">
+          <label class="cc-label">Presupuesto para producción</label>
+          <select class="cc-select" id="cc-presupuesto">
+            <option value="">Seleccioná tu rango</option>
+            <option value="Hasta $60.000">Hasta $60.000</option>
+            <option value="$60.000–$100.000">$60.000 – $100.000</option>
+            <option value="$100.000–$200.000">$100.000 – $200.000</option>
+            <option value="$200.000+">$200.000+</option>
+          </select>
+        </div>
+        <div class="cc-field">
+          <label class="cc-label">Género de la creator</label>
+          <select class="cc-select" id="cc-genero">
+            <option value="">Seleccioná</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Indistinto">Indistinto</option>
+          </select>
+        </div>
+        <div class="cc-field">
+          <label class="cc-label">Fecha que necesitás el contenido</label>
+          <input type="text" class="cc-input" id="cc-fecha" placeholder="Ej: Para el 30 de mayo" />
+        </div>
+        <div class="cc-field">
+          <label class="cc-label">Edad target de la creator</label>
+          <select class="cc-select" id="cc-edad">
+            <option value="">Seleccioná rango</option>
+            <option value="18–24 años">18–24 años</option>
+            <option value="25–34 años">25–34 años</option>
+            <option value="35–45 años">35–45 años</option>
+            <option value="Indistinto">Indistinto</option>
+          </select>
+        </div>
+        <div class="cc-field">
+          <label class="cc-label">Nicho de tu marca</label>
+          <input type="text" class="cc-input" id="cc-nicho" placeholder="Ej: Skincare, Fitness, Moda, Gastronomía..." />
+        </div>
+      </div>
+      <button class="cc-wapp-btn" onclick="consultarWapp()">
+        <svg class="cc-wapp-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652C8.094 23.333 10.05 23.82 12.045 23.82h.006c6.554 0 11.89-5.335 11.893-11.893.002-3.172-1.24-6.159-3.424-8.478zM12.045 21.785c-1.792 0-3.55-.479-5.087-1.385l-.366-.215-3.755.98.998-3.645-.238-.375a9.813 9.813 0 01-1.513-5.25c0-5.445 4.445-9.874 9.907-9.874 2.648 0 5.13 1.028 7.002 2.895a9.837 9.837 0 012.9 6.992c-.003 5.445-4.449 9.877-9.848 9.877zm5.42-7.387c-.298-.148-1.76-.866-2.033-.965-.273-.1-.472-.148-.67.148-.198.297-.768.964-.941 1.162-.173.199-.347.223-.645.075-.297-.149-1.258-.463-2.397-1.48-.885-.789-1.483-1.763-1.657-2.061-.173-.297-.018-.458.13-.605.132-.133.297-.347.446-.52.148-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.67-1.608-.918-2.201-.242-.578-.488-.5-.67-.51-.173-.008-.372-.01-.571-.01-.198 0-.521.074-.794.372-.273.297-1.041 1.016-1.041 2.479 0 1.462 1.066 2.875 1.215 3.073.148.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#fff"/></svg>
+        Consultar por WhatsApp
+      </button>
+      <p class="cc-note">Te respondemos en menos de 24 horas · Sin compromiso</p>
     </div>
-    <div class="creator-card">
-      <div class="creator-rating"><span class="stars">★★★★★</span> 5.0</div>
-      <div class="creator-top"><div class="creator-avatar">💜</div><div><div class="creator-name">Camila T.</div><div class="creator-tier">Micro · 41K</div></div></div>
-      <div class="creator-niches"><span class="niche-tag">Moda</span><span class="niche-tag">Tendencias</span><span class="niche-tag">OOTD</span></div>
-      <div class="creator-stats"><div><div class="c-stat-val">5.2%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">62</div><div class="c-stat-label">Proyectos</div></div></div>
-      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
-    </div>
-    <div class="creator-card">
-      <div class="creator-rating"><span class="stars">★★★★★</span> 4.8</div>
-      <div class="creator-top"><div class="creator-avatar">🌸</div><div><div class="creator-name">Martina L.</div><div class="creator-tier">Nano · 7K</div></div></div>
-      <div class="creator-niches"><span class="niche-tag">Hogar</span><span class="niche-tag">Deco</span><span class="niche-tag">Organización</span></div>
-      <div class="creator-stats"><div><div class="c-stat-val">14.1%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">19</div><div class="c-stat-label">Proyectos</div></div></div>
-      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
-    </div>
-    <div class="creator-card">
-      <div class="creator-rating"><span class="stars">★★★★★</span> 4.9</div>
-      <div class="creator-top"><div class="creator-avatar">🍊</div><div><div class="creator-name">Julieta A.</div><div class="creator-tier">Micro · 33K</div></div></div>
-      <div class="creator-niches"><span class="niche-tag">Gastronomía</span><span class="niche-tag">Recetas</span><span class="niche-tag">Foodie</span></div>
-      <div class="creator-stats"><div><div class="c-stat-val">7.3%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">38</div><div class="c-stat-label">Proyectos</div></div></div>
-      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
-    </div>
-    <div class="creator-card">
-      <div class="creator-rating"><span class="stars">★★★★★</span> 5.0</div>
-      <div class="creator-top"><div class="creator-avatar">⭐</div><div><div class="creator-name">Lucía P.</div><div class="creator-tier">Macro · 120K</div></div></div>
-      <div class="creator-niches"><span class="niche-tag">Tech</span><span class="niche-tag">Productividad</span><span class="niche-tag">Emprendimiento</span></div>
-      <div class="creator-stats"><div><div class="c-stat-val">4.1%</div><div class="c-stat-label">Engagement</div></div><div><div class="c-stat-val">91</div><div class="c-stat-label">Proyectos</div></div></div>
-      <a href="/app" onclick="goToApp(event)" class="creator-solicitar-btn">Solicitar contenido →</a>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:32px">
-    <a href="/app" onclick="goToApp(event)" class="btn-ghost">Ver todas las creators →</a>
   </div>
 </div>
 
@@ -430,9 +461,9 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
     <h2>Empezá hoy.<br/><span>Brief listo en 10 segundos.</span></h2>
     <p>Contanos tu marca, la IA genera el brief, vos elegís la creator. Así de simple.</p>
     <div class="cta-price-pills">
-      <div class="cta-pill">Brief IA <span class="amt">$9.999</span></div>
+      <div class="cta-pill">Brief IA viral <span class="amt">$3.999</span></div>
       <div class="cta-pill">+</div>
-      <div class="cta-pill">Creator <span class="amt">$90.000</span></div>
+      <div class="cta-pill">Creator <span class="amt">por WhatsApp</span></div>
     </div>
     <a href="/brief" class="btn-primary" style="margin:0 auto;display:inline-flex">Crear mi brief →</a>
   </div>
@@ -444,7 +475,7 @@ footer{border-top:1px solid var(--border);padding:40px;background:var(--black)}
     <div class="footer-logo">crea<span>lo</span></div>
     <ul class="footer-links">
       <li><a href="#como-funciona">Cómo funciona</a></li>
-      <li><a href="#creators">Creators</a></li>
+      <li><a href="#creators">Contratar creator</a></li>
       <li><a href="#precios">Precios</a></li>
       <li><a href="/brief">Crear brief</a></li>
     </ul>
@@ -480,6 +511,28 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 function goToApp(e){
   e.preventDefault();
   window.location.href='/app';
+}
+
+// Consultar creator por WhatsApp
+function consultarWapp(){
+  const seg = document.getElementById('cc-seguidores').value;
+  const pres = document.getElementById('cc-presupuesto').value;
+  const gen = document.getElementById('cc-genero').value;
+  const fecha = document.getElementById('cc-fecha').value.trim();
+  const edad = document.getElementById('cc-edad').value;
+  const nicho = document.getElementById('cc-nicho').value.trim();
+  if(!nicho){ alert('Por favor completá el nicho de tu marca para continuar.'); return; }
+  const msg = [
+    '¡Hola! Quiero contratar una creator a través de Crealo 🎬',
+    '',
+    `📊 Seguidores aprox de la creator: ${seg||'No especificado'}`,
+    `💰 Presupuesto: ${pres||'No especificado'}`,
+    `👤 Género creator: ${gen||'No especificado'}`,
+    `📅 Fecha que necesito el contenido: ${fecha||'No especificado'}`,
+    `🎯 Edad target de la creator: ${edad||'No especificado'}`,
+    `🏷️ Nicho de mi marca: ${nicho}`,
+  ].join('\n');
+  window.open('https://wa.me/5493456431651?text='+encodeURIComponent(msg),'_blank');
 }
 </script>
 </body>
